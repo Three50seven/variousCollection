@@ -1,0 +1,258 @@
+﻿html,
+body {
+    background-color: #222;
+    color: #7ED1FB;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#container {
+    min-height: 100%;
+    position: relative;
+}
+
+#container {
+    height: 100%;
+}
+
+#header {
+    background: #5E5E5E;
+    padding: 10px;
+}
+
+.header-text {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+#body {
+    padding: 10px;
+    padding-bottom: 20px; /* Height of the footer */
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 20px; /* Height of the footer */
+    background: #0B2D3E;
+    padding: 10px 0px 0px 5px;
+    font-size: xx-small;
+}
+
+label {
+    font-size: 22px;
+}
+
+/*Drop Down Menu Items Source: https://codepen.io/shshaw/pen/gsFch */
+
+.sub-menu-parent {
+    position: relative;
+}
+
+.sub-menu {
+    visibility: hidden; /* hides sub-menu */
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    transform: translateY(-2em);
+    z-index: -1;
+    transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
+}
+
+.show-sub-menu {
+    visibility: visible; /* shows sub-menu */
+    opacity: 1;
+    z-index: 1;
+    transform: translateY(0%);
+    transition-delay: 0s, 0s, 0.3s; /* this removes the transition delay so the menu will be visible while the other styles transition */
+}
+
+.sub-menu-parent:focus .sub-menu,
+.sub-menu-parent:focus-within .sub-menu,
+.sub-menu-parent:hover .sub-menu {
+    visibility: visible; /* shows sub-menu */
+    opacity: 1;
+    z-index: 1;
+    transform: translateY(0%);
+    transition-delay: 0s, 0s, 0.3s; /* this removes the transition delay so the menu will be visible while the other styles transition */
+}
+
+nav a {
+    color: #11F3DC;
+    display: block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+}
+
+    nav a:hover {
+        color: #0FA091;
+    }
+
+nav ul,
+nav ul li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav > ul {
+    background: #052C46;
+    text-align: center;
+    max-width: 350px;
+}
+
+    nav > ul > li {
+        display: inline-block;
+        border-left: solid 1px #aaa;
+    }
+
+        nav > ul > li:first-child {
+            border-left: none;
+        }
+
+.sub-menu {
+    background: #052C46;
+}
+/*END Drop Down Menu Items */
+
+.main-site-link {
+    font-size: 32px;
+    color: #FE9428;
+}
+
+    .main-site-link:visited {
+        color: #0E97D2
+    }
+
+/*CUSTOM COLORS*/
+.gold {
+    color: gold;
+}
+
+.white {
+    color: white;
+}
+/*END CUSTOM COLORS*/
+
+.scroller {
+    overflow-y: auto;
+    height: 400px;
+}
+
+/*BUTTON STYLES*/
+.btn-default, .btn-default:visited, input[type="submit"].btn-default {
+    background-color: #0568ae;
+    display: inline-block;
+    position: relative;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.25rem;
+    line-height: 2rem;
+    font-weight: normal;
+    padding: 12px 20px;
+    border: 0;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+}
+
+    .btn-default:hover, .btn-default:focus, input[type="submit"].btn-default:hover {
+        background-color: #045086;
+        text-decoration: none;
+    }
+
+.btn-default, input[type="submit"].btn-default {
+    -webkit-transition: background-color 0.14s ease-in-out, color 0.25s ease-in-out;
+    transition: background-color 0.14s ease-in-out, color 0.25s ease-in-out;
+}
+
+    input[type="submit"].btn-default.btn-default-gray, input[type="submit"].btn-default.btn-default-gray:visited {
+        background-color: #666666;
+        color: #fff;
+    }
+
+        input[type="submit"].btn-default.btn-default-gray:hover, input[type="submit"].btn-default.btn-default-gray:focus, input[type="submit"].btn-default.btn-default-gray:visited:hover, input[type="submit"].btn-default.btn-default-gray:visited:focus {
+            background-color: #545454;
+        }
+
+.recip-buttons .btn-default {
+    margin: 0 0.25rem;
+}
+
+.btn-default, .btn-default:visited, input[type="submit"].btn-default.btn-default-small {
+    font-size: 1.25rem;
+    padding: 6px 10px;
+    margin: 0 5px;
+}
+
+.btn-default-point-total {
+    background-color: #999900;
+}
+
+.btn-default.btn-default-separate {
+    margin-left: 3em;
+    margin-right: 3em;
+}
+
+.btn-default.btn-default-small.btn-default-solo {
+    margin: 0 !important;
+}
+
+input[type="submit"].btn-default:disabled {
+    background-color: #666666;
+    color: #fff;
+    cursor: default;
+}
+/*END BUTTON STYLES*/
+
+
+/*Sliders*/
+.slidecontainer {
+    max-width: 350px;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+    .slider:hover {
+        opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+
+.smaller {
+    font-size: .75em;
+}
+
+/*Hide the radio button dot of radio button controls (where not needed)*/
+input[type="radio"][name="selectTeam"],
+input[type="radio"][name="selectCoinTossWinner"] {
+    visibility: hidden;
+}
