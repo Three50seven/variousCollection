@@ -8,6 +8,14 @@ body {
     height: 100%;
 }
 
+.round-corners {
+    border-radius: 25px;
+    border-color: #7ED1FB;
+    background: #7ED1FB;
+    padding: 2px;
+    margin: 10px;
+}
+
 #container {
     min-height: 100%;
     position: relative;
@@ -119,6 +127,14 @@ nav > ul {
     background: #052C46;
 }
 /*END Drop Down Menu Items */
+
+.header-link {
+    text-decoration: none;
+    color: #0E97D2;
+}
+    .header-link:visited {
+        text-decoration:none;
+    }
 
 .main-site-link {
     font-size: 32px;

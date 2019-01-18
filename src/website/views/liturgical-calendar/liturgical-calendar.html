@@ -4,40 +4,44 @@
 		<link href='/wwwroot/content/css/liturgical.css' rel='stylesheet' type='text/css'>
 		<script src="/wwwroot/content/script/libraries/knockout/knockout-3.4.1.js"></script>
 	</head>
-	<body>
-		<form method="post" action="">
-			<p>Enter Year: <input data-bind="value: yearToCalculate" /></p>
-			<button data-bind="click: prevYear"> << </button>&nbsp;&nbsp;<span data-bind="text: yearToCalculate" ></span>&nbsp;&nbsp;
-			<button data-bind="click: nextYear"> >> </button>
-			<p>Enter the year above to calculate the Liturgical Year.</p>
+    <body>
+        <a href="/" class="header-link">
+            <div id="header">
+                <h1>Liturgical Calendar</h1>
+            </div>
+        </a>
+        <form method="post" action="">
+            <p>Enter Year: <input data-bind="value: yearToCalculate" /></p>
+            <button data-bind="click: prevYear"> << </button>&nbsp;&nbsp;<span data-bind="text: yearToCalculate"></span>&nbsp;&nbsp;
+            <button data-bind="click: nextYear"> >> </button>
+            <p>Enter the year above to calculate the Liturgical Year.</p>
 
-			<button data-bind="click: getLiturgicalYear">Calculate</button>
-		</form>
-			
-		<!-- ko if: errors -->
-		<p class="error">Errors: <strong data-bind="text: errors"></strong></p>
-		<!-- /ko -->
-		
-		<!-- ko if: liturgicalDates().length > 0-->
-		<h1>Liturgical Calendar</h1>
-		
-		<table>
-			<thead>
-				<tr>					
-					<th class="col-offlevel">Event Name</th>
-					<th class="col-offtype">Value</th>
-				</tr>
-			</thead>
-			<tbody data-bind="foreach: liturgicalDates">
-				<tr>
-					<td><span data-bind="text: eventName"></span></td>
-					<td><span data-bind="text: eventDate"></span></td>
-				</tr>			
-			</tbody>
-		</table>
-		<!-- /ko -->
-		
+            <button data-bind="click: getLiturgicalYear">Calculate</button>
+        </form>
 
-		<script src="/wwwroot/content/script/custom/calculate-easter-date.js"></script>
-	</body>
+        <!-- ko if: errors -->
+        <p class="error">Errors: <strong data-bind="text: errors"></strong></p>
+        <!-- /ko -->
+        <!-- ko if: liturgicalDates().length > 0-->
+        <h1>Liturgical Calendar</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-offlevel">Event Name</th>
+                    <th class="col-offtype">Value</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: liturgicalDates">
+                <tr>
+                    <td><span data-bind="text: eventName"></span></td>
+                    <td><span data-bind="text: eventDate"></span></td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- /ko -->
+
+
+        <script src="/wwwroot/content/script/custom/calculate-easter-date.js"></script>
+    </body>
 </html>

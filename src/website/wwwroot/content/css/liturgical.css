@@ -12,6 +12,16 @@ form {
   color: red;
 }
 
+.header-link {
+    text-decoration: none;
+    color: #0E97D2;
+    padding-left: 10px;
+}
+
+    .header-link:visited {
+        text-decoration: none;
+    }
+
 /* Forms
    ========================================================================== */
 /**
