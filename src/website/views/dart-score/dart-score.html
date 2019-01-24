@@ -18,17 +18,54 @@
 </head>
 
 <body>
-    <div id="container">
+    <div id="container">        
         <a href="/" class="header-link">
             <div id="header">
                 <h1>Darts Scoreboard</h1>
             </div>
         </a>
         <div id="body">
-            Keep Dart Score Here:
-
+            <!-- ko if: errors -->
+            <p class="error">Errors: <strong data-bind="text: errors"></strong></p>
+            <!-- /ko -->
             <p>TODO: Add a score box for each user and subtract points based on darts thrown.</p>
             <p>TODO: Add a box to pick which number (1-20) to create a score column. Add a score column and add an X for each dart thrown.</p>
+            <p>
+                Enter Score Target (1-20): 
+                <input data-bind="value: scoreTargetSeed" />
+            </p>
+            <button data-bind="click: buildScoreBoard">Show Score Board</button>
+            
+            <div class="row" id="scoreBoard">
+                <div class="column" id="leftColumn">
+                    
+                </div>
+                <div class="column" id="centerColumn">
+                    
+                </div>
+                <div class="" id="rightColumn">
+                    <div id="Player1Name">Player 2</div>
+                </div>
+            </div>
+
+        <table id="scoreBoard">
+            <thead>
+                <tr>
+                    <td><input data-bind="value: playerOne" /></td>
+                    <td>Cricket</td>
+                    <td><input data-bind="value: playerTwo" /></td>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ko foreach: scoreTargets -->
+                <tr>
+                    <td><img class="score-marker" src="../../wwwroot/content/images/dart-x-circled-transparent.png" data-bind="click: decrementScore(score)" /></td>
+                    <td><span class="score-number" data-bind="text: score"></span></td>
+                    <td><img class="score-marker" src="../../wwwroot/content/images/dart-slash-transparent.png" data-bind="click: decrementScore(score)" /></td>
+                </tr>
+                <!-- /ko -->
+            </tbody>
+        </table>
 
             <p>
                 Something like this:
@@ -41,6 +78,7 @@
 
     <!--SCRIPTS-->
     <script src="/wwwroot/content/script/libraries/JQuery/jquery-3.3.1.min.js"></script>
-    <script src="/wwwroot/content/script/libraries/react/umd/react.development.js"></script>
+    <script src="/wwwroot/content/script/libraries/knockout/knockout-3.4.2.js" ></script>
+    <script src="/wwwroot/content/script/custom/dart-score.js"></script>
 </body>
 </html>
