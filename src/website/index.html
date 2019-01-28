@@ -9,6 +9,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" href="wwwroot/content/css/main.css" media="screen" />
+
+    <!--nav - source: https://tympanus.net/codrops/2013/12/18/perspective-page-view-navigation/-->
+    <link rel="stylesheet" type="text/css" href="wwwroot/content/css/nav/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="wwwroot/content/css/nav/demo.css" />
+    <link rel="stylesheet" type="text/css" href="wwwroot/content/css/nav/component.css" />
+    <script src="wwwroot/content/script/libraries/nav/modernizr.custom.25376.js"></script>
+    <!--end nav-->
+
     <title>Three50seven - Various Collection</title>
     <!--initialize objects for JavaScript-->
     <script type="text/javascript">
@@ -17,23 +25,43 @@
 </head>
 
 <body>
-    <div id="container">
-        <a href="/" class="header-link">
-            <div id="header">
-                <h1><img class="round-corners" alt="Various Collection Icon" src="wwwroot/content/images/favicon.png" />Various Collection - JavaScript and other tidbits</h1>
-            </div>
-        </a>
-        <div id="body">
-            <ul>
-                <li>
-                    <a class="main-site-link" href="views/dart-score/dart-score.html">Darts - Keep Score</a>
-                </li>
-                <li>
-                    <a class="main-site-link" href="views/liturgical-calendar/liturgical-calendar.html">Liturgical Calendar</a>
-                </li>
-            </ul>
-        </div>﻿
-        <div id="footer">This is a collection of various JavaScript and testing apps.</div>
-</div>
+    <div id="perspective" class="perspective effect-moveleft">
+        <div class="container">
+            <div class="wrapper">
+                <!-- wrapper needed for scroll -->
+                <!-- Top Navigation -->
+                <div class="codrops-top clearfix">
+                    <!--<a class="codrops-icon codrops-icon-prev" href="http://tympanus.net/Development/ProgressButtonStyles/"><span>Previous Demo</span></a>
+                    <span class="right"><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=17915"><span>Back to the Codrops Article</span></a></span>-->
+                </div>
+                <header class="codrops-header">
+                    <h1><img class="round-corners" alt="Various Collection Icon" src="wwwroot/content/images/main-site-image.png" />Various Collection<span>JavaScript and other tidbits</span></h1>
+                </header>
+                <div class="main clearfix">
+                    <div class="column">
+                        <p><button id="showMenu">Menu >></button></p>
+                        <p>Click the menu to view different tools and apps.</p>
+                    </div>
+                    <div class="column">
+                        <nav class="codrops-demos">
+                            <!--<a href="index.html">Other Menu's could go here</a>-->
+                        </nav>
+                    </div>
+                    <div class="related">
+                        <p>
+                            This site contains a collection of JavaScript tools that are custom built for either learning and/or fun.  
+                            This menu is based on the <a href="https://tympanus.net/codrops/2013/12/18/perspective-page-view-navigation/" target="_blank">"perspective page view navigation"</a>.
+                        </p>                        
+                    </div>
+                </div><!-- /main -->
+            </div><!-- wrapper -->
+        </div><!-- /container -->
+        <nav class="outer-nav right vertical">
+            <a class="main-site-link" href="views/dart-score/dart-score.html">Darts - Keep Score</a>
+            <a class="main-site-link" href="views/liturgical-calendar/liturgical-calendar.html">Liturgical Calendar</a>
+        </nav>
+    </div><!-- /perspective -->
+    <script src="wwwroot/content/script/libraries/nav/classie.js"></script>
+    <script src="wwwroot/content/script/libraries/nav/menu.js"></script>
 </body>
 </html>
