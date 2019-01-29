@@ -2,6 +2,15 @@
     color: red;
 }
 
+.red-btn {
+    background-color: red;
+}
+
+.winner {
+    color: green;
+    font-size:48px;
+}
+
 .score-number {
     font-size:48px
 }
@@ -9,4 +18,21 @@
 img.score-marker {
     max-height: 100px;
     max-width: 100px;
+}
+
+/*centering tables: https://www.granneman.com/webdev/coding/css/centertables */
+table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.center {
+    text-align:center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img.score-increment {
+    max-height: 30px;
+    max-width: 30px;
 }

@@ -34,68 +34,123 @@
                 <header class="codrops-header">
                     <h1>Darts Scoreboard<span>A way to keep score while playing darts</span></h1>
                 </header>
-                <div class="related">
+                <div class="main">
                     <!-- ko if: errors -->
                     <p class="error">Errors: <strong data-bind="text: errors"></strong></p>
                     <!-- /ko -->
-                    <p>TODO: Add a score box for each user and subtract points based on darts thrown.</p>
-                    <p>TODO: Add a box to pick which number (1-20) to create a score column. Add a score column and add an X for each dart thrown.</p>
+                    <!-- ko if: winningPlayer -->
+                    <p class="winner">Winner: <strong data-bind="text: winningPlayer"></strong></p>
+                    <!-- /ko -->
                     <p>
-                        Enter Score Target (1-20):
-                        <input data-bind="value: scoreTargetSeed" />
+                        Choose a dart game to play below.  Click <a href="https://www.mastersofgames.com/rules/darts-rules.htm" target="_blank">here</a> to view rules for various dart games.
                     </p>
-                    <button data-bind="click: buildScoreBoard">Show Score Board</button>
+                    <p>
+                        Choose Game:
+                        <select data-bind="options: availableGames, value: selectedGame, disable: gameStarted"></select>
+                        <button data-bind="click: resetGame" class="red-btn">Reset Game</button>
+                    </p>
 
-                    <table id="scoreBoard">
-                        <thead>
-                            <tr>
-                                <td><input data-bind="value: playerOne" /></td>
-                                <td>Cricket</td>
-                                <td><input data-bind="value: playerTwo" /></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- ko foreach: scoreTargets -->
-                            <tr>
-                                <td><img class="score-marker" src="../../wwwroot/content/images/dart-x-circled-transparent.png" data-bind="click: decrementScore(score)" /></td>
-                                <td><span class="score-number" data-bind="text: score"></span></td>
-                                <td><img class="score-marker" src="../../wwwroot/content/images/dart-slash-transparent.png" data-bind="click: decrementScore(score)" /></td>
-                            </tr>
-                            <!-- /ko -->
-                        </tbody>
-                    </table>
-                </div>
-                <!--<div class="main clearfix">
-                    <!--<div class="column">
-
+                    <div data-bind="visible: selectedGame() === GameEnum.FiveOne">
+                        <h3 class="center">501 up (301 up)</h3>
+                        <p>
+                            Select a game score to reach:
+                            <select data-bind="options: availableUpGames, value: score501, disable: gameStarted, event:{ change: upGameChanged}"></select>
+                        </p>
+                        <!-- ko if: upErrors -->
+                        <p class="error">Errors: <strong data-bind="text: upErrors"></strong></p>
+                        <!-- /ko -->
+                        <table id="scoreBoard" class="center">
+                            <thead>
+                                <tr>
+                                    <td><h3>Round</h3></td>
+                                    <td>
+                                        SCORE: <span class="score-number" data-bind="text: currentPlayerOneUpScore"></span>
+                                        <br />
+                                        <input data-bind="value: playerOne, disable: gameStarted" />
+                                    </td>
+                                    <td>
+                                        SCORE: <span class="score-number" data-bind="text: currentPlayerTwoUpScore"></span>
+                                        <br />
+                                        <input data-bind="value: playerTwo, disable: gameStarted" />
+                                    </td>
+                                    <td><h3>Controls</h3></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="score-number" data-bind="text: currentUpRound"></span></td>
+                                    <td>
+                                        Enter Player 1 Score: <br />
+                                        <input data-bind="value: playerOneUpRoundScoreEntered" />
+                                    </td>
+                                    <td>
+                                        Enter Player 2 Score: <br />
+                                        <input data-bind="value: playerTwoUpRoundScoreEntered" />
+                                    </td>
+                                    <td>
+                                        <button data-bind="click: enterUpScore, visible: !isEditingUpScore()">Save Round</button>
+                                        <button data-bind="click: editUpScore, visible: !isEditingUpScore()">Edit</button>
+                                        <button data-bind="click: saveAllUpScore, visible: isEditingUpScore()">Save All</button>
+                                    </td>
+                                </tr>
+                                <!-- ko foreach: scoreUpGame -->
+                                <tr>
+                                    <td><span class="score-number" data-bind="text: round"></span></td>
+                                    <td>
+                                        Player 1 Score: <span class="score-number" data-bind="text: playerOneScore, visible: !isEditingUpScore()"></span>
+                                        <input data-bind="value: playerOneScore, visible: isEditingUpScore()" />
+                                    </td>
+                                    <td>
+                                        Player 2 Score: <span class="score-number" data-bind="text: playerTwoScore, visible: !isEditingUpScore()"></span>
+                                        <input data-bind="value: playerTwoScore, visible: isEditingUpScore()" />
+                                    </td>
+                                </tr>
+                                <!-- /ko -->
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="column">
 
-                    </div>-->
-                    <div class="related">
-                        <!--<div class="row" id="scoreBoard">
-                            <div class="column" id="leftColumn">
-
-                            </div>
-                            <div class="column" id="centerColumn">
-
-                            </div>
-                            <div class="" id="rightColumn">
-                                <div id="Player1Name">Player 2</div>
-                            </div>
-                        </div>-->
-
-                        
-
-                        <!--<p>
-                            Something like this:
-                            <br />
-                            <img src="https://images-na.ssl-images-amazon.com/images/I/618rsK2ZjLL._SY679_.jpg" />
-                        </p>-->
+                    <div data-bind="visible: selectedGame() === GameEnum.Killer">
+                        <h3 class="center">Killer</h3>
+                        <p>
+                            Coming soon!
+                        </p>
                     </div>
-                </div><!-- /main -->-->
+
+                    <div data-bind="visible: selectedGame() === GameEnum.Cricket">
+                        <h3 class="center">Cricket</h3>
+                        <p>
+                            Enter Score Target (1-20):
+                            <input data-bind="value: scoreTargetSeed" />
+                        </p>
+                        <button data-bind="click: buildScoreBoard">Show Score Board</button>
+
+                        <table id="scoreBoard" class="center">
+                            <thead>
+                                <tr>
+                                    <td><input data-bind="value: playerOne" /></td>
+                                    <td></td>
+                                    <td><input data-bind="value: playerTwo" /></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- ko foreach: scoreTargets -->
+                                <tr>
+                                    <td><img class="score-marker" src="../../wwwroot/content/images/dart-x-circled-transparent.png" data-bind="click: decrementScore.bind($data, score, 1)" /></td>
+                                    <td>
+                                        <img class="score-increment" src="../../wwwroot/content/images/dart-plus-transparent.png" data-bind="click: incrementScore.bind($data, score, 1)" />
+                                        <span class="score-number" data-bind="text: score"></span>
+                                        <img class="score-increment" src="../../wwwroot/content/images/dart-plus-transparent.png" data-bind="click: incrementScore.bind($data, score, 2)" />
+                                    </td>
+                                    <td><img class="score-marker" src="../../wwwroot/content/images/dart-slash-transparent.png" data-bind="click: decrementScore.bind($data, score, 2)" /></td>
+                                </tr>
+                                <!-- /ko -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!-- /main -->
             </div><!-- wrapper -->
-        </div><!-- /container -->        
+        </div><!-- /container -->
     </div><!-- /perspective -->
     <!--SCRIPTS-->
     <script src="/wwwroot/content/script/libraries/JQuery/jquery-3.3.1.min.js"></script>
