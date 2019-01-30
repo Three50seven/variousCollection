@@ -36,3 +36,17 @@ img.score-increment {
     max-height: 30px;
     max-width: 30px;
 }
+
+.score-entry {
+    font-size: 20px;
+    padding: 15px 0px 15px 0px;
+    width: 50px;    
+}
+
+.scoreboard {
+    margin-bottom: 50px
+}
+
+td.scoreboard {
+    border-right: 1px solid gray;
+}

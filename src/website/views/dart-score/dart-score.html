@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="../../wwwroot/content/css/nav/normalize.css" />
     <link rel="stylesheet" type="text/css" href="../../wwwroot/content/css/nav/demo.css" />
     <link rel="stylesheet" type="text/css" href="../../wwwroot/content/css/nav/component.css" />
-    <script src="../../wwwroot/content/script/libraries/nav/modernizr.custom.25376.js"></script>
+    <!--script src="../../wwwroot/content/script/libraries/nav/modernizr.custom.25376.js"></script>-->
     <title>Three50seven - Dart Score</title>
     <!--initialize objects for JavaScript-->
     <script type="text/javascript">
@@ -30,65 +30,76 @@
                 <div class="codrops-top clearfix">
                     <a class="codrops-icon codrops-icon-prev" href="/"><span>Back to Home</span></a>
                     <!--<span class="right"><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=17915"><span>Back to the Codrops Article</span></a></span>-->
-                </div>
-                <header class="codrops-header">
-                    <h1>Darts Scoreboard<span>A way to keep score while playing darts</span></h1>
-                </header>
-                <div class="main">
+                </div>               
+                <div class="main">                    
+                    <div id="slider">
+                        <header class="codrops-header">
+                            <h1>Darts Scoreboard<span> A way to keep score while playing darts</span></h1>
+                        </header>
+                        <p>
+                            Choose a dart game to play below.  Click <a href="https://www.mastersofgames.com/rules/darts-rules.htm" target="_blank">here</a> to view rules for various dart games.
+                        </p>
+                        <p>
+                            Choose Game:
+                            <select data-bind="options: availableGames, value: selectedGame, disable: gameStarted"></select>
+                            <button data-bind="click: resetGame" class="red-btn">Reset Game</button>
+                        </p>                        
+                    </div>
+                    <div class="center" id="slider-control">------- hide -------</div>                    
+                    
                     <!-- ko if: errors -->
                     <p class="error">Errors: <strong data-bind="text: errors"></strong></p>
                     <!-- /ko -->
                     <!-- ko if: winningPlayer -->
                     <p class="winner">Winner: <strong data-bind="text: winningPlayer"></strong></p>
                     <!-- /ko -->
-                    <p>
-                        Choose a dart game to play below.  Click <a href="https://www.mastersofgames.com/rules/darts-rules.htm" target="_blank">here</a> to view rules for various dart games.
-                    </p>
-                    <p>
-                        Choose Game:
-                        <select data-bind="options: availableGames, value: selectedGame, disable: gameStarted"></select>
-                        <button data-bind="click: resetGame" class="red-btn">Reset Game</button>
-                    </p>
 
                     <div data-bind="visible: selectedGame() === GameEnum.FiveOne">
                         <h3 class="center">501 up (301 up)</h3>
-                        <p>
-                            Select a game score to reach:
-                            <select data-bind="options: availableUpGames, value: score501, disable: gameStarted, event:{ change: upGameChanged}"></select>
-                        </p>
-                        <!-- ko if: upErrors -->
-                        <p class="error">Errors: <strong data-bind="text: upErrors"></strong></p>
-                        <!-- /ko -->
-                        <table id="scoreBoard" class="center">
+                        <div class="center">
+                            <p>
+                                Select a game score to reach:
+                                <select data-bind="options: availableUpGames, value: score501, disable: gameStarted, event:{ change: upGameChanged}"></select>
+                            </p>
+                            <!-- ko if: upErrors -->
+                            <p class="error">Errors: <strong data-bind="text: upErrors"></strong></p>
+                            <!-- /ko -->
+
+                            <input data-bind="value: playerOne, visible: !gameStarted()" maxlength="20" onfocus="this.value=''" />
+                            <span data-bind="text: playerOne, visible: gameStarted"></span>:
+                            <span class="score-number" data-bind="text: currentPlayerOneUpScore"></span>
+
+                            <input data-bind="value: playerTwo, visible: !gameStarted()" maxlength="20" onfocus="this.value=''" />
+                            <span data-bind="text: playerTwo, visible: gameStarted"></span>:
+                            <span class="score-number" data-bind="text: currentPlayerTwoUpScore"></span>
+                        </div>                        
+
+                        <table id="up-scoreboard" class="center scoreboard">
                             <thead>
                                 <tr>
                                     <td><h3>Round</h3></td>
                                     <td>
-                                        SCORE: <span class="score-number" data-bind="text: currentPlayerOneUpScore"></span>
-                                        <br />
-                                        <input data-bind="value: playerOne, disable: gameStarted" />
+                                        <h3 data-bind="text: playerOne"></h3>
                                     </td>
                                     <td>
-                                        SCORE: <span class="score-number" data-bind="text: currentPlayerTwoUpScore"></span>
-                                        <br />
-                                        <input data-bind="value: playerTwo, disable: gameStarted" />
+                                        <h3 data-bind="text: playerTwo"></h3>
                                     </td>
                                     <td><h3>Controls</h3></td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><span class="score-number" data-bind="text: currentUpRound"></span></td>
                                     <td>
-                                        Enter Player 1 Score: <br />
-                                        <input data-bind="value: playerOneUpRoundScoreEntered" />
+                                        <h3 class="score-number" data-bind="text: currentUpRound"></h3>
                                     </td>
                                     <td>
-                                        Enter Player 2 Score: <br />
-                                        <input data-bind="value: playerTwoUpRoundScoreEntered" />
+                                        <input class="score-entry" maxlength="3" data-bind="value: playerOneUpRoundScoreEntered" onfocus="this.value=''" />
                                     </td>
                                     <td>
-                                        <button data-bind="click: enterUpScore, visible: !isEditingUpScore()">Save Round</button>
+                                        <input class="score-entry" maxlength="3" data-bind="value: playerTwoUpRoundScoreEntered" onfocus="this.value=''" />
+                                    </td>
+                                    <td>
+                                        <button data-bind="click: enterUpScore, visible: !isEditingUpScore()">Enter<br />Scores</button>
                                         <button data-bind="click: editUpScore, visible: !isEditingUpScore()">Edit</button>
                                         <button data-bind="click: saveAllUpScore, visible: isEditingUpScore()">Save All</button>
                                     </td>
@@ -97,13 +108,14 @@
                                 <tr>
                                     <td><span class="score-number" data-bind="text: round"></span></td>
                                     <td>
-                                        Player 1 Score: <span class="score-number" data-bind="text: playerOneScore, visible: !isEditingUpScore()"></span>
-                                        <input data-bind="value: playerOneScore, visible: isEditingUpScore()" />
+                                        <span class="score-number" data-bind="text: playerOneScore, visible: !isEditingUpScore()"></span>
+                                        <input class="score-entry" maxlength="3" data-bind="value: playerOneScore, visible: isEditingUpScore()" />
                                     </td>
                                     <td>
-                                        Player 2 Score: <span class="score-number" data-bind="text: playerTwoScore, visible: !isEditingUpScore()"></span>
-                                        <input data-bind="value: playerTwoScore, visible: isEditingUpScore()" />
+                                        <span class="score-number" data-bind="text: playerTwoScore, visible: !isEditingUpScore()"></span>
+                                        <input class="score-entry" maxlength="3" data-bind="value: playerTwoScore, visible: isEditingUpScore()" />
                                     </td>
+                                    <td></td>
                                 </tr>
                                 <!-- /ko -->
                             </tbody>
@@ -121,16 +133,16 @@
                         <h3 class="center">Cricket</h3>
                         <p>
                             Enter Score Target (1-20):
-                            <input data-bind="value: scoreTargetSeed" />
+                            <input data-bind="value: scoreTargetSeed, disable: gameStarted" />
                         </p>
-                        <button data-bind="click: buildScoreBoard">Show Score Board</button>
+                        <button data-bind="click: buildScoreboard">Start Game</button>
 
-                        <table id="scoreBoard" class="center">
+                        <table id="scoreboard" class="center">
                             <thead>
                                 <tr>
-                                    <td><input data-bind="value: playerOne" /></td>
+                                    <td><input data-bind="value: playerOne, disable: gameStarted" /></td>
                                     <td></td>
-                                    <td><input data-bind="value: playerTwo" /></td>
+                                    <td><input data-bind="value: playerTwo, disable: gameStarted" /></td>
                                 </tr>
                             </thead>
                             <tbody>

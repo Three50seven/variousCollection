@@ -25,6 +25,16 @@ var UpScore = function (round, playerOneScore, playerTwoScore) {
     this.playerTwoScore = playerTwoScore;
 };
 
+$("#slider-control").click(function () {
+    if ($("#slider").is(":hidden")) {
+        $("#slider").slideDown("slow");
+        $("#slider-control").text('------- hide -------');
+    } else {
+        $("#slider").slideUp("slow");
+        $("#slider-control").text('------- show -------');        
+    }
+});
+
 function AppViewModel() {
     self.errors = ko.observable("");
     self.upErrors = ko.observable("");
@@ -57,7 +67,8 @@ upGameChanged = function () {
     self.currentPlayerTwoUpScore(self.score501());
 };
 
-buildScoreBoard = function () {
+buildScoreboard = function () {
+    self.gameStarted(true); //first time building scoreboard, the game has started
     clearForm();
 
     if (isValidCurrentScoreTargetSeed()) {
@@ -123,12 +134,39 @@ function isValidCurrentScoreTargetSeed() {
     return isValid(errorMessage);
 }
 
-function isValidUpScore(playerName, newScore) {
+function isValidUpScoreEntered() {
+    let errorMessage = '';
+    const MAX_UP_SCORE = 150;
+    const MIN_UP_SCORE = 0;
+
+    let scoresEntered = [];
+    scoresEntered.push({ playerName: self.playerOne(), scoreEntered: self.playerOneUpRoundScoreEntered() });
+    scoresEntered.push({ playerName: self.playerTwo(), scoreEntered: self.playerTwoUpRoundScoreEntered() });
+
+    for (var i = 0; i < scoresEntered.length; i++) {
+        if (isNumber(scoresEntered[i].scoreEntered)) {
+            if (scoresEntered[i].scoreEntered >= MIN_UP_SCORE && scoresEntered[i].scoreEntered <= MAX_UP_SCORE) {
+                errorMessage += '';
+            }
+            else {
+                errorMessage += scoresEntered[i].playerName + ' must enter a number between ' + MIN_UP_SCORE + ' and ' + MAX_UP_SCORE;
+            }
+        }
+        else {
+            errorMessage += scoresEntered[i].playerName + ' must enter a valid number';
+        }
+    }    
+
+    if (errorMessage !== '')
+        self.upErrors(errorMessage);
+    else
+        return true;
+}
+
+function checkUpScore(playerName, newScore) {
     let validMessage = '';
     let isValid = false;
-
-    console.log(newScore);
-
+    
     //show winner
     if (newScore === 0) {
         self.winningPlayer(playerName);
@@ -137,7 +175,7 @@ function isValidUpScore(playerName, newScore) {
     else if (newScore > 1)
         isValid = true;
     else {
-        validMessage = playerName + " Bust!";
+        validMessage = playerName + " is bust!";
         self.upErrors((self.upErrors() + ' ' + validMessage).trim());
     }
 
@@ -148,24 +186,30 @@ function enterUpScore() {
     self.gameStarted(true); //first time score is entered, the game has started
     self.upErrors(''); //reset errors for this game
 
-    let newP1Score = self.currentPlayerOneUpScore() - self.playerOneUpRoundScoreEntered();
-    let newP2Score = self.currentPlayerTwoUpScore() - self.playerTwoUpRoundScoreEntered();    
+    if (isValidUpScoreEntered()) {
+        let newP1Score = self.currentPlayerOneUpScore() - self.playerOneUpRoundScoreEntered();
+        let newP2Score = self.currentPlayerTwoUpScore() - self.playerTwoUpRoundScoreEntered();
 
-    if (isValidUpScore(self.playerOne(), newP1Score))
-        self.currentPlayerOneUpScore(newP1Score);
-    else
+        if (checkUpScore(self.playerOne(), newP1Score))
+            self.currentPlayerOneUpScore(newP1Score);
+        else
+            self.playerOneUpRoundScoreEntered(0);
+
+        if (checkUpScore(self.playerTwo(), newP2Score))
+            self.currentPlayerTwoUpScore(newP2Score);
+        else
+            self.playerTwoUpRoundScoreEntered(0);
+
+        //create and add a new score record for this round
+        let roundScore = new UpScore(self.currentUpRound(), self.playerOneUpRoundScoreEntered().toString(), self.playerTwoUpRoundScoreEntered().toString());
+        self.scoreUpGame.unshift(roundScore); //add score to beginning of array
+
+        //reset entries after recording
         self.playerOneUpRoundScoreEntered(0);
+        self.playerTwoUpRoundScoreEntered(0);
 
-    if (isValidUpScore(self.playerTwo(), newP2Score))
-        self.currentPlayerTwoUpScore(newP2Score);
-    else
-        self.playerTwoUpRoundScoreEntered(0);    
-
-    //create and add a new score record for this round
-    let roundScore = new UpScore(self.currentUpRound(), self.playerOneUpRoundScoreEntered().toString(), self.playerTwoUpRoundScoreEntered().toString());
-    self.scoreUpGame.unshift(roundScore); //add score to beginning of array
-
-    self.currentUpRound(self.currentUpRound() + 1);
+        self.currentUpRound(self.currentUpRound() + 1);
+    }    
 }
 
 function editUpScore(data) {
