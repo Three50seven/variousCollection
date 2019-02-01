@@ -8,20 +8,26 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!--<link rel="stylesheet" type="text/css" href="/wwwroot/content/css/main.css" media="screen" />-->
-    <link rel="stylesheet" type="text/css" href="/wwwroot/content/css/darts.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="../../wwwroot/content/css/nav/normalize.css" />
-    <link rel="stylesheet" type="text/css" href="../../wwwroot/content/css/nav/demo.css" />
-    <link rel="stylesheet" type="text/css" href="../../wwwroot/content/css/nav/component.css" />
-    <!--script src="../../wwwroot/content/script/libraries/nav/modernizr.custom.25376.js"></script>-->
-    <title>Three50seven - Dart Score</title>
+    <link rel="stylesheet" type="text/css" href="/wwwroot/content/css/dart-score-styles.min.css" media="screen" />
+    <title>Dart Score</title>
     <!--initialize objects for JavaScript-->
     <script type="text/javascript">
-        var MODULES = {}; MODULES.UI = {}; var COMPONENTS = {}; var USER = {};
+        var MODULES = {}; MODULES.UI = {}; var COMPONENTS = {};
     </script>
 </head>
 
 <body>
+    <div id="jsconfig" style="display:none;visibility:hidden">
+        <!--<input type="hidden" value="@settings.AlertErrors.ToString().ToLower()"
+        id="showJSErrors" />
+        <input type="hidden" value="@settings.Debug.ToString().ToLower()" id="isDebugMode"
+        />
+        <input type="hidden" value="@settings.LogErrors.ToString().ToLower()"
+        id="logJSErrors" />
+        <input type="hidden" value="@settings.UserSessionTimeout" id="sessionExpireTime"
+        />-->
+        <input type="hidden" value="Production" id="app-environment" />
+    </div>
     <div id="perspective" class="perspective effect-moveleft">
         <div class="container">
             <div class="wrapper">
@@ -30,8 +36,8 @@
                 <div class="codrops-top clearfix">
                     <a class="codrops-icon codrops-icon-prev" href="/"><span>Back to Home</span></a>
                     <!--<span class="right"><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=17915"><span>Back to the Codrops Article</span></a></span>-->
-                </div>               
-                <div class="main">                    
+                </div>
+                <div class="main">
                     <div id="slider">
                         <header class="codrops-header">
                             <h1>Darts Scoreboard<span> A way to keep score while playing darts</span></h1>
@@ -43,10 +49,10 @@
                             Choose Game:
                             <select data-bind="options: availableGames, value: selectedGame, disable: gameStarted"></select>
                             <button data-bind="click: resetGame" class="red-btn">Reset Game</button>
-                        </p>                        
+                        </p>
                     </div>
-                    <div class="center" id="slider-control">------- hide -------</div>                    
-                    
+                    <div class="center" id="slider-control" data-bind="click: HideOtherInfo">------- hide -------</div>
+
                     <!-- ko if: errors -->
                     <p class="error">Errors: <strong data-bind="text: errors"></strong></p>
                     <!-- /ko -->
@@ -54,7 +60,7 @@
                     <p class="winner">Winner: <strong data-bind="text: winningPlayer"></strong></p>
                     <!-- /ko -->
 
-                    <div data-bind="visible: selectedGame() === GameEnum.FiveOne">
+                    <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.FiveOne">
                         <h3 class="center">501 up (301 up)</h3>
                         <div class="center">
                             <p>
@@ -72,7 +78,7 @@
                             <input data-bind="value: playerTwo, visible: !gameStarted()" maxlength="20" onfocus="this.value=''" />
                             <span data-bind="text: playerTwo, visible: gameStarted"></span>:
                             <span class="score-number" data-bind="text: currentPlayerTwoUpScore"></span>
-                        </div>                        
+                        </div>
 
                         <table id="up-scoreboard" class="center scoreboard">
                             <thead>
@@ -93,10 +99,10 @@
                                         <h3 class="score-number" data-bind="text: currentUpRound"></h3>
                                     </td>
                                     <td>
-                                        <input class="score-entry" maxlength="3" data-bind="value: playerOneUpRoundScoreEntered" onfocus="this.value=''" />
+                                        <input class="score-entry" type="number" maxlength="3" data-bind="value: playerOneUpRoundScoreEntered" onfocus="this.value=''" />
                                     </td>
                                     <td>
-                                        <input class="score-entry" maxlength="3" data-bind="value: playerTwoUpRoundScoreEntered" onfocus="this.value=''" />
+                                        <input class="score-entry" type="number" maxlength="3" data-bind="value: playerTwoUpRoundScoreEntered" onfocus="this.value=''" />
                                     </td>
                                     <td>
                                         <button data-bind="click: enterUpScore, visible: !isEditingUpScore()">Enter<br />Scores</button>
@@ -109,11 +115,13 @@
                                     <td><span class="score-number" data-bind="text: round"></span></td>
                                     <td>
                                         <span class="score-number" data-bind="text: playerOneScore, visible: !isEditingUpScore()"></span>
-                                        <input class="score-entry" maxlength="3" data-bind="value: playerOneScore, visible: isEditingUpScore()" />
+                                        <input class="score-entry" type="number" maxlength="3" data-bind="value: playerOneScore, visible: isEditingUpScore()" />
+                                        <div class="error" data-bind="text: playerOneErrorMessage"></div>
                                     </td>
                                     <td>
                                         <span class="score-number" data-bind="text: playerTwoScore, visible: !isEditingUpScore()"></span>
-                                        <input class="score-entry" maxlength="3" data-bind="value: playerTwoScore, visible: isEditingUpScore()" />
+                                        <input class="score-entry" type="number" maxlength="3" data-bind="value: playerTwoScore, visible: isEditingUpScore()" />
+                                        <div class="error" data-bind="text: playerTwoErrorMessage"></div>
                                     </td>
                                     <td></td>
                                 </tr>
@@ -122,14 +130,14 @@
                         </table>
                     </div>
 
-                    <div data-bind="visible: selectedGame() === GameEnum.Killer">
+                    <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.Killer">
                         <h3 class="center">Killer</h3>
                         <p>
                             Coming soon!
                         </p>
                     </div>
 
-                    <div data-bind="visible: selectedGame() === GameEnum.Cricket">
+                    <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.Cricket">
                         <h3 class="center">Cricket</h3>
                         <p>
                             Enter Score Target (1-20):
@@ -165,8 +173,6 @@
         </div><!-- /container -->
     </div><!-- /perspective -->
     <!--SCRIPTS-->
-    <script src="/wwwroot/content/script/libraries/JQuery/jquery-3.3.1.min.js"></script>
-    <script src="/wwwroot/content/script/libraries/knockout/knockout-3.4.2.js"></script>
-    <script src="/wwwroot/content/script/custom/dart-score.js"></script>
+    <script src="/wwwroot/content/js/viewmodels/dart-bundle.min.js"></script>
 </body>
 </html>

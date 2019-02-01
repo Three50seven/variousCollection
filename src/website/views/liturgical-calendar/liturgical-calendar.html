@@ -1,16 +1,27 @@
 <html>
 	<head>
-		<link href='/wwwroot/content/css/liturgical.css' rel='stylesheet' type='text/css'>
-		<script src="/wwwroot/content/script/libraries/knockout/knockout-3.4.2.js"></script>
+		<link href='/wwwroot/content/css/liturgical-styles.min.css' rel='stylesheet' type='text/css'>
 	</head>
     <body>
+        <div id="jsconfig" style="display:none;visibility:hidden">
+            <!--<input type="hidden" value="@settings.AlertErrors.ToString().ToLower()"
+            id="showJSErrors" />
+            <input type="hidden" value="@settings.Debug.ToString().ToLower()" id="isDebugMode"
+            />
+            <input type="hidden" value="@settings.LogErrors.ToString().ToLower()"
+            id="logJSErrors" />
+            <input type="hidden" value="@settings.UserSessionTimeout" id="sessionExpireTime"
+            />-->
+            <input type="hidden" value="Production" id="app-environment" />
+        </div>
         <a href="/" class="header-link">
             <div id="header">
                 <h1>Liturgical Calendar</h1>
             </div>
         </a>
         <form method="post" action="">
-            <p>Enter Year: <input data-bind="value: yearToCalculate" /></p>
+            <button data-bind="click: resetCalendar">Reset</button>
+            <p>Enter Year: <input data-bind="value: yearToCalculate" type="number" /></p>
             <button data-bind="click: prevYear"> << </button>&nbsp;&nbsp;<span data-bind="text: yearToCalculate"></span>&nbsp;&nbsp;
             <button data-bind="click: nextYear"> >> </button>
             <p>Enter the year above to calculate the Liturgical Year.</p>
@@ -41,6 +52,6 @@
         <!-- /ko -->
 
 
-        <script src="/wwwroot/content/script/custom/calculate-easter-date.js"></script>
+        <script src="/wwwroot/content/js/viewmodels/liturgical-calendar-bundle.min.js"></script>
     </body>
 </html>
