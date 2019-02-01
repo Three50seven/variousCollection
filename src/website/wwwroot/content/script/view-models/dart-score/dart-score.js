@@ -178,8 +178,6 @@
             else {
                 p1Total += parseFloat(scoreRecord.playerOneScore);
                 p2Total += parseFloat(scoreRecord.playerTwoScore);
-
-                console.log('p1: %s, p2: %s', p1Total, p2Total);
             }
 
             self.scoreUpGame.refresh(scoreRecord); //refresh observable
