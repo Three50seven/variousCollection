@@ -9,6 +9,9 @@
     self.gameStarted = ko.observable(false);
     self.playerOne = ko.observable(MODULES.Constants.DartScore.PLAYER_ONE);
     self.playerTwo = ko.observable(MODULES.Constants.DartScore.PLAYER_TWO);
+    self.winnerDeclared = ko.computed(() => {
+        return self.winningPlayer().length > 0;
+    });
 
     self.selectedGame = ko.observable("");
     self.scoreTargetSeed = ko.observable(MODULES.Constants.DartScore.DEFAULT_SCORE_TARGET); //e.g. 19 will make a score board of 19 - 20 + Bull, and 1 - 20 if 1 is entered    
@@ -19,6 +22,10 @@
     self.isEditingUpScore = ko.observable(false);
     self.currentPlayerOneUpScore = ko.observable(self.score501());
     self.currentPlayerTwoUpScore = ko.observable(self.score501());
-    self.playerOneUpRoundScoreEntered = ko.observable(0);
-    self.playerTwoUpRoundScoreEntered = ko.observable(0);
+    self.playerOneUpRoundScore1Entered = ko.observable(0); //player1 dart 1
+    self.playerOneUpRoundScore2Entered = ko.observable(0); //player1 dart 2
+    self.playerOneUpRoundScore3Entered = ko.observable(0); //player1 dart 3
+    self.playerTwoUpRoundScore1Entered = ko.observable(0); //player2 dart 1
+    self.playerTwoUpRoundScore2Entered = ko.observable(0); //player2 dart 2
+    self.playerTwoUpRoundScore3Entered = ko.observable(0); //player2 dart 3
 })(jQuery);

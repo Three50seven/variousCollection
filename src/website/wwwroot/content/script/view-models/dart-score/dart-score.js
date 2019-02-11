@@ -75,8 +75,8 @@
 
         return isValid(errorMessage);
     };
-    getValidUpScoreError = function (score, playerName) {
-        const MAX_UP_SCORE = 180; //3 triple 20s = 3*20*3 = 180
+    getValidUpScoreError = function (isSingleDart = false, score, playerName, dartMsg) {
+        const MAX_UP_SCORE = isSingleDart ? 60 : 180; //3 triple 20s = 3*20*3 = 180 - highest score in throw/round
         const MIN_UP_SCORE = 0;
         let errorMessage = '';
 
@@ -85,11 +85,16 @@
                 errorMessage = '';
             }
             else {
-                errorMessage = playerName + ' must enter a number between ' + MIN_UP_SCORE + ' and ' + MAX_UP_SCORE;
+                errorMessage = ' must enter a number between ' + MIN_UP_SCORE + ' and ' + MAX_UP_SCORE;
             }
         }
         else {
-            errorMessage = playerName + ' must enter a valid number';
+            errorMessage = ' must enter a valid number';
+        }
+
+        //format the error message, if there is one
+        if (errorMessage.length > 0) {            
+            errorMessage = '- ' + playerName + errorMessage + ' for ' + dartMsg + '</br>';
         }
         
         return errorMessage;
@@ -98,13 +103,19 @@
         let errorMessage = '';
 
         let scoresEntered = [];
-        scoresEntered.push({ playerName: self.playerOne(), scoreEntered: self.playerOneUpRoundScoreEntered() });
-        scoresEntered.push({ playerName: self.playerTwo(), scoreEntered: self.playerTwoUpRoundScoreEntered() });
+        scoresEntered.push({ playerName: self.playerOne(), scoreEntered: self.playerOneUpRoundScore1Entered(), dartMsg: 'first dart' });
+        scoresEntered.push({ playerName: self.playerOne(), scoreEntered: self.playerOneUpRoundScore2Entered(), dartMsg: 'second dart' });
+        scoresEntered.push({ playerName: self.playerOne(), scoreEntered: self.playerOneUpRoundScore3Entered(), dartMsg: 'third dart' });
+        scoresEntered.push({ playerName: self.playerTwo(), scoreEntered: self.playerTwoUpRoundScore1Entered(), dartMsg: 'first dart' });
+        scoresEntered.push({ playerName: self.playerTwo(), scoreEntered: self.playerTwoUpRoundScore2Entered(), dartMsg: 'second dart' });
+        scoresEntered.push({ playerName: self.playerTwo(), scoreEntered: self.playerTwoUpRoundScore3Entered(), dartMsg: 'third dart' });
 
         for (var i = 0; i < scoresEntered.length; i++) {
             let score = scoresEntered[i].scoreEntered;
             let playerName = scoresEntered[i].playerName;
-            errorMessage += (errorMessage.length > 0 ? getValidUpScoreError(score, playerName) + ' ' : getValidUpScoreError(score, playerName));
+            let dartMsg = scoresEntered[i].dartMsg;
+            let scoreErrorMsg = getValidUpScoreError(true, score, playerName, dartMsg);
+            errorMessage += scoreErrorMsg;
         }
 
         if (errorMessage !== '') {
@@ -137,26 +148,38 @@
         self.upErrors(''); //reset errors for this game
 
         if (isValidUpScoreEntered()) {
-            let newP1Score = self.currentPlayerOneUpScore() - self.playerOneUpRoundScoreEntered();
-            let newP2Score = self.currentPlayerTwoUpScore() - self.playerTwoUpRoundScoreEntered();
+            let roundP1Score = parseFloat(self.playerOneUpRoundScore1Entered()) + parseFloat(self.playerOneUpRoundScore2Entered()) + parseFloat(self.playerOneUpRoundScore3Entered());
+            let roundP2Score = parseFloat(self.playerTwoUpRoundScore1Entered()) + parseFloat(self.playerTwoUpRoundScore2Entered()) + parseFloat(self.playerTwoUpRoundScore3Entered());
+            let newP1Score = parseFloat(self.currentPlayerOneUpScore()) - roundP1Score;
+            let newP2Score = parseFloat(self.currentPlayerTwoUpScore()) - roundP2Score;
 
             if (checkUpScore(self.playerOne(), newP1Score))
                 self.currentPlayerOneUpScore(newP1Score);
-            else
-                self.playerOneUpRoundScoreEntered(0);
+            else {
+                self.playerOneUpRoundScore1Entered(0);
+                self.playerOneUpRoundScore2Entered(0);
+                self.playerOneUpRoundScore3Entered(0);
+            }                
 
             if (checkUpScore(self.playerTwo(), newP2Score))
                 self.currentPlayerTwoUpScore(newP2Score);
-            else
-                self.playerTwoUpRoundScoreEntered(0);
+            else {
+                self.playerTwoUpRoundScore1Entered(0);
+                self.playerTwoUpRoundScore2Entered(0);
+                self.playerTwoUpRoundScore3Entered(0);
+            }
 
             //create and add a new score record for this round
-            let roundScore = new MODULES.Constructors.DartScore.UpScore(self.currentUpRound(), self.playerOneUpRoundScoreEntered().toString(), self.playerTwoUpRoundScoreEntered().toString(),'','');
+            let roundScore = new MODULES.Constructors.DartScore.UpScore(self.currentUpRound(), roundP1Score.toString(), roundP2Score.toString(),'','');
             self.scoreUpGame.unshift(roundScore); //add score to beginning of array
 
             //reset entries after recording
-            self.playerOneUpRoundScoreEntered(0);
-            self.playerTwoUpRoundScoreEntered(0);
+            self.playerOneUpRoundScore1Entered(0);
+            self.playerOneUpRoundScore2Entered(0);
+            self.playerOneUpRoundScore3Entered(0);
+            self.playerTwoUpRoundScore1Entered(0);
+            self.playerTwoUpRoundScore2Entered(0);
+            self.playerTwoUpRoundScore3Entered(0);
 
             self.currentUpRound(self.currentUpRound() + 1);
         }
@@ -170,8 +193,8 @@
         let p2Total = 0;
 
         $.each(self.scoreUpGame(), function (i, scoreRecord) {
-            scoreRecord.playerOneErrorMessage = getValidUpScoreError(scoreRecord.playerOneScore, playerOne());
-            scoreRecord.playerTwoErrorMessage = getValidUpScoreError(scoreRecord.playerTwoScore, playerTwo());
+            scoreRecord.playerOneErrorMessage = getValidUpScoreError(false, scoreRecord.playerOneScore, playerOne(), 'all darts combined in this round');
+            scoreRecord.playerTwoErrorMessage = getValidUpScoreError(false, scoreRecord.playerTwoScore, playerTwo(), 'all darts combined in this round');
             
             if (scoreRecord.playerOneErrorMessage !== '' || scoreRecord.playerTwoErrorMessage !== '')
                 hasErrors = true;

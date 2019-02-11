@@ -38,9 +38,14 @@ img.score-increment {
 }
 
 .score-entry {
-    font-size: 20px;
-    padding: 15px 0px 15px 0px;
-    width: 50px;    
+    font-size: 12px;
+    padding: 5px 0px;
+    width: 40px;    
+}
+
+.score-entry-help-txt {
+    font-size: 10px;
+    margin-right: 2px;
 }
 
 .scoreboard {

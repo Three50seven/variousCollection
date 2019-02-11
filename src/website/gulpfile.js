@@ -21,7 +21,7 @@ var gulp = require("gulp"),
     clean = require('gulp-clean'),
     del = require("del"),
     vinyl = require('vinyl'),
-    sass = require('gulp-sass'),
+    //sass = require('gulp-sass'),
     sourcemaps = require('gulp-sourcemaps'),
     autoprefixer = require('gulp-autoprefixer');
     //htmlPartial = require('gulp-html-partial');
@@ -370,21 +370,21 @@ gulp.task("copy-local-content-to-wwwroot", function () {
 
 gulp.task("project-open", ["copy-local-content-to-wwwroot"]);
 
-// Gulp SASS Build Task
-gulp.task('sass', ['sass:compile', 'autoprefixer']);
+//// Gulp SASS Build Task
+//gulp.task('sass', ['sass:compile', 'autoprefixer']);
 
-gulp.task('sass:compile', function () {
-    return gulp.src('./wwwroot/content/SCSS/**.scss')
-        .pipe(sass.sync().on('error', console.log))
-        .pipe(sourcemaps.init()) // not for production env
-        .pipe(sourcemaps.write('./'))  // not for production env
-        .pipe(gulp.dest('./wwwroot/content/css'));
-});
+//gulp.task('sass:compile', function () {
+//    return gulp.src('./wwwroot/content/SCSS/**.scss')
+//        .pipe(sass.sync().on('error', console.log))
+//        .pipe(sourcemaps.init()) // not for production env
+//        .pipe(sourcemaps.write('./'))  // not for production env
+//        .pipe(gulp.dest('./wwwroot/content/css'));
+//});
 
-// SASS Watch
-gulp.task('sass:watch', function () {
-    gulp.watch('./wwwroot/content/SCSS/**.scss', ['sass']);
-});
+//// SASS Watch
+//gulp.task('sass:watch', function () {
+//    gulp.watch('./wwwroot/content/SCSS/**.scss', ['sass']);
+//});
 
 // CSS Autoprefixer
 // adds custom cutting-edge styles for specific browsers
