@@ -24,7 +24,8 @@
     "name": "dart-score-styles",
     "files": [
       "nav-styles",
-      "content/style/dart-score/darts.css"
+      "content/style/dart-score/darts.css",
+      "content/style/flag.css"
     ]
   },
   {

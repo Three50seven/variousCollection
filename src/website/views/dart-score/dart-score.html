@@ -65,10 +65,7 @@
 
                     <!-- ko if: errors -->
                     <p class="error">Errors: <strong data-bind="html: errors"></strong></p>
-                    <!-- /ko -->
-                    <!-- ko if: winnerDeclared -->
-                    <p class="winner">Winner: <strong data-bind="html: winningPlayer"></strong></p>
-                    <!-- /ko -->
+                    <!-- /ko -->                    
 
                     <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.FiveOne">
                         <h3 class="center">501 up (301 up)</h3>
@@ -124,9 +121,17 @@
                                     </td>
                                     <td>
                                         <!-- ko ifnot: winnerDeclared -->
-                                        <button data-bind="click: enterUpScore, visible: !isEditingUpScore()">Enter<br />Scores</button>
-                                        <button data-bind="click: editUpScore, visible: !isEditingUpScore()">Edit</button>
-                                        <button data-bind="click: saveAllUpScore, visible: isEditingUpScore()">Save All</button>
+                                            <button data-bind="click: enterUpScore, visible: !isEditingUpScore()">Enter<br />Scores</button>
+                                            <button data-bind="click: editUpScore, visible: !isEditingUpScore()">Edit</button>
+                                            <button data-bind="click: saveAllUpScore, visible: isEditingUpScore()">Save All</button>
+                                        <!-- /ko -->
+                                        <!-- ko if: winnerDeclared -->
+                                            <div class="flag">
+                                                <div class="flagwave"></div>
+                                                <span class="flagtxt"></span>
+                                                <span data-bind="html: winningPlayer" class="winner"></span>
+                                                <span class="winner">WINS!</span>
+                                            </div>
                                         <!-- /ko -->
                                     </td>
                                 </tr>
@@ -187,7 +192,7 @@
                                 <!-- /ko -->
                             </tbody>
                         </table>
-                    </div>
+                    </div>                    
                 </div><!-- /main -->
             </div><!-- wrapper -->
         </div><!-- /container -->

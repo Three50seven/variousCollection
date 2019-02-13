@@ -1,0 +1,50 @@
+﻿/*
+    FLAG CSS SOURCE: https://css-tricks.com/forums/topic/css3-flag-wave-ribbon-animated/
+*/
+.flag {
+    position: relative;
+    height: 150px;
+    width: 300px;
+    border: 3px solid #fff;
+    -webkit-box-shadow: 0 0 2px 2px rgba(20,20,20,.1);
+    background-color: yellow;
+    text-align: center;
+}
+
+.flagwave {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 306px;
+    height: 156px;
+    z-index: 2;
+    background-image: -webkit-gradient( linear, 0% 30%, 50% top, color-stop(0%,rgba(204,99,40,0)), color-stop(40%,rgba(204,99,40,0)), color-stop(90%,rgba(204,99,40,.3)), color-stop(100%,rgba(204,99,40,0))), -webkit-gradient( linear, 50% 30%, 100% top, color-stop(0%,rgba(204,99,40,0)), color-stop(25%,rgba(204,99,40,.3)), color-stop(50%,rgba(204,99,40,0)), color-stop(80%,rgba(204,99,40,.3)), color-stop(100%,rgba(204,99,40,0)));
+    background-size: 200%;
+    background-position: right;
+    -webkit-animation-name: flagwave;
+    -webkit-animation-duration: 10s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes flagwave {
+
+    0% {
+        background-position: -400px 0px, -400px 0px, -400px 0px,-400px 0px;
+    }
+
+    100% {
+        background-position: 800px 0px, 800px 0px, 800px 0px, 800px 0px;
+    }
+}
+
+span.flagtxt {
+    position: relative;
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 1.6em;
+    text-transform: uppercase;
+    line-height: 1.9em;
+}
