@@ -46,13 +46,9 @@
         }
     };
     incrementScore = function (score, playerId) {
-        console.log('increase: ' + score + ' for player:' + playerId);
-
         updateCricketScore(score, playerId, 1);
     };
     decrementScore = function (score, playerId) {
-        console.log('decrease: ' + score + ' for player:' + playerId);
-
         updateCricketScore(score, playerId, -1);
     };
     clearForm = function () {
@@ -253,15 +249,65 @@
                 match.p1Score += scoreChanger;
                 match.p1ScoreImg = getCricketScoreImagePath(match.p1Score);                
             }
+            else            
+                self.cricketP1Score(self.cricketP1Score() + tallyCricketScore(scoreId, match.p1Score, match.p2Score) * scoreChanger);
         }
         else {
             if (match.p2Score + scoreChanger >= 0 && match.p2Score + scoreChanger <= 3) {
                 match.p2Score += scoreChanger;
                 match.p2ScoreImg = getCricketScoreImagePath(match.p2Score);
             }
+            else
+                self.cricketP2Score(self.cricketP2Score() + tallyCricketScore(scoreId, match.p2Score, match.p1Score) * scoreChanger);
         }
 
-        self.scoreTargets.refresh(match); //refresh observable array        
+        self.scoreTargets.refresh(match); //refresh observable array
+
+        checkCricketWinner();
+    };
+    tallyCricketScore = function (scoreAmount, scorerMarks, opponentMarks) {
+        var tally = 0;
+
+        //if keeping score - tally up total when the other player has not closed out the number yet:
+        if (self.keepCricketScore() && scorerMarks === 3 && opponentMarks < 3) {
+            if (scoreAmount === 'Bull')
+                tally = 25;
+            else if (UTILITIES.isNumber(scoreAmount))
+                tally = parseFloat(scoreAmount);            
+        }
+
+        return tally;
+    };
+    checkCricketWinner = function () {
+        var winnersName = '';
+
+        //check if every score equals 3, then this player is a winnerCandidate
+        var allP1IsChecked = self.scoreTargets().every(function (scoreRecord) {
+            return scoreRecord.p1Score === 3;
+        });
+
+        var allP2IsChecked = self.scoreTargets().every(function (scoreRecord) {
+            return scoreRecord.p2Score === 3;
+        });
+        
+        if (allP1IsChecked || allP2IsChecked) {
+            //if keeping score, see who has the biggest score
+            if (allP1IsChecked && allP2IsChecked && self.keepCricketScore()) {
+                if (self.cricketP1Score() > self.cricketP2Score())
+                    winnersName = self.playerOne();
+                else
+                    winnersName = self.playerTwo();
+            }
+            else if (!self.keepCricketScore()) {
+                //otherwise, just see who checks out first
+                if (allP1IsChecked)
+                    winnersName = self.playerOne();
+                if (allP2IsChecked)
+                    winnersName = self.playerTwo();
+            }
+
+            self.winningPlayer(winnersName);
+        }        
     };
 
 })(jQuery);

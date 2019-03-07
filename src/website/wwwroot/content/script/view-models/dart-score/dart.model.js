@@ -28,4 +28,7 @@
     self.playerTwoUpRoundScore1Entered = ko.observable(0); //player2 dart 1
     self.playerTwoUpRoundScore2Entered = ko.observable(0); //player2 dart 2
     self.playerTwoUpRoundScore3Entered = ko.observable(0); //player2 dart 3
+    self.keepCricketScore = ko.observable(false);
+    self.cricketP1Score = ko.observable(0);
+    self.cricketP2Score = ko.observable(0);
 })(jQuery);

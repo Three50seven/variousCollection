@@ -164,7 +164,7 @@
 
                     <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.Cricket">
                         <h3 class="center">Cricket</h3>
-                        
+
                         <div data-bind="visible: !gameStarted()">
                             <p>
                                 Enter Score Target (1-20):
@@ -174,17 +174,34 @@
                             <br />
                             Player 2: <input data-bind="value: playerTwo" maxlength="20" onfocus="this.value=''" />
                             <br /><br />
+                            <input type="checkbox" data-bind="checked: keepCricketScore"> Keep Cricket Score
+                            <br />
+                            <span style="font-size: x-small">Check this to keep score after each score is closed out.  Example: after closing out (hitting three times) the 20, each 20 hit afterwards for the player will be tallied until the other player also closes out the 20.</span>
+                            <br />
+                            <br /><br />
+
                             <button data-bind="click: buildScoreboard">Start Game</button>
                         </div>
 
-                        <table id="scoreboard" class="center">
+                        <!-- ko if: winnerDeclared -->
+                        <div class="flag">
+                            <div class="flagwave"></div>
+                            <span class="flagtxt"></span>
+                            <span data-bind="html: winningPlayer" class="winner"></span>
+                            <span class="winner">WINS!</span>
+                        </div>
+                        <!-- /ko -->
+
+                        <table id="scoreboard" class="center" data-bind="visible: !self.winnerDeclared()">
                             <thead>
                                 <tr>
                                     <td>
+                                        <h2 data-bind="visible: keepCricketScore">Score: <span data-bind="text: cricketP1Score"></span></h2>
                                         <h3 data-bind="text: playerOne"></h3>
                                     </td>
                                     <td> VS </td>
                                     <td>
+                                        <h2 data-bind="visible: keepCricketScore">Score: <span data-bind="text: cricketP2Score"></span></h2>
                                         <h3 data-bind="text: playerTwo"></h3>
                                     </td>
                                 </tr>
@@ -193,7 +210,7 @@
                                 <!-- ko foreach: scoreTargets -->
                                 <tr>
                                     <td>
-                                        <img class="score-marker" data-bind="attr: { src: p1ScoreImg }, click: decrementScore.bind($data, score, 1)" />                                        
+                                        <img class="score-marker" data-bind="attr: { src: p1ScoreImg }, click: decrementScore.bind($data, score, 1)" />
                                     </td>
                                     <td>
                                         <div class="score-board-ctrls">
@@ -202,7 +219,7 @@
                                             <img class="score-increment" src="../../wwwroot/content/images/dart-plus-transparent.png" data-bind="click: incrementScore.bind($data, score, 2)" />
                                         </div>
                                     </td>
-                                    <td>                                        
+                                    <td>
                                         <img class="score-marker" data-bind="attr: { src: p2ScoreImg }, click: decrementScore.bind($data, score, 2)" />
                                     </td>
                                 </tr>
