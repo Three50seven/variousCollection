@@ -55,3 +55,8 @@ img.score-increment {
 td.scoreboard {
     border-right: 1px solid gray;
 }
+
+.score-board-ctrls {
+    width: 100%;
+    height: 100px;
+}

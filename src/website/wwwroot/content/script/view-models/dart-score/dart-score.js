@@ -26,18 +26,34 @@
         if (isValidCurrentScoreTargetSeed()) {
             var currentVal = parseFloat(self.scoreTargetSeed()); // Read the user input
             for (i = MODULES.Constants.DartScore.MAX_SEED; i >= currentVal; i--) {
-                self.scoreTargets.push({ score: i });
+                self.scoreTargets.push({
+                    score: i,
+                    p1Score: 0,
+                    p1ScoreImg: '',
+                    p2Score: 0,
+                    p2ScoreImg: ''
+                });
             }
 
             //add bullseye each time
-            self.scoreTargets.push({ score: 'Bull' });
+            self.scoreTargets.push({
+                score: 'Bull',
+                p1Score: 0,
+                p1ScoreImg: '',
+                p2Score: 0,
+                p2ScoreImg: ''
+            });
         }
     };
     incrementScore = function (score, playerId) {
         console.log('increase: ' + score + ' for player:' + playerId);
+
+        updateCricketScore(score, playerId, 1);
     };
     decrementScore = function (score, playerId) {
         console.log('decrease: ' + score + ' for player:' + playerId);
+
+        updateCricketScore(score, playerId, -1);
     };
     clearForm = function () {
         self.scoreTargets([]);
@@ -203,7 +219,7 @@
                 p2Total += parseFloat(scoreRecord.playerTwoScore);
             }
 
-            self.scoreUpGame.refresh(scoreRecord); //refresh observable
+            self.scoreUpGame.refresh(scoreRecord); //refresh observable array
         });        
 
         if (!hasErrors) {
@@ -212,6 +228,40 @@
             self.currentPlayerOneUpScore(self.score501() - p1Total);
             self.currentPlayerTwoUpScore(self.score501() - p2Total);
         }            
+    };
+    getCricketScoreImagePath = function (score) {
+        var path = '';
+        switch (score) {
+            case 1:
+                path = MODULES.Constants.DartScore.IMG_1_SLASH_T_PATH;
+                break;
+            case 2:
+                path = MODULES.Constants.DartScore.IMG_2_X_T_PATH;
+                break;
+            case 3:
+                path = MODULES.Constants.DartScore.IMG_3_X_CIRCLED_T_PATH;
+        }
+        return path;
+    };
+    updateCricketScore = function (scoreId, playerId, scoreChanger) {
+        var match = ko.utils.arrayFirst(self.scoreTargets(), function (item) {
+            return item.score === scoreId;
+        });
+
+        if (playerId === 1) {
+            if (match.p1Score + scoreChanger >= 0 && match.p1Score + scoreChanger <= 3) {
+                match.p1Score += scoreChanger;
+                match.p1ScoreImg = getCricketScoreImagePath(match.p1Score);                
+            }
+        }
+        else {
+            if (match.p2Score + scoreChanger >= 0 && match.p2Score + scoreChanger <= 3) {
+                match.p2Score += scoreChanger;
+                match.p2ScoreImg = getCricketScoreImagePath(match.p2Score);
+            }
+        }
+
+        self.scoreTargets.refresh(match); //refresh observable array        
     };
 
 })(jQuery);

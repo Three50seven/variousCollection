@@ -70,7 +70,7 @@
                     <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.FiveOne">
                         <h3 class="center">501 up (301 up)</h3>
                         <div class="center">
-                            <p>
+                            <p data-bind="visible: !gameStarted()">
                                 Select a game score to reach:
                                 <select data-bind="options: availableUpGames, value: score501, disable: gameStarted, event:{ change: upGameChanged}"></select>
                             </p>
@@ -164,30 +164,47 @@
 
                     <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.Cricket">
                         <h3 class="center">Cricket</h3>
-                        <p>
-                            Enter Score Target (1-20):
-                            <input data-bind="value: scoreTargetSeed, disable: gameStarted" />
-                        </p>
-                        <button data-bind="click: buildScoreboard">Start Game</button>
+                        
+                        <div data-bind="visible: !gameStarted()">
+                            <p>
+                                Enter Score Target (1-20):
+                                <input data-bind="value: scoreTargetSeed, disable: gameStarted" />
+                            </p>
+                            Player 1: <input data-bind="value: playerOne" maxlength="20" onfocus="this.value=''" />
+                            <br />
+                            Player 2: <input data-bind="value: playerTwo" maxlength="20" onfocus="this.value=''" />
+                            <br /><br />
+                            <button data-bind="click: buildScoreboard">Start Game</button>
+                        </div>
 
                         <table id="scoreboard" class="center">
                             <thead>
                                 <tr>
-                                    <td><input data-bind="value: playerOne, disable: gameStarted" /></td>
-                                    <td></td>
-                                    <td><input data-bind="value: playerTwo, disable: gameStarted" /></td>
+                                    <td>
+                                        <h3 data-bind="text: playerOne"></h3>
+                                    </td>
+                                    <td> VS </td>
+                                    <td>
+                                        <h3 data-bind="text: playerTwo"></h3>
+                                    </td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <!-- ko foreach: scoreTargets -->
                                 <tr>
-                                    <td><img class="score-marker" src="../../wwwroot/content/images/dart-x-circled-transparent.png" data-bind="click: decrementScore.bind($data, score, 1)" /></td>
                                     <td>
-                                        <img class="score-increment" src="../../wwwroot/content/images/dart-plus-transparent.png" data-bind="click: incrementScore.bind($data, score, 1)" />
-                                        <span class="score-number" data-bind="text: score"></span>
-                                        <img class="score-increment" src="../../wwwroot/content/images/dart-plus-transparent.png" data-bind="click: incrementScore.bind($data, score, 2)" />
+                                        <img class="score-marker" data-bind="attr: { src: p1ScoreImg }, click: decrementScore.bind($data, score, 1)" />                                        
                                     </td>
-                                    <td><img class="score-marker" src="../../wwwroot/content/images/dart-slash-transparent.png" data-bind="click: decrementScore.bind($data, score, 2)" /></td>
+                                    <td>
+                                        <div class="score-board-ctrls">
+                                            <img class="score-increment" src="../../wwwroot/content/images/dart-plus-transparent.png" data-bind="click: incrementScore.bind($data, score, 1)" />
+                                            <span class="score-number" data-bind="text: score"></span>
+                                            <img class="score-increment" src="../../wwwroot/content/images/dart-plus-transparent.png" data-bind="click: incrementScore.bind($data, score, 2)" />
+                                        </div>
+                                    </td>
+                                    <td>                                        
+                                        <img class="score-marker" data-bind="attr: { src: p2ScoreImg }, click: decrementScore.bind($data, score, 2)" />
+                                    </td>
                                 </tr>
                                 <!-- /ko -->
                             </tbody>
