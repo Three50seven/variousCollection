@@ -14,10 +14,11 @@
     });
 
     self.selectedGame = ko.observable("");
-    self.scoreTargetSeed = ko.observable(MODULES.Constants.DartScore.DEFAULT_SCORE_TARGET); //e.g. 19 will make a score board of 19 - 20 + Bull, and 1 - 20 if 1 is entered    
+    self.scoreTargetSeed = ko.observable(MODULES.Constants.DartScore.DEFAULT_SCORE_TARGET); //e.g. 19 will make a score board of 19 - 20 + Bull, and 1 - 20 if 1 is entered
     self.score501 = ko.observable(MODULES.LookupTypes.DartScore.Game501Enum.Five);
     self.scoreTargets = ko.observableArray([]);
     self.scoreUpGame = ko.observableArray([]);
+    self.killerScores = ko.observableArray([]);
     self.currentUpRound = ko.observable(1);
     self.isEditingUpScore = ko.observable(false);
     self.currentPlayerOneUpScore = ko.observable(self.score501());
@@ -31,4 +32,7 @@
     self.keepCricketScore = ko.observable(false);
     self.cricketP1Score = ko.observable(0);
     self.cricketP2Score = ko.observable(0);
+    self.numberOfKillerPlayers = ko.observable(2);
+    self.numberOfKillerLives = ko.observable(MODULES.Constants.DartScore.DEFAULT_KILLER_LIVES);
+    self.currentKillerPlayersTurn = ko.observable(0);
 })(jQuery);

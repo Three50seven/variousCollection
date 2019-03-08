@@ -65,8 +65,9 @@
 
                     <!-- ko if: errors -->
                     <p class="error">Errors: <strong data-bind="html: errors"></strong></p>
-                    <!-- /ko -->                    
+                    <!-- /ko -->
 
+                    <!-- BEGIN 501/301 -->
                     <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.FiveOne">
                         <h3 class="center">501 up (301 up)</h3>
                         <div class="center">
@@ -121,17 +122,17 @@
                                     </td>
                                     <td>
                                         <!-- ko ifnot: winnerDeclared -->
-                                            <button data-bind="click: enterUpScore, visible: !isEditingUpScore()">Enter<br />Scores</button>
-                                            <button data-bind="click: editUpScore, visible: !isEditingUpScore()">Edit</button>
-                                            <button data-bind="click: saveAllUpScore, visible: isEditingUpScore()">Save All</button>
+                                        <button data-bind="click: enterUpScore, visible: !isEditingUpScore()">Enter<br />Scores</button>
+                                        <button data-bind="click: editUpScore, visible: !isEditingUpScore()">Edit</button>
+                                        <button data-bind="click: saveAllUpScore, visible: isEditingUpScore()">Save All</button>
                                         <!-- /ko -->
                                         <!-- ko if: winnerDeclared -->
-                                            <div class="flag">
-                                                <div class="flagwave"></div>
-                                                <span class="flagtxt"></span>
-                                                <span data-bind="html: winningPlayer" class="winner"></span>
-                                                <span class="winner">WINS!</span>
-                                            </div>
+                                        <div class="flag">
+                                            <div class="flagwave"></div>
+                                            <span class="flagtxt"></span>
+                                            <span data-bind="html: winningPlayer" class="winner"></span>
+                                            <span class="winner">WINS!</span>
+                                        </div>
                                         <!-- /ko -->
                                     </td>
                                 </tr>
@@ -154,21 +155,89 @@
                             </tbody>
                         </table>
                     </div>
-
+                    <!-- END 501/301 -->
+                    <!-- BEGIN KILLER -->
                     <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.Killer">
                         <h3 class="center">Killer</h3>
-                        <p>
-                            Coming soon!
-                        </p>
-                    </div>
+                        <div data-bind="visible: !gameStarted()">
+                            <p>
+                                Enter Number of Players (1-20):
+                                <input data-bind="value: numberOfKillerPlayers" type="number" />
+                                <br /><br />
+                                Enter Number of Starting Lives (1-20):
+                                <input data-bind="value: numberOfKillerLives" type="number" />
+                            </p>
+                            <p style="font-size: x-small">
+                                Press "Next" to enter player info and assign numbers.
+                                To assign numbers, take turns throwing with least dominant hand.
+                                Once a unique number is hit, assign that player the number hit.
+                            </p>
+                            <br /><br />
+                            <button data-bind="click: buildKillerScoreboard">Next</button>
+                        </div>
 
+                        <!-- ko if: winnerDeclared -->
+                        <div class="flag">
+                            <div class="flagwave"></div>
+                            <span class="flagtxt"></span>
+                            <span data-bind="html: winningPlayer" class="winner"></span>
+                            <span class="winner">WINS!</span>
+                        </div>
+                        <!-- /ko -->
+
+                        <p>
+                            <div class="killer-indicator"></div> indicates the player is a "Killer" and can take lives away from other players by hitting their assigned number.
+                        </p>
+                        <p>
+                            A <span class="turn-indicator">highlighted row</span> indicates it is this player's turn.
+                        </p>
+                        <table id="scoreboard" class="center" data-bind="visible: !self.winnerDeclared()">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        Assigned Number
+                                    </td>
+                                    <td>
+                                        Player
+                                    </td>
+                                    <td>
+                                        Lives Remaining
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- ko foreach: killerScores -->
+                                <tr data-bind="css: { 'turn-indicator': currentKillerPlayersTurn === playerId}">
+                                    <td>
+                                        <div class="killer-indicator" data-bind="visible: isKiller"></div>
+                                        <span class="score-number" data-bind="text: assignedNumber, visible: gameStarted()"></span>
+                                        <input class="score-entry" type="number" data-bind="value: assignedNumber, visible: !gameStarted()" />
+                                    </td>
+                                    <td>
+                                        <span class="score-number" data-bind="text: playerName, visible: gameStarted(), css: { 'out-indicator': isOut}"></span>
+                                        <input maxlength="30" width="140" data-bind="value: playerName, visible: !gameStarted()" />
+                                    </td>
+                                    <td>
+                                        <div class="score-board-ctrls" style="margin: 20px;" data-bind="visible: !isOut">
+                                            <img class="score-increment" src="../../wwwroot/content/images/dart-minus-transparent.png" data-bind="click: decrementLives.bind($data, playerId)" />
+                                            <span class="score-number" data-bind="text: livesRemaining"></span>
+                                            <img class="score-increment" src="../../wwwroot/content/images/dart-plus-transparent.png" data-bind="click: incrementLives.bind($data, playerId)" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- /ko -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END KILLER -->
+                    <!-- BEGIN CRICKET -->
                     <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.Cricket">
                         <h3 class="center">Cricket</h3>
 
                         <div data-bind="visible: !gameStarted()">
                             <p>
                                 Enter Score Target (1-20):
-                                <input data-bind="value: scoreTargetSeed, disable: gameStarted" />
+                                <input data-bind="value: scoreTargetSeed, disable: gameStarted" type="number" />
                             </p>
                             Player 1: <input data-bind="value: playerOne" maxlength="20" onfocus="this.value=''" />
                             <br />
@@ -226,7 +295,8 @@
                                 <!-- /ko -->
                             </tbody>
                         </table>
-                    </div>                    
+                    </div>
+                    <!-- END CRICKET -->
                 </div><!-- /main -->
             </div><!-- wrapper -->
         </div><!-- /container -->

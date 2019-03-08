@@ -23,26 +23,14 @@
         self.gameStarted(true); //first time building scoreboard, the game has started
         clearForm();
 
-        if (isValidCurrentScoreTargetSeed()) {
+        if (isValidCurrentScoreTargetSeed(self.scoreTargetSeed())) {
             var currentVal = parseFloat(self.scoreTargetSeed()); // Read the user input
             for (i = MODULES.Constants.DartScore.MAX_SEED; i >= currentVal; i--) {
-                self.scoreTargets.push({
-                    score: i,
-                    p1Score: 0,
-                    p1ScoreImg: '',
-                    p2Score: 0,
-                    p2ScoreImg: ''
-                });
+                self.scoreTargets.push(new MODULES.Constructors.DartScore.CricketScore(i, 0, '', 0, ''));
             }
 
             //add bullseye each time
-            self.scoreTargets.push({
-                score: 'Bull',
-                p1Score: 0,
-                p1ScoreImg: '',
-                p2Score: 0,
-                p2ScoreImg: ''
-            });
+            self.scoreTargets.push(new MODULES.Constructors.DartScore.CricketScore('Bull', 0, '', 0, ''));
         }
     };
     incrementScore = function (score, playerId) {
@@ -51,7 +39,24 @@
     decrementScore = function (score, playerId) {
         updateCricketScore(score, playerId, -1);
     };
+    incrementLives = function (playerId) {        
+        updateKillerScore(playerId, 1);
+    };
+    decrementLives = function (playerId) {
+        updateKillerScore(playerId, -1);
+    };
+    buildKillerScoreboard = function () {        
+        clearForm();
+
+        if (isValidCurrentScoreTargetSeed(self.numberOfKillerPlayers()) && isValidCurrentScoreTargetSeed(self.numberOfKillerLives())) {
+            var currentVal = parseFloat(self.numberOfKillerPlayers()); // Read the user input
+            for (i = 0; i < currentVal; i++) {
+                self.killerScores.push(new MODULES.Constructors.DartScore.KillerScore(i, UTILITIES.getRandomName(true), 0, 0, false, false));
+            }
+        }
+    };
     clearForm = function () {
+        self.killerScores([]);
         self.scoreTargets([]);
     };
     isValid = function (errorMessage) {
@@ -68,11 +73,9 @@
 
         return valid;
     };
-    isValidCurrentScoreTargetSeed = function () {
+    isValidCurrentScoreTargetSeed = function (currentScoreTargetSeed) {
         let errorMessage = '';
-
-        var currentScoreTargetSeed = self.scoreTargetSeed();
-
+        
         if (UTILITIES.isNumber(currentScoreTargetSeed)) {
             if (currentScoreTargetSeed >= MODULES.Constants.DartScore.MIN_SEED && currentScoreTargetSeed <= MODULES.Constants.DartScore.MAX_SEED) {
                 errorMessage = '';
@@ -240,7 +243,7 @@
         return path;
     };
     updateCricketScore = function (scoreId, playerId, scoreChanger) {
-        var match = ko.utils.arrayFirst(self.scoreTargets(), function (item) {
+        let match = ko.utils.arrayFirst(self.scoreTargets(), function (item) {
             return item.score === scoreId;
         });
 
@@ -266,7 +269,7 @@
         checkCricketWinner();
     };
     tallyCricketScore = function (scoreAmount, scorerMarks, opponentMarks) {
-        var tally = 0;
+        let tally = 0;
 
         //if keeping score - tally up total when the other player has not closed out the number yet:
         if (self.keepCricketScore() && scorerMarks === 3 && opponentMarks < 3) {
@@ -279,14 +282,14 @@
         return tally;
     };
     checkCricketWinner = function () {
-        var winnersName = '';
+        let winnersName = '';
 
         //check if every score equals 3, then this player is a winnerCandidate
-        var allP1IsChecked = self.scoreTargets().every(function (scoreRecord) {
+        let allP1IsChecked = self.scoreTargets().every(function (scoreRecord) {
             return scoreRecord.p1Score === 3;
         });
 
-        var allP2IsChecked = self.scoreTargets().every(function (scoreRecord) {
+        let allP2IsChecked = self.scoreTargets().every(function (scoreRecord) {
             return scoreRecord.p2Score === 3;
         });
         
@@ -308,6 +311,60 @@
 
             self.winningPlayer(winnersName);
         }        
+    };
+    updateKillerScore = function (playerId, countChanger) {
+        if (allPlayersAssigned()) {
+            self.errors(''); //clear errors
+            self.gameStarted(true); //first time scoring, the game has started
+            
+            let match = ko.utils.arrayFirst(self.killerScores(), function (item) {
+                return item.playerId === playerId;
+            });
+
+            //only add until max is hit
+            if (match.livesRemaining + countChanger <= self.numberOfKillerLives()) {
+                match.livesRemaining += countChanger;
+            }
+
+            //determine if player is killer
+            if (match.livesRemaining === self.numberOfKillerLives()) {
+                match.isKiller = true;
+            }
+            else {
+                match.isKiller = false;
+            }
+
+            //determine if player is out
+            if (match.livesRemaining < 0) {
+                match.isOut = true;
+            }
+
+            self.killerScores.refresh(match); //refresh observable array
+
+            checkKillerWinner();
+        }
+        else {
+            self.errors('You must assign a number (1-20) to all players');
+        }              
+    };
+    allPlayersAssigned = function () {
+        //check if every assigned number is within the allowed range
+        return self.killerScores().every(function (record) {
+            return record.assignedNumber >= MODULES.Constants.DartScore.MIN_SEED && record.assignedNumber <= MODULES.Constants.DartScore.MAX_SEED;
+        });
+    };
+    checkKillerWinner = function () {
+        let winnersName = '';
+
+        //get an array of all players still alive
+        let playersStillAlive = self.killerScores().filter(function (record) {
+            return !record.isOut;
+        });
+
+        if (playersStillAlive.length === 1) {
+            winnersName = playersStillAlive[0].playerName;
+            self.winningPlayer(winnersName);
+        }
     };
 
 })(jQuery);

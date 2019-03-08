@@ -59,5 +59,21 @@
     },
     isNumber: function (n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
+    },
+    getRandomName: function (useTitleCase) {
+        let names = ["alligator", "anteater", "armadillo", "auroch", "axolotl", "badger", "bat", "beaver", "buffalo", "camel", "capybara",
+            "chameleon", "cheetah", "chinchilla", "chipmunk", "chupacabra", "cormorant", "coyote", "crow", "dingo", "dinosaur", "dog",
+            "dolphin", "dragon", "duck", "dumbo octopus", "elephant", "ferret", "fox", "frog", "giraffe", "gopher", "grizzly", "hedgehog",
+            "hippo", "hyena", "jackal", "ibex", "ifrit", "iguana", "koala", "kraken", "lemur", "leopard", "liger", "lion", "llama", "manatee",
+            "mink", "monkey", "narwhal", "nyan cat", "orangutan", "otter", "panda", "penguin", "platypus", "pumpkin", "python", "quagga",
+            "rabbit", "raccoon", "rhino", "sheep", "shrew", "skunk", "slow loris", "squirrel", "tiger", "turtle", "unicorn", "walrus",
+            "wolf", "wolverine", "wombat"];
+
+        var i = this.getRandomInt(0, names.length);
+
+        if (useTitleCase)
+            return this.titleCase(names[i]);
+        else
+            return names[i];        
     }
 };

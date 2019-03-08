@@ -9,7 +9,8 @@
         PLAYER_TWO: 'Player 2',
         IMG_1_SLASH_T_PATH: '/wwwroot/content/images/dart-slash-transparent.png',
         IMG_2_X_T_PATH: '/wwwroot/content/images/dart-x-transparent.png',
-        IMG_3_X_CIRCLED_T_PATH: '/wwwroot/content/images/dart-x-circled-transparent.png'
+        IMG_3_X_CIRCLED_T_PATH: '/wwwroot/content/images/dart-x-circled-transparent.png',
+        DEFAULT_KILLER_LIVES: 5
     };
 
 })();
