@@ -291,18 +291,18 @@
         });
         
         if (allP1IsChecked || allP2IsChecked) {
-            //if keeping score, see who has the biggest score
-            if (allP1IsChecked && allP2IsChecked && self.keepCricketScore()) {
+            //if keeping score, see who has the biggest score (or if tied, whoever goes out first)
+            if (self.keepCricketScore() && self.cricketP1Score() !== self.cricketP2Score()) {
                 if (self.cricketP1Score() > self.cricketP2Score())
                     winnersName = self.playerOne();
                 else
                     winnersName = self.playerTwo();
             }
-            else if (!self.keepCricketScore()) {
+            else {
                 //otherwise, just see who checks out first
                 if (allP1IsChecked)
                     winnersName = self.playerOne();
-                if (allP2IsChecked)
+                else
                     winnersName = self.playerTwo();
             }
 
