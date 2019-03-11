@@ -168,12 +168,17 @@
                                 <input data-bind="value: numberOfKillerLives" type="number" />
                             </p>
                             <p style="font-size: x-small">
-                                Press "Next" to enter player info and assign numbers.
-                                To assign numbers, take turns throwing with least dominant hand.
-                                Once a unique number is hit, assign that player the number hit.
+                                Press "Next" to show the score board.  Here you will be able to
+                                enter player info and assign numbers.  To assign numbers, take
+                                turns throwing with least dominant hand.  Once a unique number is
+                                hit, assign that player the number hit.
                             </p>
-                            <br /><br />
+                            <p style="font-size: x-small">
+                                Press "Start Game" once you are finished assigning numbers and names
+                                to each player.
+                            </p>
                             <button data-bind="click: buildKillerScoreboard">Next</button>
+                            <button data-bind="click: startKillerGame, visible: self.killerScores().length > 0">Start Game</button>
                         </div>
 
                         <!-- ko if: winnerDeclared -->
@@ -189,8 +194,15 @@
                             <div class="killer-indicator"></div> indicates the player is a "Killer" and can take lives away from other players by hitting their assigned number.
                         </p>
                         <p>
-                            A <span class="turn-indicator">highlighted row</span> indicates it is this player's turn.
+                            A <span class="turn-indicator">highlighted row</span> indicates it is this player's turn.  Once a player's lives fall below zero (0) they are out.
                         </p>
+                        <div data-bind="visible: gameStarted()">                            
+                            Currently Throwing: <span style="font-weight:400;" data-bind="text: currentKillerPlayersName()"></span>
+                            <br />
+                            <button data-bind="click: changeKillerPlayer(-1)">Previous Player's Turn</button>
+                            <button data-bind="click: changeKillerPlayer(1)">Next Player's Turn</button>
+                        </div>
+                        
                         <table id="scoreboard" class="center" data-bind="visible: !self.winnerDeclared()">
                             <thead>
                                 <tr>
@@ -207,21 +219,22 @@
                             </thead>
                             <tbody>
                                 <!-- ko foreach: killerScores -->
-                                <tr data-bind="css: { 'turn-indicator': currentKillerPlayersTurn === playerId}">
+                                <tr data-bind="css: { 'turn-indicator': isPlayersTurn(playerId)}">
                                     <td>
                                         <div class="killer-indicator" data-bind="visible: isKiller"></div>
                                         <span class="score-number" data-bind="text: assignedNumber, visible: gameStarted()"></span>
-                                        <input class="score-entry" type="number" data-bind="value: assignedNumber, visible: !gameStarted()" />
+                                        <input class="score-entry" type="number" data-bind="value: assignedNumber, visible: !gameStarted()" onfocus="this.value=''" />
                                     </td>
                                     <td>
                                         <span class="score-number" data-bind="text: playerName, visible: gameStarted(), css: { 'out-indicator': isOut}"></span>
                                         <input maxlength="30" width="140" data-bind="value: playerName, visible: !gameStarted()" />
+                                        <div class="error" data-bind="html: errorMessage" />
                                     </td>
                                     <td>
                                         <div class="score-board-ctrls" style="margin: 20px;" data-bind="visible: !isOut">
-                                            <img class="score-increment" src="../../wwwroot/content/images/dart-minus-transparent.png" data-bind="click: decrementLives.bind($data, playerId)" />
+                                            <img class="score-increment" src="../../wwwroot/content/images/dart-minus-transparent.png" data-bind="click: decrementLives.bind($data, playerId), visible: canDecrementLives(playerId)" />
                                             <span class="score-number" data-bind="text: livesRemaining"></span>
-                                            <img class="score-increment" src="../../wwwroot/content/images/dart-plus-transparent.png" data-bind="click: incrementLives.bind($data, playerId)" />
+                                            <img class="score-increment" src="../../wwwroot/content/images/dart-plus-transparent.png" data-bind="click: incrementLives.bind($data, playerId), visible: isPlayersTurn(playerId) && gameStarted()" />
                                         </div>
                                     </td>
                                 </tr>

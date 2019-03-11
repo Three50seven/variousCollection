@@ -34,5 +34,5 @@
     self.cricketP2Score = ko.observable(0);
     self.numberOfKillerPlayers = ko.observable(2);
     self.numberOfKillerLives = ko.observable(MODULES.Constants.DartScore.DEFAULT_KILLER_LIVES);
-    self.currentKillerPlayersTurn = ko.observable(0);
+    self.currentKillerPlayersTurn = ko.observable(0);    
 })(jQuery);

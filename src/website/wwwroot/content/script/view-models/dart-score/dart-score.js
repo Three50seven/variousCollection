@@ -51,9 +51,53 @@
         if (isValidCurrentScoreTargetSeed(self.numberOfKillerPlayers()) && isValidCurrentScoreTargetSeed(self.numberOfKillerLives())) {
             var currentVal = parseFloat(self.numberOfKillerPlayers()); // Read the user input
             for (i = 0; i < currentVal; i++) {
-                self.killerScores.push(new MODULES.Constructors.DartScore.KillerScore(i, UTILITIES.getRandomAnimalWithAdjective(true), 0, 0, false, false));
+                self.killerScores.push(new MODULES.Constructors.DartScore.KillerScore(i, UTILITIES.getRandomAnimalWithAdjective(true), i+1, 0, false, false,''));
             }
         }
+    };
+    startKillerGame = function () {
+        if (!killerSetupHasErrors()) {
+            self.errors(''); //clear errors
+            self.gameStarted(true); //indicator flag that the game has started
+        }
+    };
+    isPlayersTurn = function (playerId) {
+        return self.currentKillerPlayersTurn() === playerId;
+    };
+    changeKillerPlayer = function (changer) {
+        if (gameStarted()) {
+            let currentPlayerID = self.currentKillerPlayersTurn();
+
+            if (self.currentKillerPlayersTurn() + changer >= self.numberOfKillerPlayers())
+                currentPlayerID = 0; //reset to first player after last player's turn
+            else if (currentPlayerID + changer < 0)
+                currentPlayerID = self.numberOfKillerPlayers() - 1; //when pressing prev. on player 1, change to last player
+            else
+                currentPlayerID += changer;
+
+            self.currentKillerPlayersTurn(currentPlayerID);
+        }
+    };
+    currentKillerPlayersName = function () {
+        if (self.killerScores().length > 0) {
+            let match = ko.utils.arrayFirst(self.killerScores(), function (item) {
+                return item.playerId === self.currentKillerPlayersTurn();
+            });
+
+            if (match)
+                return match.playerName;
+        }
+    };
+    canDecrementLives = function (playerId) {
+        //current player can only decrement anyone's lives only if they are a killer, or they are decreasing their own lives
+        let currentThrowerIsKiller = false;
+        let match = ko.utils.arrayFirst(self.killerScores(), function (item) {
+            return item.playerId === self.currentKillerPlayersTurn();
+        });
+        if (match)
+            currentThrowerIsKiller = match.isKiller;                
+
+        return self.gameStarted() && (playerId === self.currentKillerPlayersTurn() || currentThrowerIsKiller);
     };
     clearForm = function () {
         self.killerScores([]);
@@ -73,11 +117,11 @@
 
         return valid;
     };
-    isValidCurrentScoreTargetSeed = function (currentScoreTargetSeed) {
+    validateDartNumber = function (number) {
         let errorMessage = '';
-        
-        if (UTILITIES.isNumber(currentScoreTargetSeed)) {
-            if (currentScoreTargetSeed >= MODULES.Constants.DartScore.MIN_SEED && currentScoreTargetSeed <= MODULES.Constants.DartScore.MAX_SEED) {
+
+        if (UTILITIES.isNumber(number)) {
+            if (number >= MODULES.Constants.DartScore.MIN_SEED && number <= MODULES.Constants.DartScore.MAX_SEED) {
                 errorMessage = '';
             }
             else {
@@ -87,6 +131,11 @@
         else {
             errorMessage = 'You must enter a valid number';
         }
+
+        return errorMessage;
+    };
+    isValidCurrentScoreTargetSeed = function (currentScoreTargetSeed) {
+        let errorMessage = validateDartNumber(currentScoreTargetSeed);
 
         return isValid(errorMessage);
     };
@@ -313,45 +362,63 @@
         }        
     };
     updateKillerScore = function (playerId, countChanger) {
-        if (allPlayersAssigned()) {
-            self.errors(''); //clear errors
-            self.gameStarted(true); //first time scoring, the game has started
-            
-            let match = ko.utils.arrayFirst(self.killerScores(), function (item) {
-                return item.playerId === playerId;
-            });
+        let match = ko.utils.arrayFirst(self.killerScores(), function (item) {
+            return item.playerId === playerId;
+        });
 
-            //only add until max is hit
-            if (match.livesRemaining + countChanger <= self.numberOfKillerLives()) {
-                match.livesRemaining += countChanger;
-            }
+        //only add until max is hit
+        if (match.livesRemaining + countChanger <= self.numberOfKillerLives()) {
+            match.livesRemaining += countChanger;
+        }
 
-            //determine if player is killer
-            if (match.livesRemaining === self.numberOfKillerLives()) {
-                match.isKiller = true;
-            }
-            else {
-                match.isKiller = false;
-            }
-
-            //determine if player is out
-            if (match.livesRemaining < 0) {
-                match.isOut = true;
-            }
-
-            self.killerScores.refresh(match); //refresh observable array
-
-            checkKillerWinner();
+        //determine if player is killer
+        if (match.livesRemaining === self.numberOfKillerLives()) {
+            match.isKiller = true;
         }
         else {
-            self.errors('You must assign a number (1-20) to all players');
-        }              
+            match.isKiller = false;
+        }
+
+        //determine if player is out
+        if (match.livesRemaining < 0) {
+            match.isOut = true;
+        }
+
+        self.killerScores.refresh(match); //refresh observable array
+
+        checkKillerWinner();     
     };
-    allPlayersAssigned = function () {
-        //check if every assigned number is within the allowed range
-        return self.killerScores().every(function (record) {
-            return record.assignedNumber >= MODULES.Constants.DartScore.MIN_SEED && record.assignedNumber <= MODULES.Constants.DartScore.MAX_SEED;
-        });
+    killerSetupHasErrors = function () {
+        //check if every assigned number is within the allowed range and make sure the player name is not blank
+        let hasErrors = false;
+
+        $.each(self.killerScores(), function (i, record) {
+            let assigned = record.assignedNumber;
+            record.errorMessage = validateDartNumber(assigned);
+
+            if (record.playerName.trim() === '') {
+                record.errorMessage = record.errorMessage + "</br>Player Name cannot be blank.";
+            }
+
+            self.killerScores.refresh(record); //refresh observable array to get assigned number
+
+            //check if every player has a unique assigned number
+            let otherPlayers = self.killerScores().filter(function (r) { return r.playerId !== record.playerId; });
+            let isUnique = otherPlayers.every(function (unique) {
+                return unique.assignedNumber !== assigned;
+            });
+
+            if (!isUnique) {
+                record.errorMessage = record.errorMessage + "</br>This number is already assigned to another player.";
+            }
+
+            if (record.errorMessage !== '')
+                hasErrors = true;
+
+            self.killerScores.refresh(record); //refresh observable array to show errors
+        });  
+
+        return hasErrors;
     };
     checkKillerWinner = function () {
         let winnersName = '';

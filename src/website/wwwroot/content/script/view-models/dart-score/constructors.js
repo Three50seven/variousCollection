@@ -15,13 +15,14 @@ MODULES.Constructors.DartScore = (function () {
             this.p2Score = p2Score;
             this.p2ScoreImg = p2ScoreImg;
         },
-        KillerScore: function (playerId, playerName, assignedNumber, livesRemaining, isKiller, isOut) {
+        KillerScore: function (playerId, playerName, assignedNumber, livesRemaining, isKiller, isOut, errorMessage) {
             this.playerId = playerId;
             this.playerName = playerName;
             this.assignedNumber = assignedNumber;
             this.livesRemaining = livesRemaining;
             this.isKiller = isKiller;
             this.isOut = isOut;
+            this.errorMessage = errorMessage;
         }
     };
 })();

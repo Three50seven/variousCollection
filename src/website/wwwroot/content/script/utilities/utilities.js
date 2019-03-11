@@ -65,30 +65,33 @@
         return list[i];
     },
     getRandomAnimal: function (useTitleCase) {
-        let animals = ["alligator", "anteater", "antelope", "armadillo", "auroch", "axolotl", "badger", "bat", "beaver", "buffalo", "camel", "jackalope", "starfish",
-            "chameleon", "cheetah", "chinchilla", "chipmunk", "chupacabra", "cormorant", "coyote", "crow", "dingo", "dinosaur", "dog", "cow", "opossum", "jellyfish",
+        let animals = ["alligator", "anteater", "antelope", "armadillo", "pelican", "muskrat", "badger", "bat", "beaver", "buffalo", "camel", "jackalope", "starfish",
+            "chameleon", "cheetah", "chinchilla", "chipmunk", "chupacabra", "flamingo", "coyote", "crow", "dingo", "dinosaur", "dog", "cow", "opossum", "jellyfish",
             "dolphin", "dragon", "duck", "octopus", "elephant", "ferret", "fox", "frog", "giraffe", "gopher", "grizzly", "hedgehog", "chicken", "Tasmanian devil",
-            "hippo", "hyena", "jackal", "ibex", "coyote", "iguana", "koala", "kraken", "lemur", "leopard", "liger", "lion", "llama", "manatee", "lamb", "stingray",
+            "hippo", "hyena", "jackal", "seagull", "coyote", "iguana", "koala", "kraken", "lemur", "leopard", "liger", "lion", "llama", "manatee", "lamb", "stingray",
             "mink", "monkey", "narwhal", "cat", "orangutan", "otter", "panda", "penguin", "platypus", "snake", "python", "zebra", "parakeet", "newt", "panther", "sloth",
             "rabbit", "raccoon", "rhino", "sheep", "shrew", "skunk", "loris", "squirrel", "tiger", "turtle", "unicorn", "walrus", "whale", "shark", "bear", "blue-jay",
             "wolf", "wolverine", "wombat", "cardinal", "wildcat", "falcon", "eagle", "bronco", "colt", "jaguar", "ram", "goat", "hawk", "warthog", "snail", "canary",
-            "parrot", "salamander", "mole", "dragon", "lizard", "guppy", "deer", "gorilla", "gecko", "blowfish", "mouse", "mammoth", "owl", "puppy", "porcupine"];
+            "parrot", "salamander", "mole", "dragon", "lizard", "guppy", "deer", "gorilla", "gecko", "blowfish", "mouse", "mammoth", "owl", "puppy", "porcupine",
+            "sea-turtle", "jackrabbit", "kangaroo", "kitten", "cub", "moose", "oyster", "goose", "wasp", "spider", "crab", "donkey", "mule", "elk", "swan", "horse", "pig",
+            "weasel", "seal", "peacock", "butterfly", "bull", "lobster", "roadrunner"];
 
         let animal = this.getRandomElement(animals);
 
         return useTitleCase ? this.titleCase(animal) : animal;
     },
     getRandomAnimalWithAdjective: function (useTitleCase) {
-        let adjectives = ["adamant", "cuddly" , "baleful", "violent", "embarrassed", "self-centered", "naked", "caustic", "bright", "wise-cracking",
-            "angry", "comely", "shaky", "sick", "zippy", "drunken", "defamatory", "sticky", "fighting", "painfully honest", "frozen", "filthy",
-            "bonkers", "harsh", "fluffy", "frisky", "greedy", "hideous", "crawly", "ungodly", "abusive", "idiotic", "hateful", "twisted", "morbid",
-            "useless", "yapping", "smelly", "magical", "indecent", "insolent", "arrogant", "confused", "flirting", "high-end", "insecure", "maniacal",
-            "sickened", "slippery", "stubborn", "talkative", "luminous", "mannered", "tripping", "vengeful", "sinister", "cowardly", "haunting", "wicked",
-            "noxious", "obtuse", "alcoholic", "demanding", "shivering", "offensive", "elusive", "startling", "disgusting", "slap happy", "disturbing", "sleazy",
+        let adjectives = ["adamant", "cuddly" , "baleful", "violent", "embarrassed", "self-centered", "naked", "caustic", "bright", "wise-cracking", "horrible", "jumpy",
+            "angry", "comely", "shaky", "sick", "zippy", "drunken", "defamatory", "sticky", "fighting", "painfully honest", "frozen", "filthy", "sporadic", "extreme",
+            "bonkers", "harsh", "fluffy", "frisky", "greedy", "hideous", "crawly", "ungodly", "abusive", "idiotic", "hateful", "twisted", "morbid", "twitchy", "conniving",
+            "useless", "yapping", "smelly", "magical", "indecent", "insolent", "arrogant", "confused", "flirting", "high-end", "insecure", "maniacal", "sneaky", "carnivorous",
+            "sickened", "slippery", "stubborn", "talkative", "luminous", "mannered", "tripping", "vengeful", "sinister", "cowardly", "haunting", "wicked", "tiny", "kind", "nice",
+            "noxious", "obtuse", "alcoholic", "demanding", "shivering", "offensive", "elusive", "startling", "disgusting", "slap happy", "disturbing", "sleazy", "joking", "jolly",
             "blathering", "rebellious", "lovely", "sexy", "hyperactive", "raunchy", "infuriating", "pea-brained", "territorial", "mischievous", "free-loading", "woolly", "grumpy",
             "house-broken", "house-trained", "cruel-hearted", "misunderstood", "narrow-minded", "tenacious", "self-absorbed", "crazy", "fierce", "swollen", "ubiquitous",
-            "lush", "incessant", "voracious", "smoky", "withering", "zealous", "lazy", "rabid", "diseased", "hyper", "hairy", "gassy", "wise", "saber-tooth",
-            "ferocious", "domesticated", "abnormal", "medicated", "cocky", "disrespectful", "impressive", "hilarious", "hot", "tactful", "bearded", "slimy", "insane"];
+            "lush", "incessant", "voracious", "smoky", "withering", "zealous", "lazy", "rabid", "diseased", "hyper", "hairy", "gassy", "wise", "saber-tooth", "timid",
+            "ferocious", "domesticated", "abnormal", "medicated", "cocky", "disrespectful", "impressive", "hilarious", "hot", "tactful", "bearded", "slimy", "insane",
+            "energetic", "gentle", "playful", "intelligent", "loyal", "rough"];
 
         let name = this.getRandomElement(adjectives) + ' ' + this.getRandomAnimal(useTitleCase);
 
