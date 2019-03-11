@@ -226,7 +226,7 @@
                                         <input class="score-entry" type="number" data-bind="value: assignedNumber, visible: !gameStarted()" onfocus="this.value=''" />
                                     </td>
                                     <td>
-                                        <span class="score-number" data-bind="text: playerName, visible: gameStarted(), css: { 'out-indicator': isOut}"></span>
+                                        <span class="score-number" data-bind="text: playerName, visible: gameStarted(), css: { 'out-indicator': isOut, 'killer-text': isKiller}"></span>
                                         <input maxlength="30" width="140" data-bind="value: playerName, visible: !gameStarted()" />
                                         <div class="error" data-bind="html: errorMessage" />
                                     </td>

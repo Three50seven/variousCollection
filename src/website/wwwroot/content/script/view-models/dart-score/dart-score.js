@@ -91,13 +91,16 @@
     canDecrementLives = function (playerId) {
         //current player can only decrement anyone's lives only if they are a killer, or they are decreasing their own lives
         let currentThrowerIsKiller = false;
+        let hasLives = false;
         let match = ko.utils.arrayFirst(self.killerScores(), function (item) {
             return item.playerId === self.currentKillerPlayersTurn();
         });
-        if (match)
-            currentThrowerIsKiller = match.isKiller;                
+        if (match) {
+            currentThrowerIsKiller = match.isKiller;
+            hasLives = match.livesRemaining > 0;
+        }                          
 
-        return self.gameStarted() && (playerId === self.currentKillerPlayersTurn() || currentThrowerIsKiller);
+        return self.gameStarted() && (playerId === self.currentKillerPlayersTurn() && hasLives || currentThrowerIsKiller);
     };
     clearForm = function () {
         self.killerScores([]);
@@ -399,13 +402,11 @@
             if (record.playerName.trim() === '') {
                 record.errorMessage = record.errorMessage + "</br>Player Name cannot be blank.";
             }
-
-            self.killerScores.refresh(record); //refresh observable array to get assigned number
-
+            
             //check if every player has a unique assigned number
             let otherPlayers = self.killerScores().filter(function (r) { return r.playerId !== record.playerId; });
             let isUnique = otherPlayers.every(function (unique) {
-                return unique.assignedNumber !== assigned;
+                return parseFloat(unique.assignedNumber) !== parseFloat(assigned);
             });
 
             if (!isUnique) {

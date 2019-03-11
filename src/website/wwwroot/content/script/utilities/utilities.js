@@ -91,7 +91,7 @@
             "house-broken", "house-trained", "cruel-hearted", "misunderstood", "narrow-minded", "tenacious", "self-absorbed", "crazy", "fierce", "swollen", "ubiquitous",
             "lush", "incessant", "voracious", "smoky", "withering", "zealous", "lazy", "rabid", "diseased", "hyper", "hairy", "gassy", "wise", "saber-tooth", "timid",
             "ferocious", "domesticated", "abnormal", "medicated", "cocky", "disrespectful", "impressive", "hilarious", "hot", "tactful", "bearded", "slimy", "insane",
-            "energetic", "gentle", "playful", "intelligent", "loyal", "rough"];
+            "energetic", "gentle", "playful", "intelligent", "loyal", "rough", "high", "wasted"];
 
         let name = this.getRandomElement(adjectives) + ' ' + this.getRandomAnimal(useTitleCase);
 
