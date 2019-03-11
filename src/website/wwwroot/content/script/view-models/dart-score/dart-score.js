@@ -51,7 +51,7 @@
         if (isValidCurrentScoreTargetSeed(self.numberOfKillerPlayers()) && isValidCurrentScoreTargetSeed(self.numberOfKillerLives())) {
             var currentVal = parseFloat(self.numberOfKillerPlayers()); // Read the user input
             for (i = 0; i < currentVal; i++) {
-                self.killerScores.push(new MODULES.Constructors.DartScore.KillerScore(i, UTILITIES.getRandomName(true), 0, 0, false, false));
+                self.killerScores.push(new MODULES.Constructors.DartScore.KillerScore(i, UTILITIES.getRandomAnimalWithAdjective(true), 0, 0, false, false));
             }
         }
     };

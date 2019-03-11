@@ -24,7 +24,7 @@
         if (timeSeconds > 0) {
             var minutes = Math.floor(timeSeconds / 60);
             var seconds = timeSeconds - minutes * 60;
-            return UTILITIES.strPadLeft(minutes, '0', 2) + ':' + UTILITIES.strPadLeft(seconds, '0', 2);
+            return this.strPadLeft(minutes, '0', 2) + ':' + this.strPadLeft(seconds, '0', 2);
         }
         else {
             return '00:00';
@@ -55,25 +55,43 @@
             return '';
     },
     splitAndTitleCase: function (str) {
-        return UTILITIES.titleCase(UTILITIES.splitCamelCase(str));
+        return this.titleCase(UTILITIES.splitCamelCase(str));
     },
     isNumber: function (n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     },
-    getRandomName: function (useTitleCase) {
-        let names = ["alligator", "anteater", "armadillo", "auroch", "axolotl", "badger", "bat", "beaver", "buffalo", "camel", "capybara",
-            "chameleon", "cheetah", "chinchilla", "chipmunk", "chupacabra", "cormorant", "coyote", "crow", "dingo", "dinosaur", "dog",
-            "dolphin", "dragon", "duck", "dumbo octopus", "elephant", "ferret", "fox", "frog", "giraffe", "gopher", "grizzly", "hedgehog",
-            "hippo", "hyena", "jackal", "ibex", "ifrit", "iguana", "koala", "kraken", "lemur", "leopard", "liger", "lion", "llama", "manatee",
-            "mink", "monkey", "narwhal", "nyan cat", "orangutan", "otter", "panda", "penguin", "platypus", "pumpkin", "python", "quagga",
-            "rabbit", "raccoon", "rhino", "sheep", "shrew", "skunk", "slow loris", "squirrel", "tiger", "turtle", "unicorn", "walrus",
-            "wolf", "wolverine", "wombat"];
+    getRandomElement: function (list) {
+        var i = this.getRandomInt(0, list.length);
+        return list[i];
+    },
+    getRandomAnimal: function (useTitleCase) {
+        let animals = ["alligator", "anteater", "antelope", "armadillo", "auroch", "axolotl", "badger", "bat", "beaver", "buffalo", "camel", "jackalope", "starfish",
+            "chameleon", "cheetah", "chinchilla", "chipmunk", "chupacabra", "cormorant", "coyote", "crow", "dingo", "dinosaur", "dog", "cow", "opossum", "jellyfish",
+            "dolphin", "dragon", "duck", "octopus", "elephant", "ferret", "fox", "frog", "giraffe", "gopher", "grizzly", "hedgehog", "chicken", "Tasmanian devil",
+            "hippo", "hyena", "jackal", "ibex", "coyote", "iguana", "koala", "kraken", "lemur", "leopard", "liger", "lion", "llama", "manatee", "lamb", "stingray",
+            "mink", "monkey", "narwhal", "cat", "orangutan", "otter", "panda", "penguin", "platypus", "snake", "python", "zebra", "parakeet", "newt", "panther", "sloth",
+            "rabbit", "raccoon", "rhino", "sheep", "shrew", "skunk", "loris", "squirrel", "tiger", "turtle", "unicorn", "walrus", "whale", "shark", "bear", "blue-jay",
+            "wolf", "wolverine", "wombat", "cardinal", "wildcat", "falcon", "eagle", "bronco", "colt", "jaguar", "ram", "goat", "hawk", "warthog", "snail", "canary",
+            "parrot", "salamander", "mole", "dragon", "lizard", "guppy", "deer", "gorilla", "gecko", "blowfish", "mouse", "mammoth", "owl", "puppy", "porcupine"];
 
-        var i = this.getRandomInt(0, names.length);
+        let animal = this.getRandomElement(animals);
 
-        if (useTitleCase)
-            return this.titleCase(names[i]);
-        else
-            return names[i];        
+        return useTitleCase ? this.titleCase(animal) : animal;
+    },
+    getRandomAnimalWithAdjective: function (useTitleCase) {
+        let adjectives = ["adamant", "cuddly" , "baleful", "violent", "embarrassed", "self-centered", "naked", "caustic", "bright", "wise-cracking",
+            "angry", "comely", "shaky", "sick", "zippy", "drunken", "defamatory", "sticky", "fighting", "painfully honest", "frozen", "filthy",
+            "bonkers", "harsh", "fluffy", "frisky", "greedy", "hideous", "crawly", "ungodly", "abusive", "idiotic", "hateful", "twisted", "morbid",
+            "useless", "yapping", "smelly", "magical", "indecent", "insolent", "arrogant", "confused", "flirting", "high-end", "insecure", "maniacal",
+            "sickened", "slippery", "stubborn", "talkative", "luminous", "mannered", "tripping", "vengeful", "sinister", "cowardly", "haunting", "wicked",
+            "noxious", "obtuse", "alcoholic", "demanding", "shivering", "offensive", "elusive", "startling", "disgusting", "slap happy", "disturbing", "sleazy",
+            "blathering", "rebellious", "lovely", "sexy", "hyperactive", "raunchy", "infuriating", "pea-brained", "territorial", "mischievous", "free-loading", "woolly", "grumpy",
+            "house-broken", "house-trained", "cruel-hearted", "misunderstood", "narrow-minded", "tenacious", "self-absorbed", "crazy", "fierce", "swollen", "ubiquitous",
+            "lush", "incessant", "voracious", "smoky", "withering", "zealous", "lazy", "rabid", "diseased", "hyper", "hairy", "gassy", "wise", "saber-tooth",
+            "ferocious", "domesticated", "abnormal", "medicated", "cocky", "disrespectful", "impressive", "hilarious", "hot", "tactful", "bearded", "slimy", "insane"];
+
+        let name = this.getRandomElement(adjectives) + ' ' + this.getRandomAnimal(useTitleCase);
+
+        return useTitleCase ? this.titleCase(name) : name;
     }
 };
