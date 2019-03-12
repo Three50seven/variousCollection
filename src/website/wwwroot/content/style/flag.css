@@ -27,6 +27,12 @@
     -webkit-animation-iteration-count: infinite;
 }
 
+.killer-flag {
+    height: 300px;
+    width: 100%;
+    line-height: 300px
+}
+
 @-webkit-keyframes flagwave {
 
     0% {

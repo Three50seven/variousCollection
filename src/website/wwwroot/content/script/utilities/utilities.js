@@ -70,11 +70,11 @@
             "dolphin", "dragon", "duck", "octopus", "elephant", "ferret", "fox", "frog", "giraffe", "gopher", "grizzly", "hedgehog", "chicken", "Tasmanian devil",
             "hippo", "hyena", "jackal", "seagull", "coyote", "iguana", "koala", "kraken", "lemur", "leopard", "liger", "lion", "llama", "manatee", "lamb", "stingray",
             "mink", "monkey", "narwhal", "cat", "orangutan", "otter", "panda", "penguin", "platypus", "snake", "python", "zebra", "parakeet", "newt", "panther", "sloth",
-            "rabbit", "raccoon", "rhino", "sheep", "shrew", "skunk", "loris", "squirrel", "tiger", "turtle", "unicorn", "walrus", "whale", "shark", "bear", "blue-jay",
+            "rabbit", "raccoon", "rhino", "sheep", "shrew", "skunk", "loris", "squirrel", "tiger", "turtle", "unicorn", "walrus", "whale", "shark", "bear", "jay",
             "wolf", "wolverine", "wombat", "cardinal", "wildcat", "falcon", "eagle", "bronco", "colt", "jaguar", "ram", "goat", "hawk", "warthog", "snail", "canary",
             "parrot", "salamander", "mole", "dragon", "lizard", "guppy", "deer", "gorilla", "gecko", "blowfish", "mouse", "mammoth", "owl", "puppy", "porcupine",
             "sea-turtle", "jackrabbit", "kangaroo", "kitten", "cub", "moose", "oyster", "goose", "wasp", "spider", "crab", "donkey", "mule", "elk", "swan", "horse", "pig",
-            "weasel", "seal", "peacock", "butterfly", "bull", "lobster", "roadrunner"];
+            "weasel", "seal", "peacock", "butterfly", "bull", "lobster", "roadrunner", "fish", "goldfish", "reindeer"];
 
         let animal = this.getRandomElement(animals);
 
@@ -91,7 +91,19 @@
             "house-broken", "house-trained", "cruel-hearted", "misunderstood", "narrow-minded", "tenacious", "self-absorbed", "crazy", "fierce", "swollen", "ubiquitous",
             "lush", "incessant", "voracious", "smoky", "withering", "zealous", "lazy", "rabid", "diseased", "hyper", "hairy", "gassy", "wise", "saber-tooth", "timid",
             "ferocious", "domesticated", "abnormal", "medicated", "cocky", "disrespectful", "impressive", "hilarious", "hot", "tactful", "bearded", "slimy", "insane",
-            "energetic", "gentle", "playful", "intelligent", "loyal", "rough", "high", "wasted"];
+            "energetic", "gentle", "playful", "intelligent", "loyal", "rough", "high", "wasted", "benevolent", "scared", "delicious", "tasty", "colorful", "slightly-plump",
+            "adaptable", "adventurous", "daring", "affectionate", "ambitious", "compassionate", "considerate", "courageous", "courteous", "diligent", "empathetic", "exuberant",
+            "generous", "impartial", "short", "long", "intuitive", "inventive", "passionate", "persistent", "philosophical", "knowledgeable", "practical", "rational", "reliable",
+            "trusty", "resourceful", "sensible", "sincere", "sympathetic", "witty", "unassuming", "nauseating", "malevolent", "humorous", "lighthearted", "amusing", "amazing",
+            "entertaining", "comical", "whimsical", "eccentric", "single-haired", "fuzzy", "darling", "caring", "sour", "remarkable", "bold", "quiet", "roaring", "loud", "delighted",
+            "content", "annoying", "disappointed", "sad", "unhappy", "tiring", "exhausted", "excited", "relaxed", "sleeping", "sleepy", "homesick", "seasick", "world-weary",
+            "man-made", "time-consuming", "clean-shaven", "fine-looking", "indoor", "recluse", "only", "afraid", "ashamed", "ill", "glad", "upset", "exempt", "outspoken", "good-humored",
+            "loving", "terrible", "awful", "shiny", "soggy", "wooden", "thin", "plump", "juicy", "slender", "petite", "evil", "scary", "lumpy", "weird", "creepy", "big", "little",
+            "large", "gigantic", "racist", "mean", "stingy", "mighty", "vile", "hostile", "puny", "fit", "unreliable", "noble", "magic", "cunning", "foxy", "tricky", "clever", "brave",
+            "smart", "pleasant", "happy", "late", "graceful", "beautiful", "cheerful", "fishy", "icy", "keen", "merry", "nasty", "obnoxious", "prissy", "respectful", "silent", "unique",
+            "vain", "wary", "yummy", "over-achieving", "under-achieving", "slick", "clean", "dirty", "flirtatious", "secretive", "luscious", "rare", "mountain", "extinct",
+            "limited-edition", "abundant", "purple", "pink", "blue", "red", "green", "orange", "yellow", "indigo", "violet", "neon", "fluorescent", "tan", "gray", "black", "white",
+            "one-eyed","yellow-bellied", "one-legged"];
 
         let name = this.getRandomElement(adjectives) + ' ' + this.getRandomAnimal(useTitleCase);
 

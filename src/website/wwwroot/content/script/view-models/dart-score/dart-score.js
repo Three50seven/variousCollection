@@ -45,6 +45,29 @@
     decrementLives = function (playerId) {
         updateKillerScore(playerId, -1);
     };
+    resurrectPlayer = function (playerId) {
+        let confirmMessage = 'Are you sure you want to bring this player back?';
+        let match = ko.utils.arrayFirst(self.killerScores(), function (item) {
+            return item.playerId === playerId;
+        });
+
+        if (match) {
+            if (match.isOut) {
+                console.log(match.isOut);
+                if (confirm(confirmMessage)) {
+                    //reset player if confirmed
+                    match.isOut = false;
+                    match.livesRemaining = 0;
+
+                    self.killerScores.refresh(match); //refresh observable array
+                }
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+    };
     buildKillerScoreboard = function () {        
         clearForm();
 
@@ -97,7 +120,7 @@
         });
         if (match) {
             currentThrowerIsKiller = match.isKiller;
-            hasLives = match.livesRemaining > 0;
+            hasLives = match.livesRemaining > 0 || self.allowSuicideInKiller(); //if allowing suicide, player will "always" have lives
         }                          
 
         return self.gameStarted() && (playerId === self.currentKillerPlayersTurn() && hasLives || currentThrowerIsKiller);
