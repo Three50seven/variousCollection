@@ -46,7 +46,8 @@
       "content/script/modules/constants.js",
       "content/script/modules/environment.js",
       "content/script/modules/constructors.js",
-      "content/script/modules/lookup-types.js"
+      "content/script/modules/lookup-types.js",
+      "content/script/modules/static-data-sets.js"
     ]
   },
   {

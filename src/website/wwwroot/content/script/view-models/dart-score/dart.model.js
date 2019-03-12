@@ -7,8 +7,8 @@
     self.availableGames = ko.observableArray([MODULES.LookupTypes.DartScore.GameEnum.Cricket, MODULES.LookupTypes.DartScore.GameEnum.FiveOne, MODULES.LookupTypes.DartScore.GameEnum.Killer]);
     self.availableUpGames = ko.observableArray([MODULES.LookupTypes.DartScore.Game501Enum.Five, MODULES.LookupTypes.DartScore.Game501Enum.Three]);
     self.gameStarted = ko.observable(false);
-    self.playerOne = ko.observable(MODULES.Constants.DartScore.PLAYER_ONE);
-    self.playerTwo = ko.observable(MODULES.Constants.DartScore.PLAYER_TWO);
+    self.playerOne = ko.observable(UTILITIES.getRandomAnimalWithAdjective(true)); //MODULES.Constants.DartScore.PLAYER_ONE
+    self.playerTwo = ko.observable(UTILITIES.getRandomAnimalWithAdjective(true)); //MODULES.Constants.DartScore.PLAYER_TWO
     self.winnerDeclared = ko.computed(() => {
         return self.winningPlayer().length > 0;
     });

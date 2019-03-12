@@ -1,5 +1,9 @@
 body {
-  font: 14px / 22px 'PT Sans', sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.85em;
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 form {
@@ -204,19 +208,19 @@ th {
 }
 
 button, .btn, a.btn {
-  border: 1px solid #009fdb;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 1rem;
-  line-height: 1.35;
-  margin-bottom: 0.5rem;
-  max-width: 90%;
-  padding: 0.25rem 2rem;
-  color: #57595b;
-  text-decoration: none;
-  -webkit-transition: color 0.2s;
-          transition: color 0.2s;
-  width: auto;
+    border: 1px solid #009fdb;
+    cursor: pointer;
+    display: inline-block;
+    /*font-size: 2rem;*/
+    line-height: 1.35;
+    margin-bottom: 0.5rem;
+    max-width: 90%;
+    padding: 0.25rem 2rem;
+    color: #57595b;
+    text-decoration: none;
+    -webkit-transition: color 0.2s;
+    transition: color 0.2s;
+    width: auto;
 }
 
 button:visited, .btn:visited, a.btn:visited {
@@ -462,33 +466,33 @@ table td {
   border: solid 1px #dddddd;
 }
 
-table th, table tfoot td {
-  background-color: #efefef;
-  font-weight: normal;
-  font-size: .85rem;
-}
+    table th, table tfoot td {
+        background-color: #efefef;
+        font-weight: normal;
+        font-size: 1.85rem;
+    }
 
-table td {
-  vertical-align: top;
-  font-size: .85rem;
-}
+    table td {
+        vertical-align: top;
+        font-size: 1.85rem;
+    }
 
-table th {
-  vertical-align: middle;
-  text-align: left;
-  font-size: .85rem;
-  font-weight: bold;
-}
+    table th {
+        vertical-align: middle;
+        text-align: left;
+        font-size: 1.85rem;
+        font-weight: bold;
+    }
 
-table.n
-h2.table-heading {
-  background: #888888;
-  display: block;
-  font-size: 1.15rem;
-  padding: 0.15rem 0.5rem;
-  color: #fff;
-  margin-bottom: 0.25rem;
-}
+    table.n
+    h2.table-heading {
+        background: #888888;
+        display: block;
+        font-size: 2.15rem;
+        padding: 0.15rem 0.5rem;
+        color: #fff;
+        margin-bottom: 0.25rem;
+    }
 
 fieldset table {
   border: solid 1px #dddddd;
@@ -633,31 +637,31 @@ table.tbl-mobile-headers {
     margin-bottom: 1rem;
     border: 2px solid #71c5e8;
   }
-  table.tbl-mobile-headers > tbody > tr > td {
-    font-size: 1rem;
-    padding-left: 0;
-    padding: 0.5rem;
-    border: 1px solid #fff;
-    border-bottom: 1px solid #dddddd;
-  }
+    table.tbl-mobile-headers > tbody > tr > td {
+        font-size: 1.95rem
+        /*padding-left: 0;
+        padding: 0.5rem;
+        border: 1px solid #fff;
+        border-bottom: 1px solid #dddddd;*/
+    }
   table.tbl-mobile-headers > tbody > tr > td:last-of-type {
     border-bottom: 1px solid #fff;
   }
-  table.tbl-mobile-headers > tbody > tr > td:before {
-    border: none;
-    font-size: 0.8rem;
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 0 0 0.25rem 0;
-    white-space: normal;
-    color: #888888;
-    display: block;
-    position: relative;
-    font-style: italic;
-    font-weight: 400;
-  }
+        table.tbl-mobile-headers > tbody > tr > td:before {
+            border: none;
+            /*font-size: 0.8rem;*/
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 0 0 0.25rem 0;
+            white-space: normal;
+            color: #888888;
+            display: block;
+            position: relative;
+            font-style: italic;
+            font-weight: 400;
+        }
   table.tbl-mobile-headers > tbody > tr > td.text-center,
   table.tbl-mobile-headers > tbody > tr > td.text-right {
     text-align: left;
@@ -796,4 +800,19 @@ table.tbl-width-auto {
   table.tbl-width-auto {
     width: auto;
   }
+}
+
+@media screen and (min-width: 1200px) {
+    body {
+        font-size: 20px;
+    }
+
+    table {
+        font-size: 20px;
+    }
+
+        table th,
+        table td {
+            font-size: 20px;
+        }
 }
