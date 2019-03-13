@@ -53,7 +53,6 @@
 
         if (match) {
             if (match.isOut) {
-                console.log(match.isOut);
                 if (confirm(confirmMessage)) {
                     //reset player if confirmed
                     match.isOut = false;
@@ -87,16 +86,50 @@
     isPlayersTurn = function (playerId) {
         return self.currentKillerPlayersTurn() === playerId;
     };
+    jumpToPlayer = function (playerId) {
+        if (gameStarted()) {
+            let match = ko.utils.arrayFirst(self.killerScores(), function (item) {
+                return item.playerId === playerId && !item.isOut;
+            });
+
+            if (match)
+                self.currentKillerPlayersTurn(match.playerId);
+        }
+    };
     changeKillerPlayer = function (changer) {
         if (gameStarted()) {
             let currentPlayerID = self.currentKillerPlayersTurn();
 
-            if (self.currentKillerPlayersTurn() + changer >= self.numberOfKillerPlayers())
-                currentPlayerID = 0; //reset to first player after last player's turn
-            else if (currentPlayerID + changer < 0)
-                currentPlayerID = self.numberOfKillerPlayers() - 1; //when pressing prev. on player 1, change to last player
-            else
-                currentPlayerID += changer;
+            //get an array of all players still alive
+            let playersStillAlive = self.killerScores().filter(function (record) {
+                return !record.isOut;
+            });
+
+            if (playersStillAlive.length > 0) {
+                let minPlayerId = playersStillAlive[0].playerId;
+                let maxPlayerId = playersStillAlive[playersStillAlive.length - 1].playerId;
+                let currentPlayerIndex = playersStillAlive.map(function (player) { return player.playerId; }).indexOf(currentPlayerID);
+                                               
+                if (self.currentKillerPlayersTurn() + changer > maxPlayerId) {                
+                    currentPlayerID = minPlayerId; //reset to first active player after last player's turn
+                }
+                else if (currentPlayerID + changer < minPlayerId) {
+                    currentPlayerID = maxPlayerId; //when pressing prev. on first active player, change to last active player
+                }
+                else {
+                    let newIndex = currentPlayerIndex += changer;
+                    currentPlayerID = playersStillAlive[newIndex].playerId;
+                }
+            }
+
+            /*old logic
+                if (self.currentKillerPlayersTurn() + changer >= self.numberOfKillerPlayers())
+                    currentPlayerID = 0; //reset to first player after last player's turn
+                else if (currentPlayerID + changer < 0)
+                    currentPlayerID = self.numberOfKillerPlayers() - 1; //when pressing prev. on player 1, change to last player
+                else
+                    currentPlayerID += changer;
+            */
 
             self.currentKillerPlayersTurn(currentPlayerID);
         }

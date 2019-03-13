@@ -66,8 +66,11 @@
                             </p>
                             <p>
                                 A <span class="turn-indicator">highlighted row</span> indicates it is this player's turn.  Once a player's lives fall below zero (0) they are out.
+                                <br />
                                 Note: A player can be resurrected by clicking the <img src="../../wwwroot/content/images/resurrect-symbol-transparent.png" style="max-height: 15px; max-width: 15px;" />
                                 when they are crossed out.
+                                <br />
+                                You can also click a player's assigned number to jump to that player's turn.
                             </p>
                         </div>
                     </div>
@@ -226,7 +229,7 @@
                                 <tr data-bind="css: { 'turn-indicator': isPlayersTurn(playerId)}">
                                     <td>
                                         <img class="player-changer" src="../../wwwroot/content/images/dart-up-arrow-transparent.png" data-bind="click: changeKillerPlayer(-1), visible: isPlayersTurn(playerId) && gameStarted()" />                                        
-                                        <span class="killer-score-text" data-bind="text: assignedNumber, visible: gameStarted()"></span>
+                                        <span class="killer-score-text" data-bind="text: assignedNumber, visible: gameStarted(), click: jumpToPlayer.bind($data, playerId)"></span>
                                         <input class="score-entry" type="number" data-bind="value: assignedNumber, visible: !gameStarted()" onfocus="this.value=''" />
                                         <img class="player-changer" src="../../wwwroot/content/images/dart-down-arrow-transparent.png" data-bind="click: changeKillerPlayer(1), visible: isPlayersTurn(playerId) && gameStarted()" />
                                     </td>
