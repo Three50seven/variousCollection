@@ -39,7 +39,7 @@
             var currentVal = parseFloat(self.yearToCalculate()); // Read the user input
 
             getEasterSeasonDates(currentVal);
-            getNumberOfSundaysAfterPentacost(self.easterDate);
+            getNumberOfSundaysAfterPentecost(self.easterDate);
             getChristmasSeasonDates(currentVal);
             //now get dates for next year since Liturgical year carries over into civil year
             currentVal = parseFloat(currentVal + 1);
@@ -111,7 +111,7 @@
         return finalEasterDate;
     };
 
-    getNumberOfSundaysAfterPentacost = function (finalEasterDate) {
+    getNumberOfSundaysAfterPentecost = function (finalEasterDate) {
         var easter = new Date(finalEasterDate);
         var pentecost = new Date(easter.setDate(easter.getDate() + 49));
 
@@ -133,26 +133,33 @@
         var finalEasterDate = getEasterDate(parseFloat(currentVal));
         console.log('finalEasterDate= ' + finalEasterDate);
 
-        var easter = new Date(finalEasterDate);
-        var septuagesima = new Date(easter.setDate(easter.getDate() - 63));
-        easter = new Date(finalEasterDate); //reset value to calculate new date since javascript passes by reference
-        var sexagesima = new Date(easter.setDate(easter.getDate() - 56));
-        easter = new Date(finalEasterDate); //reset value to calculate new date since javascript passes by reference
-        var quinquagesima = new Date(easter.setDate(easter.getDate() - 49));
-        easter = new Date(finalEasterDate); //reset value to calculate new date since javascript passes by reference		
-        var ashWednesday = new Date(easter.setDate(easter.getDate() - 46));
-        easter = new Date(finalEasterDate); //reset value to calculate new date since javascript passes by reference
-        var ascension = new Date(easter.setDate(easter.getDate() + 39));
-        easter = new Date(finalEasterDate); //reset value to calculate new date since javascript passes by reference
-        var pentecost = new Date(easter.setDate(easter.getDate() + 49));
+        var septuagesima = getNewFeastDayBasedOnEaster(finalEasterDate, -63);
+        var sexagesima = getNewFeastDayBasedOnEaster(finalEasterDate, -56);
+        var quinquagesima = getNewFeastDayBasedOnEaster(finalEasterDate, -49);		
+        var ashWednesday = getNewFeastDayBasedOnEaster(finalEasterDate, -46);
+        var goodShep = getNewFeastDayBasedOnEaster(finalEasterDate, 21);
+        var ascension = getNewFeastDayBasedOnEaster(finalEasterDate, 39);        
+        var pentecost = getNewFeastDayBasedOnEaster(finalEasterDate, 49);
+        var trinity = getNewFeastDayBasedOnEaster(finalEasterDate, 56);
+        var corpus = getNewFeastDayBasedOnEaster(finalEasterDate, 60);
+        var corpusObs = getNewFeastDayBasedOnEaster(finalEasterDate, 63);
 
         self.liturgicalDates.push({ eventName: 'Septuagesima Sunday', eventDate: septuagesima.toLocaleDateString() });
         self.liturgicalDates.push({ eventName: 'Sexagesima Sunday', eventDate: sexagesima.toLocaleDateString() });
         self.liturgicalDates.push({ eventName: 'Quinquagesima Sunday', eventDate: quinquagesima.toLocaleDateString() });
         self.liturgicalDates.push({ eventName: 'Ash Wednesday', eventDate: ashWednesday.toLocaleDateString() });
         self.liturgicalDates.push({ eventName: 'Easter Sunday', eventDate: finalEasterDate });
+        self.liturgicalDates.push({ eventName: 'Good Shepherd Sunday (2nd Sunday after Easter)', eventDate: goodShep.toLocaleDateString() });
         self.liturgicalDates.push({ eventName: 'Ascension Thursday', eventDate: ascension.toLocaleDateString() });
         self.liturgicalDates.push({ eventName: 'Pentecost Sunday', eventDate: pentecost.toLocaleDateString() });
+        self.liturgicalDates.push({ eventName: 'Trinity Sunday', eventDate: trinity.toLocaleDateString() });
+        self.liturgicalDates.push({ eventName: 'Corpus Christi', eventDate: corpus.toLocaleDateString() });
+        self.liturgicalDates.push({ eventName: 'Corpus Christi (Sunday observed)', eventDate: corpusObs.toLocaleDateString() });
+    };
+
+    getNewFeastDayBasedOnEaster = function (finalEasterDate, daysToAddToEaster) {
+        var easter = new Date(finalEasterDate); //reset value to calculate new date since javascript passes by reference
+        return new Date(easter.setDate(easter.getDate() + daysToAddToEaster));
     };
 
     getFirstSundayOfAdvent = function (yearToCalculate) {
