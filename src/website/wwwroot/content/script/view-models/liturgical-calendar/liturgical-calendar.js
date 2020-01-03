@@ -186,9 +186,9 @@
 
         var firstSundayOfAdvent = getFirstSundayOfAdvent(yearToCalculate);
 
-        self.liturgicalDates.push({ eventName: 'First Sunday of Advent', eventDate: firstSundayOfAdvent.toLocaleDateString() });
+        self.liturgicalDates.push({ eventName: 'First Sunday of Advent (New Liturgical Year)', eventDate: firstSundayOfAdvent.toLocaleDateString() });
         self.liturgicalDates.push({ eventName: 'Christmas', eventDate: getDayOfWeekName(DEFAULT_CHRISTMAS_DATE.getDay()) + ', 12/25/' + yearToCalculate });
-        self.liturgicalDates.push({ eventName: 'New Years/Solemnity of Mary', eventDate: getDayOfWeekName(newYears.getDay()) + ', ' + newYears.toLocaleDateString() });
+        self.liturgicalDates.push({ eventName: 'The Circumcision of Christ (New Calendar Year)', eventDate: getDayOfWeekName(newYears.getDay()) + ', ' + newYears.toLocaleDateString() });
     };
 
     clearForm = function () {
