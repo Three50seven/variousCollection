@@ -153,13 +153,25 @@
                                 <tr>
                                     <td><span class="score-number" data-bind="text: round"></span></td>
                                     <td>
-                                        <span class="score-number" data-bind="text: playerOneScore, visible: !isEditingUpScore()"></span>
-                                        <input class="score-entry" type="number" data-bind="value: playerOneScore, visible: isEditingUpScore()" />
+                                        <div data-bind="visible: isEditingUpScore()">
+                                            <span class="score-entry-help-txt">1st Dart</span><input class="score-entry" type="number" data-bind="value: playerOneDart1" onfocus="this.value=''" />
+                                            <br />
+                                            <span class="score-entry-help-txt">2nd Dart</span><input class="score-entry" type="number" data-bind="value: playerOneDart2" onfocus="this.value=''" />
+                                            <br />
+                                            <span class="score-entry-help-txt">3rd Dart</span><input class="score-entry" type="number" data-bind="value: playerOneDart3" onfocus="this.value=''" />
+                                        </div>
+                                        <span class="score-number" data-bind="text: playerOneScore"></span>
                                         <div class="error" data-bind="html: playerOneErrorMessage"></div>
                                     </td>
                                     <td>
-                                        <span class="score-number" data-bind="text: playerTwoScore, visible: !isEditingUpScore()"></span>
-                                        <input class="score-entry" type="number" maxlength="3" data-bind="value: playerTwoScore, visible: isEditingUpScore()" />
+                                        <div data-bind="visible: isEditingUpScore()">
+                                            <span class="score-entry-help-txt">1st Dart</span><input class="score-entry" type="number" data-bind="value: playerTwoDart1" onfocus="this.value=''" />
+                                            <br />
+                                            <span class="score-entry-help-txt">2nd Dart</span><input class="score-entry" type="number" data-bind="value: playerTwoDart2" onfocus="this.value=''" />
+                                            <br />
+                                            <span class="score-entry-help-txt">3rd Dart</span><input class="score-entry" type="number" data-bind="value: playerTwoDart3" onfocus="this.value=''" />
+                                        </div>
+                                        <span class="score-number" data-bind="text: playerTwoScore"></span>
                                         <div class="error" data-bind="html: playerTwoErrorMessage"></div>
                                     </td>
                                     <td></td>

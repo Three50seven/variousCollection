@@ -1,8 +1,14 @@
 ﻿//DART-SCORE CONSTRUCTORS
 MODULES.Constructors.DartScore = (function () {
     return {
-        UpScore: function (round, playerOneScore, playerTwoScore, playerOneErrorMessage, playerTwoErrorMessage) {
+        UpScore: function (round, playerOneDart1, playerOneDart2, playerOneDart3, playerTwoDart1, playerTwoDart2, playerTwoDart3, playerOneScore, playerTwoScore, playerOneErrorMessage, playerTwoErrorMessage) {
             this.round = round;
+            this.playerOneDart1 = playerOneDart1;
+            this.playerOneDart2 = playerOneDart2;
+            this.playerOneDart3 = playerOneDart3;
+            this.playerTwoDart1 = playerTwoDart1;
+            this.playerTwoDart2 = playerTwoDart2;
+            this.playerTwoDart3 = playerTwoDart3;
             this.playerOneScore = playerOneScore;
             this.playerTwoScore = playerTwoScore;
             this.playerOneErrorMessage = playerOneErrorMessage;

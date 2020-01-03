@@ -224,8 +224,8 @@
     };
     isValidUpScoreEntered = function () {
         let errorMessage = '';
-
         let scoresEntered = [];
+
         scoresEntered.push({ playerName: self.playerOne(), scoreEntered: self.playerOneUpRoundScore1Entered(), dartMsg: 'first dart' });
         scoresEntered.push({ playerName: self.playerOne(), scoreEntered: self.playerOneUpRoundScore2Entered(), dartMsg: 'second dart' });
         scoresEntered.push({ playerName: self.playerOne(), scoreEntered: self.playerOneUpRoundScore3Entered(), dartMsg: 'third dart' });
@@ -293,7 +293,10 @@
             }
 
             //create and add a new score record for this round
-            let roundScore = new MODULES.Constructors.DartScore.UpScore(self.currentUpRound(), roundP1Score.toString(), roundP2Score.toString(),'','');
+            let roundScore = new MODULES.Constructors.DartScore.UpScore(self.currentUpRound(), parseFloat(self.playerOneUpRoundScore1Entered()), parseFloat(self.playerOneUpRoundScore2Entered()), parseFloat(self.playerOneUpRoundScore3Entered()),
+                parseFloat(self.playerTwoUpRoundScore1Entered()), parseFloat(self.playerTwoUpRoundScore2Entered()), parseFloat(self.playerTwoUpRoundScore3Entered()),
+                roundP1Score, roundP2Score, '', '');
+
             self.scoreUpGame.unshift(roundScore); //add score to beginning of array
 
             //reset entries after recording
@@ -310,20 +313,58 @@
     editUpScore = function () {
         self.isEditingUpScore(true);
     };
-    saveAllUpScore = function () {
+    saveAllUpScore = function () {        
         let hasErrors = false;
         let p1Total = 0;
         let p2Total = 0;
 
-        $.each(self.scoreUpGame(), function (i, scoreRecord) {
-            scoreRecord.playerOneErrorMessage = getValidUpScoreError(false, scoreRecord.playerOneScore, playerOne(), 'all darts combined in this round');
-            scoreRecord.playerTwoErrorMessage = getValidUpScoreError(false, scoreRecord.playerTwoScore, playerTwo(), 'all darts combined in this round');
+        $.each(self.scoreUpGame(), function (j, scoreRecord) {
+            let errorMessageP1 = '';
+            let errorMessageP2 = '';
+            let scoresEnteredP1 = [];
+            let scoresEnteredP2 = [];
+            scoresEnteredP1.push({ playerName: self.playerOne(), scoreEntered: scoreRecord.playerOneDart1, dartMsg: 'first dart' });
+            scoresEnteredP1.push({ playerName: self.playerOne(), scoreEntered: scoreRecord.playerOneDart2, dartMsg: 'second dart' });
+            scoresEnteredP1.push({ playerName: self.playerOne(), scoreEntered: scoreRecord.playerOneDart3, dartMsg: 'third dart' });
+            scoresEnteredP2.push({ playerName: self.playerTwo(), scoreEntered: scoreRecord.playerTwoDart1, dartMsg: 'first dart' });
+            scoresEnteredP2.push({ playerName: self.playerTwo(), scoreEntered: scoreRecord.playerTwoDart2, dartMsg: 'second dart' });
+            scoresEnteredP2.push({ playerName: self.playerTwo(), scoreEntered: scoreRecord.playerTwoDart3, dartMsg: 'third dart' });
+
+            for (var i = 0; i < scoresEnteredP1.length; i++) {
+                let score = scoresEnteredP1[i].scoreEntered;
+                let playerName = scoresEnteredP1[i].playerName;
+                let dartMsg = scoresEnteredP1[i].dartMsg;
+                let scoreErrorMsg = getValidUpScoreError(true, score, playerName, dartMsg);
+                errorMessageP1 += scoreErrorMsg;
+            }
+
+            for (var i = 0; i < scoresEnteredP2.length; i++) {
+                let score = scoresEnteredP2[i].scoreEntered;
+                let playerName = scoresEnteredP2[i].playerName;
+                let dartMsg = scoresEnteredP2[i].dartMsg;
+                let scoreErrorMsg = getValidUpScoreError(true, score, playerName, dartMsg);
+                errorMessageP2 += scoreErrorMsg;
+            }
+
+            scoreRecord.playerOneErrorMessage = errorMessageP1;
+            scoreRecord.playerTwoErrorMessage = errorMessageP2;
             
             if (scoreRecord.playerOneErrorMessage !== '' || scoreRecord.playerTwoErrorMessage !== '')
                 hasErrors = true;
             else {
+                scoreRecord.playerOneScore = parseFloat(scoreRecord.playerOneDart1) + parseFloat(scoreRecord.playerOneDart2) + parseFloat(scoreRecord.playerOneDart3);
+                scoreRecord.playerTwoScore = parseFloat(scoreRecord.playerTwoDart1) + parseFloat(scoreRecord.playerTwoDart2) + parseFloat(scoreRecord.playerTwoDart3);
+
                 p1Total += parseFloat(scoreRecord.playerOneScore);
                 p2Total += parseFloat(scoreRecord.playerTwoScore);
+
+                if (!checkUpScore(self.playerOne(), parseFloat(self.currentPlayerOneUpScore()) - p1Total)) {
+                    hasErrors = true;
+                }
+
+                if (!checkUpScore(self.playerTwo(), parseFloat(self.currentPlayerOneUpScore()) - p2Total)) {
+                    hasErrors = true;
+                }
             }
 
             self.scoreUpGame.refresh(scoreRecord); //refresh observable array

@@ -56,9 +56,9 @@ img.score-increment {
     margin-bottom: 50px
 }
 
-td.scoreboard {
-    border-right: 1px solid gray;
-}
+    .scoreboard td {
+        border-bottom: 1px solid gray;
+    }
 
 .score-board-ctrls {
     width: 100%;
