@@ -137,7 +137,7 @@
         var sexagesima = getNewFeastDayBasedOnEaster(finalEasterDate, -56);
         var quinquagesima = getNewFeastDayBasedOnEaster(finalEasterDate, -49);		
         var ashWednesday = getNewFeastDayBasedOnEaster(finalEasterDate, -46);
-        var goodShep = getNewFeastDayBasedOnEaster(finalEasterDate, 21);
+        var goodShep = getNewFeastDayBasedOnEaster(finalEasterDate, 14);
         var ascension = getNewFeastDayBasedOnEaster(finalEasterDate, 39);        
         var pentecost = getNewFeastDayBasedOnEaster(finalEasterDate, 49);
         var trinity = getNewFeastDayBasedOnEaster(finalEasterDate, 56);
