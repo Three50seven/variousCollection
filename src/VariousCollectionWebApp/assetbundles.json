@@ -1,0 +1,130 @@
+﻿[
+  {
+    "name": "main-styles",
+    "files": [
+      "style/main.css",
+      "style/colors.css"
+    ]
+  },
+  {
+    "name": "nav-styles",
+    "files": [
+      "style/nav/component.css",
+      "style/nav/demo.css",
+      "style/nav/normalize.css"
+    ]
+  },
+  {
+    "name": "liturgical-styles",
+    "files": [
+      "style/liturgical/liturgical.css"
+    ]
+  },
+  {
+    "name": "dart-score-styles",
+    "files": [
+      "nav-styles",
+      "style/dart-score/darts.css",
+      "style/flag.css"
+    ]
+  },
+  {
+    "name": "js-initializer",
+    "subpath": "modules",
+    "filename": "initializer.min.js",
+    "referenceOnly": true,
+    "staticOutputPath": "script/js-initializer.js",
+    "files": [
+      "script/js-initializer.js"
+    ]
+  },
+  {
+    "name": "main-bundle",
+    "subpath": "modules",
+    "files": [
+      "js-initializer",
+      "script/modules/constants.js",
+      "script/modules/environment.js",
+      "script/modules/constructors.js",
+      "script/modules/lookup-types.js",
+      "script/modules/static-data-sets.js"
+    ]
+  },
+  {
+    "name": "jquery-source",
+    "subpath": "lib",
+    "filename": "jquery.min.js",
+    "referenceOnly": true,
+    "staticOutputPath": "lib/jquery/dist/jquery.min.js",
+    "files": [
+      "lib/jquery/dist/jquery.min.js"
+    ]
+  },
+  {
+    "name": "knockout-bundle",
+    "subpath": "lib",
+    "files": [
+      "lib/knockout/knockout-3.4.2.js",
+      "script/custom-bindings/knockout/knockout.bindings.js"
+    ]
+  },
+  {
+    "name": "nav-modernizer",
+    "subpath": "lib",
+    "filename": "modernizer.custom.min.js",
+    "referenceOnly": true,
+    "staticOutputPath": "lib/nav/modernizr.custom.25376.js",
+    "files": [
+      "lib/nav/modernizr.custom.25376.js"
+    ]
+  },
+  {
+    "name": "nav-bundle",
+    "subpath": "lib",
+    "files": [
+      "nav-modernizer",
+      "lib/nav/classie.js",
+      "lib/nav/menu.js"
+    ]
+  },
+  {
+    "name": "datetime-bundle",
+    "subpath": "modules",
+    "files": [
+      "lib/moment.js"
+    ]
+  },
+  {
+    "name": "utilities-bundle",
+    "subpath": "utilities",
+    "files": [
+      "script/utilities/utilities.js"
+    ]
+  },
+  {
+    "name": "dart-bundle",
+    "subpath": "viewmodels",
+    "files": [
+      "main-bundle",
+      "utilities-bundle",
+      "jquery-source",
+      "knockout-bundle",
+      "script/view-models/dart-score/constants.js",
+      "script/view-models/dart-score/constructors.js",
+      "script/view-models/dart-score/lookup-types.js",
+      "script/view-models/dart-score/dart.model.js",
+      "script/view-models/dart-score/dart-score.js"
+    ]
+  },
+  {
+    "name": "liturgical-calendar-bundle",
+    "subpath": "viewmodels",
+    "files": [
+      "main-bundle",
+      "utilities-bundle",
+      "jquery-source",
+      "knockout-bundle",
+      "script/view-models/liturgical-calendar/liturgical-calendar.js"
+    ]
+  }
+]

@@ -1,0 +1,344 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+﻿
+<!-- NAME: Paul Krimm -->
+<!-- DATE: 2019.01.09 -->
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56252502-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-56252502-1');
+    </script>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="/assets/css/dart-score-styles.min.css" media="screen" />
+    <title>Dart Score</title>
+    <!--initialize objects for JavaScript-->
+    <script type="text/javascript">
+        var MODULES = {}; MODULES.UI = {}; var COMPONENTS = {};
+    </script>
+</head>
+
+<body>
+    <div id="jsconfig" style="display:none;visibility:hidden">
+        <!--<input type="hidden" value="@settings.AlertErrors.ToString().ToLower()"
+        id="showJSErrors" />
+        <input type="hidden" value="@settings.Debug.ToString().ToLower()" id="isDebugMode"
+        />
+        <input type="hidden" value="@settings.LogErrors.ToString().ToLower()"
+        id="logJSErrors" />
+        <input type="hidden" value="@settings.UserSessionTimeout" id="sessionExpireTime"
+        />-->
+        <input type="hidden" value="Production" id="app-environment" />
+    </div>
+    <div id="perspective" class="perspective effect-moveleft">
+        <div class="container">
+            <div class="wrapper">
+                <!-- wrapper needed for scroll -->
+                <!-- Top Navigation -->
+                <div class="codrops-top clearfix">
+                    <a class="codrops-icon" href="/"><span>Back to Home</span></a>
+                    <!--<span class="right"><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=17915"><span>Back to the Codrops Article</span></a></span>-->
+                </div>
+                <div class="main">
+                    <div id="slider">
+                        <header class="codrops-header">
+                            <h1>Darts Scoreboard<span> A way to keep score while playing darts</span></h1>
+                        </header>
+                        <p>
+                            Choose a dart game to play below.  Click <a href="https://www.mastersofgames.com/rules/darts-rules.htm" target="_blank">here</a> to view rules for various dart games.
+                        </p>
+                        <p>
+                            Choose Game:
+                            <select data-bind="options: availableGames, value: selectedGame, disable: gameStarted"></select>
+                            <button data-bind="click: resetGame" class="red-btn">Reset Game</button>
+                        </p>
+                        <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.Killer">
+                            <p>
+                                <div class="killer-indicator"></div> indicates the player is a "Killer" and can take lives away from other players by hitting their assigned number.
+                            </p>
+                            <p>
+                                A <span class="turn-indicator">highlighted row</span> indicates it is this player's turn.  Once a player's lives fall below zero (0) they are out.
+                                <br />
+                                Note: A player can be resurrected by clicking the <img src="../../images/resurrect-symbol-transparent.png" style="max-height: 15px; max-width: 15px;" />
+                                when they are crossed out.
+                                <br />
+                                You can also click a player's assigned number to jump to that player's turn.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="center" id="slider-control" data-bind="click: HideOtherInfo">------- hide -------</div>
+
+                    <!-- ko if: errors -->
+                    <p class="error">Errors: <strong data-bind="html: errors"></strong></p>
+                    <!-- /ko -->
+
+                    <!-- BEGIN 501/301 -->
+                    <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.FiveOne">
+                        <h3 class="center">501 up (301 up)</h3>
+                        <div class="center">
+                            <p data-bind="visible: !gameStarted()">
+                                Select a game score to reach:
+                                <select data-bind="options: availableUpGames, value: score501, disable: gameStarted, event:{ change: upGameChanged}"></select>
+                            </p>
+                            <!-- ko if: upErrors -->
+                            <p class="error">Errors: <strong data-bind="html: upErrors"></strong></p>
+                            <!-- /ko -->
+
+                            <input data-bind="value: playerOne, visible: !gameStarted()" maxlength="20" onfocus="this.value=''" />
+                            <span data-bind="text: playerOne, visible: gameStarted"></span>:
+                            <span class="score-number" data-bind="text: currentPlayerOneUpScore"></span>
+
+                            <input data-bind="value: playerTwo, visible: !gameStarted()" maxlength="20" onfocus="this.value=''" />
+                            <span data-bind="text: playerTwo, visible: gameStarted"></span>:
+                            <span class="score-number" data-bind="text: currentPlayerTwoUpScore"></span>
+                        </div>
+
+                        <table id="up-scoreboard" class="center scoreboard">
+                            <thead>
+                                <tr>
+                                    <td><h3>Round</h3></td>
+                                    <td>
+                                        <h3 data-bind="text: playerOne"></h3>
+                                    </td>
+                                    <td>
+                                        <h3 data-bind="text: playerTwo"></h3>
+                                    </td>
+                                    <td><h3>Controls</h3></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <h3 class="score-number" data-bind="text: currentUpRound"></h3>
+                                    </td>
+                                    <td>
+                                        <span class="score-entry-help-txt">1st Dart</span><input class="score-entry" type="number" data-bind="value: playerOneUpRoundScore1Entered" onfocus="this.value=''" />
+                                        <br />
+                                        <span class="score-entry-help-txt">2nd Dart</span><input class="score-entry" type="number" data-bind="value: playerOneUpRoundScore2Entered" onfocus="this.value=''" />
+                                        <br />
+                                        <span class="score-entry-help-txt">3rd Dart</span><input class="score-entry" type="number" data-bind="value: playerOneUpRoundScore3Entered" onfocus="this.value=''" />
+                                    </td>
+                                    <td>
+                                        <span class="score-entry-help-txt">1st Dart</span><input class="score-entry" type="number" data-bind="value: playerTwoUpRoundScore1Entered" onfocus="this.value=''" />
+                                        <br />
+                                        <span class="score-entry-help-txt">2nd Dart</span><input class="score-entry" type="number" data-bind="value: playerTwoUpRoundScore2Entered" onfocus="this.value=''" />
+                                        <br />
+                                        <span class="score-entry-help-txt">3rd Dart</span><input class="score-entry" type="number" data-bind="value: playerTwoUpRoundScore3Entered" onfocus="this.value=''" />
+                                    </td>
+                                    <td>
+                                        <!-- ko ifnot: winnerDeclared -->
+                                        <button data-bind="click: enterUpScore, visible: !isEditingUpScore()">Enter<br />Scores</button>
+                                        <button data-bind="click: editUpScore, visible: !isEditingUpScore()">Edit</button>
+                                        <button data-bind="click: saveAllUpScore, visible: isEditingUpScore()">Save All</button>
+                                        <button data-bind="click: cancelEditingUpScore, visible: isEditingUpScore()">Cancel</button>
+                                        <!-- /ko -->
+                                        <!-- ko if: winnerDeclared -->
+                                        <div class="flag">
+                                            <div class="flagwave"></div>
+                                            <span class="flagtxt"></span>
+                                            <span data-bind="html: winningPlayer" class="winner"></span>
+                                            <span class="winner">WINS!</span>
+                                        </div>
+                                        <!-- /ko -->
+                                    </td>
+                                </tr>
+                                <!-- ko foreach: scoreUpGame -->
+                                <tr>
+                                    <td><span class="score-number" data-bind="text: round"></span></td>
+                                    <td>
+                                        <div data-bind="visible: isEditingUpScore()">
+                                            <span class="score-entry-help-txt">1st Dart</span><input class="score-entry" type="number" data-bind="value: playerOneDart1" onfocus="this.value=''" />
+                                            <br />
+                                            <span class="score-entry-help-txt">2nd Dart</span><input class="score-entry" type="number" data-bind="value: playerOneDart2" onfocus="this.value=''" />
+                                            <br />
+                                            <span class="score-entry-help-txt">3rd Dart</span><input class="score-entry" type="number" data-bind="value: playerOneDart3" onfocus="this.value=''" />
+                                        </div>
+                                        <span class="score-number" data-bind="text: playerOneScore"></span>
+                                        <div class="error" data-bind="html: playerOneErrorMessage"></div>
+                                    </td>
+                                    <td>
+                                        <div data-bind="visible: isEditingUpScore()">
+                                            <span class="score-entry-help-txt">1st Dart</span><input class="score-entry" type="number" data-bind="value: playerTwoDart1" onfocus="this.value=''" />
+                                            <br />
+                                            <span class="score-entry-help-txt">2nd Dart</span><input class="score-entry" type="number" data-bind="value: playerTwoDart2" onfocus="this.value=''" />
+                                            <br />
+                                            <span class="score-entry-help-txt">3rd Dart</span><input class="score-entry" type="number" data-bind="value: playerTwoDart3" onfocus="this.value=''" />
+                                        </div>
+                                        <span class="score-number" data-bind="text: playerTwoScore"></span>
+                                        <div class="error" data-bind="html: playerTwoErrorMessage"></div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <!-- /ko -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END 501/301 -->
+                    <!-- BEGIN KILLER -->
+                    <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.Killer">
+                        <h3 class="center">Killer</h3>
+                        <div data-bind="visible: !gameStarted()">
+                            <p>
+                                Enter Number of Players (1-20):
+                                <input data-bind="value: numberOfKillerPlayers" type="number" />
+                                <br /><br />
+                                Enter Number of Starting Lives (1-20):
+                                <input data-bind="value: numberOfKillerLives" type="number" />
+                                <br /><br />
+                                <input type="checkbox" data-bind="checked: allowSuicideInKiller"> Allow Player Suicide
+                            </p>
+                            <p style="font-size: x-small">
+                                Press "Next" to show the score board.  Here you will be able to
+                                enter player info and assign numbers.  To assign numbers, take
+                                turns throwing with least dominant hand.  Once a unique number is
+                                hit, assign that player the number hit.
+                            </p>
+                            <p style="font-size: x-small">
+                                Press "Start Game" once you are finished assigning numbers and names
+                                to each player.
+                            </p>
+                            <button data-bind="click: buildKillerScoreboard">Next</button>
+                            <button data-bind="click: startKillerGame, visible: self.killerScores().length > 0">Start Game</button>
+                        </div>
+
+                        <!-- ko if: winnerDeclared -->
+                        <div class="flag killer-flag">
+                            <div class="flagwave killer-flag"></div>
+                            <span class="flagtxt"></span>
+                            <span data-bind="html: winningPlayer" class="winner"></span>
+                            <span class="winner">WINS!</span>
+                        </div>
+                        <!-- /ko -->
+                        
+                        <div data-bind="visible: gameStarted()">                            
+                            Currently Throwing: <span style="font-weight:400;" data-bind="text: currentKillerPlayersName()"></span>
+                            <br />                            
+                        </div>
+                        
+                        <table id="scoreboard" class="center" data-bind="visible: !self.winnerDeclared()">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        Assigned Number
+                                    </td>
+                                    <td>
+                                        Player
+                                    </td>
+                                    <td>
+                                        Lives Remaining
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- ko foreach: killerScores -->
+                                <tr data-bind="css: { 'turn-indicator': isPlayersTurn(playerId)}">
+                                    <td>
+                                        <img class="player-changer" src="../../images/dart-up-arrow-transparent.png" data-bind="click: changeKillerPlayer(-1), visible: isPlayersTurn(playerId) && gameStarted()" />                                        
+                                        <span class="killer-score-text" data-bind="text: assignedNumber, visible: gameStarted(), click: jumpToPlayer.bind($data, playerId)"></span>
+                                        <input class="score-entry" type="number" data-bind="value: assignedNumber, visible: !gameStarted()" onfocus="this.value=''" />
+                                        <img class="player-changer" src="../../images/dart-down-arrow-transparent.png" data-bind="click: changeKillerPlayer(1), visible: isPlayersTurn(playerId) && gameStarted()" />
+                                    </td>
+                                    <td>
+                                        <div class="killer-indicator" data-bind="visible: isKiller"></div>
+                                        <span class="killer-score-text" data-bind="text: playerName, visible: gameStarted(), css: { 'out-indicator': isOut, 'killer-text': isKiller}"></span>
+                                        <img class="score-increment" src="../../images/resurrect-symbol-transparent.png" data-bind="click: resurrectPlayer.bind($data, playerId), visible: isOut" />
+                                        <input maxlength="30" width="140" data-bind="value: playerName, visible: !gameStarted()" />
+                                        <div class="error" data-bind="html: errorMessage" />
+                                    </td>
+                                    <td class="score-board-ctrls">
+                                        <div data-bind="visible: !isOut">
+                                            <img class="score-increment" src="../../images/dart-minus-transparent.png" data-bind="click: decrementLives.bind($data, playerId), visible: canDecrementLives(playerId)" />
+                                            <span class="killer-score-text" data-bind="text: livesRemaining"></span>
+                                            <img class="score-increment" src="../../images/dart-plus-transparent.png" data-bind="click: incrementLives.bind($data, playerId), visible: isPlayersTurn(playerId) && gameStarted()" />
+                                        </div>                                        
+                                        <img class="score-increment" src="../../images/grave-stone-transparent.png" data-bind="visible: isOut" />
+                                    </td>
+                                </tr>
+                                <!-- /ko -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END KILLER -->
+                    <!-- BEGIN CRICKET -->
+                    <div data-bind="visible: selectedGame() === MODULES.LookupTypes.DartScore.GameEnum.Cricket">
+                        <h3 class="center">Cricket</h3>
+
+                        <div data-bind="visible: !gameStarted()">
+                            <p>
+                                Enter Score Target (1-20):
+                                <input data-bind="value: scoreTargetSeed, disable: gameStarted" type="number" />
+                            </p>
+                            Player 1: <input data-bind="value: playerOne" maxlength="20" onfocus="this.value=''" />
+                            <br />
+                            Player 2: <input data-bind="value: playerTwo" maxlength="20" onfocus="this.value=''" />
+                            <br /><br />
+                            <input type="checkbox" data-bind="checked: keepCricketScore"> Keep Cricket Score
+                            <br />
+                            <span style="font-size: x-small">Check this to keep score after each score is closed out.  Example: after closing out (hitting three times) the 20, each 20 hit afterwards for the player will be tallied until the other player also closes out the 20.</span>
+                            <br />
+                            <br /><br />
+
+                            <button data-bind="click: buildScoreboard">Start Game</button>
+                        </div>
+
+                        <!-- ko if: winnerDeclared -->
+                        <div class="flag">
+                            <div class="flagwave"></div>
+                            <span class="flagtxt"></span>
+                            <span data-bind="html: winningPlayer" class="winner"></span>
+                            <span class="winner">WINS!</span>
+                        </div>
+                        <!-- /ko -->
+
+                        <table id="scoreboard" class="center" data-bind="visible: !self.winnerDeclared()">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        <h2 data-bind="visible: keepCricketScore">Score: <span data-bind="text: cricketP1Score"></span></h2>
+                                        <h3 data-bind="text: playerOne"></h3>
+                                    </td>
+                                    <td> VS </td>
+                                    <td>
+                                        <h2 data-bind="visible: keepCricketScore">Score: <span data-bind="text: cricketP2Score"></span></h2>
+                                        <h3 data-bind="text: playerTwo"></h3>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- ko foreach: scoreTargets -->
+                                <tr>
+                                    <td>
+                                        <img class="score-marker" data-bind="attr: { src: p1ScoreImg }, click: decrementScore.bind($data, score, 1)" />
+                                    </td>
+                                    <td>
+                                        <div class="score-board-ctrls">
+                                            <img class="score-increment" src="../../images/dart-plus-transparent.png" data-bind="click: incrementScore.bind($data, score, 1)" />
+                                            <span class="score-number" data-bind="text: score"></span>
+                                            <img class="score-increment" src="../../images/dart-plus-transparent.png" data-bind="click: incrementScore.bind($data, score, 2)" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <img class="score-marker" data-bind="attr: { src: p2ScoreImg }, click: decrementScore.bind($data, score, 2)" />
+                                    </td>
+                                </tr>
+                                <!-- /ko -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END CRICKET -->
+                </div><!-- /main -->
+            </div><!-- wrapper -->
+        </div><!-- /container -->
+    </div><!-- /perspective -->
+    <!--SCRIPTS-->
+    <script src="/assets/js/viewmodels/dart-bundle.min.js"></script>
+</body>
+</html>

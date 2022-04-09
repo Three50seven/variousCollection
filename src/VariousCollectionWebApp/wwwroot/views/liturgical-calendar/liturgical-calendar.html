@@ -1,0 +1,67 @@
+<html>
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56252502-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-56252502-1');
+    </script>
+
+    <link href='/assets/css/liturgical-styles.min.css' rel='stylesheet' type='text/css'>
+</head>
+    <body>
+        <div id="jsconfig" style="display:none;visibility:hidden">
+            <!--<input type="hidden" value="@settings.AlertErrors.ToString().ToLower()"
+            id="showJSErrors" />
+            <input type="hidden" value="@settings.Debug.ToString().ToLower()" id="isDebugMode"
+            />
+            <input type="hidden" value="@settings.LogErrors.ToString().ToLower()"
+            id="logJSErrors" />
+            <input type="hidden" value="@settings.UserSessionTimeout" id="sessionExpireTime"
+            />-->
+            <input type="hidden" value="Production" id="app-environment" />
+        </div>
+        <a href="/" class="header-link" title="Litrugical Calendar (Click to go back home)">
+            <div id="header">
+                <h1>Liturgical Calendar</h1>
+            </div>
+        </a>
+        <form method="post" action="">
+            <button data-bind="click: resetCalendar">Reset</button>
+            <p>Enter Year: <input data-bind="value: yearToCalculate" type="number" /></p>
+            <button data-bind="click: prevYear"> << </button>&nbsp;&nbsp;<span data-bind="text: yearToCalculate"></span>&nbsp;&nbsp;
+            <button data-bind="click: nextYear"> >> </button>
+            <p>Enter the year above to calculate the Liturgical Year.</p>
+
+            <button data-bind="click: getLiturgicalYear">Calculate</button>
+        </form>
+
+        <!-- ko if: errors -->
+        <p class="error">Errors: <strong data-bind="text: errors"></strong></p>
+        <!-- /ko -->
+        <!-- ko if: liturgicalDates().length > 0-->
+        <h1>Liturgical Calendar</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-offlevel">Event Name</th>
+                    <th class="col-offtype">Value</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: liturgicalDates">
+                <tr>
+                    <td><span data-bind="text: eventName"></span></td>
+                    <td><span data-bind="text: eventDate"></span></td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- /ko -->
+
+
+        <script src="/assets/js/viewmodels/liturgical-calendar-bundle.min.js"></script>
+    </body>
+</html>
