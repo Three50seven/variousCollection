@@ -12,32 +12,24 @@
 
     <link href='/assets/css/liturgical-styles.min.css' rel='stylesheet' type='text/css'>
 </head>
-    <body>
-        <div id="jsconfig" style="display:none;visibility:hidden">
-            <!--<input type="hidden" value="@settings.AlertErrors.ToString().ToLower()"
-            id="showJSErrors" />
-            <input type="hidden" value="@settings.Debug.ToString().ToLower()" id="isDebugMode"
-            />
-            <input type="hidden" value="@settings.LogErrors.ToString().ToLower()"
-            id="logJSErrors" />
-            <input type="hidden" value="@settings.UserSessionTimeout" id="sessionExpireTime"
-            />-->
-            <input type="hidden" value="Production" id="app-environment" />
+<body>
+    <div id="jsconfig" style="display:none;visibility:hidden">
+        <input type="hidden" value="Production" id="app-environment" />
+    </div>
+    <a href="/" class="header-link" title="Litrugical Calendar (Click to go back home)">
+        <div id="header">
+            <h1>Liturgical Calendar</h1>
         </div>
-        <a href="/" class="header-link" title="Litrugical Calendar (Click to go back home)">
-            <div id="header">
-                <h1>Liturgical Calendar</h1>
-            </div>
-        </a>
-        <form method="post" action="">
-            <button data-bind="click: resetCalendar">Reset</button>
-            <p>Enter Year: <input data-bind="value: yearToCalculate" type="number" /></p>
-            <button data-bind="click: prevYear"> << </button>&nbsp;&nbsp;<span data-bind="text: yearToCalculate"></span>&nbsp;&nbsp;
-            <button data-bind="click: nextYear"> >> </button>
-            <p>Enter the year above to calculate the Liturgical Year.</p>
+    </a>
+    <form name="liturgical-form" defaultbutton="calculate-dates">
+        <button data-bind="click: resetCalendar">Reset</button>
+        <p>Enter Year: <input data-bind="value: yearToCalculate" type="number" /></p>
+        <button data-bind="click: prevYear"> << </button>&nbsp;&nbsp;<span data-bind="text: yearToCalculate"></span>&nbsp;&nbsp;
+        <button data-bind="click: nextYear"> >> </button>
+        <p>Enter the year above to calculate the Liturgical Year.</p>
 
-            <button data-bind="click: getLiturgicalYear">Calculate</button>
-        </form>
+        <button id="calculate-dates" data-bind="click: getLiturgicalYear" autofocus>Calculate</button>
+
 
         <!-- ko if: errors -->
         <p class="error">Errors: <strong data-bind="text: errors"></strong></p>
@@ -60,8 +52,9 @@
             </tbody>
         </table>
         <!-- /ko -->
+    </form>
 
 
-        <script src="/assets/js/viewmodels/liturgical-calendar-bundle.min.js"></script>
-    </body>
+    <script src="/assets/js/viewmodels/liturgical-calendar-bundle.min.js"></script>
+</body>
 </html>

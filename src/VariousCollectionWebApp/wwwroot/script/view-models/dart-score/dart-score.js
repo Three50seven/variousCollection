@@ -198,7 +198,7 @@
 
         return isValid(errorMessage);
     };
-    getValidUpScoreError = function (isSingleDart = false, score, playerName, dartMsg) {
+    getValidUpScoreError = function (score, playerName, dartMsg, isSingleDart = false) {
         const MAX_UP_SCORE = isSingleDart ? 60 : 180; //3 triple 20s = 3*20*3 = 180 - highest score in throw/round
         const MIN_UP_SCORE = 0;
         let errorMessage = '';
@@ -237,7 +237,7 @@
             let score = scoresEntered[i].scoreEntered;
             let playerName = scoresEntered[i].playerName;
             let dartMsg = scoresEntered[i].dartMsg;
-            let scoreErrorMsg = getValidUpScoreError(true, score, playerName, dartMsg);
+            let scoreErrorMsg = getValidUpScoreError(score, playerName, dartMsg, true);
             errorMessage += scoreErrorMsg;
         }
 
@@ -313,6 +313,13 @@
     editUpScore = function () {
         self.isEditingUpScore(true);
     };
+    deleteUpScore = function (record) {        
+        let isScoreRound = (element) => element.round === record.round;
+        let indexToDelete = self.scoreUpGame().findIndex(isScoreRound);
+
+        self.scoreUpGame().splice(indexToDelete, 1); // remove from array
+        saveAllUpScore(); // re-calculate array amounts
+    };
     cancelEditingUpScore = function () {
         self.isEditingUpScore(false);
     };
@@ -333,19 +340,19 @@
             scoresEnteredP2.push({ playerName: self.playerTwo(), scoreEntered: scoreRecord.playerTwoDart2, dartMsg: 'second dart' });
             scoresEnteredP2.push({ playerName: self.playerTwo(), scoreEntered: scoreRecord.playerTwoDart3, dartMsg: 'third dart' });
 
-            for (var i = 0; i < scoresEnteredP1.length; i++) {
+            for (let i = 0; i < scoresEnteredP1.length; i++) {
                 let score = scoresEnteredP1[i].scoreEntered;
                 let playerName = scoresEnteredP1[i].playerName;
                 let dartMsg = scoresEnteredP1[i].dartMsg;
-                let scoreErrorMsg = getValidUpScoreError(true, score, playerName, dartMsg);
+                let scoreErrorMsg = getValidUpScoreError(score, playerName, dartMsg, true);
                 errorMessageP1 += scoreErrorMsg;
             }
 
-            for (var i = 0; i < scoresEnteredP2.length; i++) {
+            for (let i = 0; i < scoresEnteredP2.length; i++) {
                 let score = scoresEnteredP2[i].scoreEntered;
                 let playerName = scoresEnteredP2[i].playerName;
                 let dartMsg = scoresEnteredP2[i].dartMsg;
-                let scoreErrorMsg = getValidUpScoreError(true, score, playerName, dartMsg);
+                let scoreErrorMsg = getValidUpScoreError(score, playerName, dartMsg, true);
                 errorMessageP2 += scoreErrorMsg;
             }
 
@@ -361,11 +368,11 @@
                 p1Total += parseFloat(scoreRecord.playerOneScore);
                 p2Total += parseFloat(scoreRecord.playerTwoScore);
 
-                if (!checkUpScore(self.playerOne(), parseFloat(self.currentPlayerOneUpScore()) - p1Total)) {
+                if (!checkUpScore(self.playerOne(), parseFloat(self.score501()) - p1Total)) {
                     hasErrors = true;
                 }
 
-                if (!checkUpScore(self.playerTwo(), parseFloat(self.currentPlayerOneUpScore()) - p2Total)) {
+                if (!checkUpScore(self.playerTwo(), parseFloat(self.score501()) - p2Total)) {
                     hasErrors = true;
                 }
             }
