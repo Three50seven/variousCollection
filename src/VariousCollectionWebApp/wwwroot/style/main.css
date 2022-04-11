@@ -272,3 +272,21 @@ input[type="radio"][name="selectTeam"],
 input[type="radio"][name="selectCoinTossWinner"] {
     visibility: hidden;
 }
+
+/* Style for Vue.js "cloak" functionality that basically hides the html
+        until Vue is ready so the markup doesn't flash Vue syntax on load */
+[v-cloak] {
+    display: none;
+}
+
+.table {
+    display: contents;    
+}
+    .table th, td {
+        padding: 5px;
+        border-right: 1px solid white
+    }
+
+    .table th {
+        border-bottom: 1px solid white
+    }

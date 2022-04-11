@@ -257,7 +257,7 @@
             self.winningPlayer(playerName);
             isValid = true;
         }
-        else if (newScore > 1)
+        else if (newScore >= 1)
             isValid = true;
         else {
             validMessage = playerName + " is bust!";

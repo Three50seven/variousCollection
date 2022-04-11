@@ -126,5 +126,15 @@
       "knockout-bundle",
       "script/view-models/liturgical-calendar/liturgical-calendar.js"
     ]
+  },
+  {
+    "name": "vue-playground-bundle",
+    "subpath": "viewmodels",
+    "files": [
+      "main-bundle",
+      "utilities-bundle",
+      "jquery-source",
+      "script/view-models/vue-playground/vue-playground.js"
+    ]
   }
 ]
