@@ -45,7 +45,12 @@
             </tbody>
         </table>
 
-        Search Count: {{TestModel.SearchCount}}
+        <button type="button" v-on:click.prevent="Search">Search</button>
+
+        <div>
+            Search Count: {{ TestModel.SearchCount }}
+            Delete Count: {{ DeleteCount }}
+        </div>
     </div>
 
     <script type="text/x-template" id="table-row-template">

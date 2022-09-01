@@ -2,6 +2,7 @@
     let model = new Object;
     model.TestModel = new Object;
     model.TestModel.SearchCount = 1;
+    model.DeleteCount = 1;
     model.TestModel.Results = [
         {
             "UserId": "1",
@@ -70,8 +71,32 @@
                 //this.SetActiveTabName(this.SubTabs[0].Name);
                 //this.SearchAliases();
             },
+            Search: function () {
+                let data = this;
+
+                data.TestModel.Results = [
+                    {
+                        "UserId": "3",
+                        "ProfileId": "6",
+                        "UserName": "User 2 Name",
+                        "ProfileName": "Profile 3 Name",
+                        "ProfileEmail": "Searched1@someplace.com"
+                    },
+                    {
+                        "UserId": "4",
+                        "ProfileId": "5",
+                        "UserName": "User 3 Name",
+                        "ProfileName": "Profile 4 Name",
+                        "ProfileEmail": "Searched2@someplace.com"
+                    }
+                ];
+            },
             DeleteRow: function () {
+                let data = this;
+
                 console.log('delete row clicked');
+                data.DeleteCount++;
+                console.log('delete count: ', data.DeleteCount);
             }
             //ShowUsersSelected: function () {
             //    let data = this;

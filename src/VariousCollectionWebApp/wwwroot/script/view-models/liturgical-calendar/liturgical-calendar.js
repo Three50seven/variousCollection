@@ -232,4 +232,7 @@
 
 $(function () {
     ko.applyBindings();
+
+    //Go ahead and grab the current year's calendar
+    getLiturgicalYear();
 }); //END DOCUMENT READY FUNCTION
