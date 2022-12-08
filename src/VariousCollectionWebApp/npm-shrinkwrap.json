@@ -1030,9 +1030,9 @@
             "dev": true
         },
         "decode-uri-component": {
-            "version": "0.2.0",
-            "resolved": "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.0.tgz",
-            "integrity": "sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=",
+            "version": "0.2.2",
+            "resolved": "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.2.tgz",
+            "integrity": "sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==",
             "dev": true
         },
         "default-compare": {
@@ -2041,6 +2041,14 @@
                 "gulp-util": "~2.2.0",
                 "map-stream": "0.0.4",
                 "temp-write": "~0.1.0"
+            },
+            "dependencies": {
+                "graceful-fs": {
+                    "version": "4.1.15",
+                    "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.15.tgz",
+                    "integrity": "sha512-6uHUhOPEBgQ24HM+r6b/QwWfZq+yiFcipKFrOFiBEnWdy5sdzYoi+pJeQaPI5qOLRFqWmAXUPQNsielzdLoecA==",
+                    "dev": true
+                }
             }
         },
         "gulp-newer": {
@@ -4738,6 +4746,14 @@
             "requires": {
                 "graceful-fs": "~2.0.0",
                 "tempfile": "~0.1.2"
+            },
+            "dependencies": {
+                "graceful-fs": {
+                    "version": "2.0.3",
+                    "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-2.0.3.tgz",
+                    "integrity": "sha512-hcj/NTUWv+C3MbqrVb9F+aH6lvTwEHJdx2foBxlrVq5h6zE8Bfu4pv4CAAqbDcZrw/9Ak5lsRXlY9Ao8/F0Tuw==",
+                    "dev": true
+                }
             }
         },
         "tempfile": {
