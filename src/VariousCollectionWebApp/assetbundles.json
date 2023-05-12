@@ -136,5 +136,15 @@
       "jquery-source",
       "script/view-models/vue-playground/vue-playground.js"
     ]
+  },
+  {
+    "name": "horse-racing-bundle",
+    "subpath": "viewmodels",
+    "files": [
+      "main-bundle",
+      "utilities-bundle",
+      "jquery-source",
+      "script/view-models/horse-racing/horse-racing.js"
+    ]
   }
 ]

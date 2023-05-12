@@ -1,0 +1,95 @@
+<html>
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56252502-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-56252502-1');
+    </script>
+
+    <!-- Load vue.js library -->
+    <!-- dev
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>-->
+    <!-- prod-->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/main-styles.min.css" />
+    <style type="text/css">
+        .active {
+            background-color:yellow;            
+        }
+    </style>
+</head>
+<body>
+    <div id="jsconfig" style="display:none;visibility:hidden">
+        <input type="hidden" value="Production" id="app-environment" />
+    </div>
+    <a href="/" class="header-link" title="Horse Racing (Click to go back home)">
+        <div id="header">
+            <h1>Horse Racing</h1>
+        </div>
+    </a>
+    <p>Select a horse to win and place your bet!</p>
+    <div id="horse-racing-app-wrapper" v-cloak>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Horse</th>
+                    <th>Odds</th>
+                    <th>Select</th>
+                </tr>
+            </thead>
+            <tbody>
+                <table-row v-for="(item, index) in HorsesModel.Results"
+                           v-bind:key="item.HorseId + '_' + HorsesModel.RaceCount"
+                           v-on:row-selected="SelectRow"
+                           v-bind:value="item"></table-row>
+            </tbody>
+        </table>
+
+        <br />
+        <div>
+            <button type="button"
+                    v-on:click.prevent="Race"
+                    v-if="HorseSelected != 0 && AccountBalance > 0">
+                Race
+            </button>
+        </div>
+        <br />
+
+        <div>
+            <span v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>            
+            <div v-if="RaceResults != 0">
+                Winner: {{ RaceResults }}
+                <br />
+                {{ RaceResultMessage }}
+            </div>
+            <br />
+            <span v-if="HorseSelected != 0">Horse Selected: {{ HorseSelected }}</span>
+            <br />
+            <br />
+            Amount Bet: $<input v-model="BetAmount" type="number">
+            <span>Minimum Bet: $2</span>
+            <br />
+            Account Balance: ${{ AccountBalance }}
+        </div>
+    </div>
+
+    <script type="text/x-template" id="table-row-template">
+        <tr :class="{ active: IsSelected }">
+            <td>{{ HorseName }}</td>
+            <td>{{ Odds }}</td>
+            <td>
+                <a href="#" v-on:click.prevent="Select">
+                    Select
+                </a>
+            </td>
+        </tr>
+    </script>
+
+    <script src="/assets/js/viewmodels/horse-racing-bundle.min.js"></script>
+</body>
+</html>
