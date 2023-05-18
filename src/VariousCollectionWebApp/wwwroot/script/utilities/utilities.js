@@ -78,6 +78,13 @@
 
         return useTitleCase ? this.titleCase(name) : name;
     },
+    getRandomHorseName: function (useTitleCase) {
+        let derbyWinners = MODULES.DataSets.DERBY_WINNERS;
+
+        let name = this.getRandomElement(derbyWinners); //TODO: eventually we'll just pull a random noun adjective, etc. and make up the horse names'
+
+        return useTitleCase ? this.titleCase(name) : name;
+    },
     testNameCombos: function (){
         let animals = MODULES.DataSets.ANIMALS;
         let adjectives = MODULES.DataSets.ADJECTIVES;

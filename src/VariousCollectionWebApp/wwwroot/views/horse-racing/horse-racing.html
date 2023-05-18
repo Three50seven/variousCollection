@@ -29,14 +29,16 @@
     </div>
     <a href="/" class="header-link" title="Horse Racing (Click to go back home)">
         <div id="header">
-            <h1>Horse Racing</h1>
+            <h1>Horse Racing</h1>            
         </div>
     </a>
-    <p>Select a horse to win and place your bet!</p>
+    <p>Select a horse to win and place your bet!</p>    
     <div id="horse-racing-app-wrapper" v-cloak>
+        <h2>Race {{ HorsesModel.RaceCount }}</h2>
         <table class="table">
             <thead>
                 <tr>
+                    <th>Pole Position</th>
                     <th>Horse</th>
                     <th>Odds</th>
                     <th>Select</th>
@@ -61,7 +63,7 @@
         <br />
 
         <div>
-            <span v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>            
+            <span v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>
             <div v-if="RaceResults != 0">
                 Winner: {{ RaceResults }}
                 <br />
@@ -80,6 +82,7 @@
 
     <script type="text/x-template" id="table-row-template">
         <tr :class="{ active: IsSelected }">
+            <td :style="{'background-color':BackgroundColor, color: FontColor}">{{ PolePosition }}</td>
             <td>{{ HorseName }}</td>
             <td>{{ Odds }}</td>
             <td>

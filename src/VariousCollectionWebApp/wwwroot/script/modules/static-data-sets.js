@@ -46,19 +46,45 @@ MODULES.DataSets = (function () {
         "vain","wary","yummy","over-achieving","under-achieving","slick","clean","dirty","flirtatious","secretive","luscious","rare","mountain","extinct",
         "limited-edition","abundant","purple","pink","blue","red","green","orange","yellow","indigo","violet","neon","fluorescent","tan","gray","black","white",
         "one-eyed","yellow-bellied","one-legged","naive","comedic","funny","scruffy","ludicrous","ridiculous","riotous","screaming","friendly","opulent","eager",
-        "delightful"];
+        "delightful","rich","authentic","super","big"];
 
     const states = ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia',
         'Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan',
         'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota',
         'Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah',
-        'Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+        'Vermont', 'Virgin Island', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+
+    const colors = ['brown', 'red', 'green', 'blue', 'orange', 'purple', 'violet', 'yellow', 'indigo'];
+
+    const nouns = ['mage', 'strike', 'mandaloun', 'country', 'house', 'nyquist', 'american', 'pharoah', 'chrome', 'orb', 'animal', 'kingdom', 'saver', 'mine', 'bird', 'brown',
+        'smarty', 'jones', 'street', 'sense', 'barbaro', 'giacomo', 'cide','war','emblem','monarchos'];    
+
+    const pronouns = ['he', 'she', 'it', 'I', 'that', 'this', 'these', 'those'];
+
+    const verbs = ['justify', 'dreaming', 'will'];
+
+    const adverbs = ['always', 'sometimes'];
+
+    const derbyWinners = ["Mage", "Rich Strike", "Mandaloun", "Authentic", "Country House", "Justify ", "Always Dreaming", "Nyquist", "American Pharoah ", "California Chrome",
+        "Orb", "I'll Have Another", "Animal Kingdom", "Super Saver", "Mine That Bird", "Big Brown", "Street Sense", "Barbaro", "Giacomo", "Smarty Jones", "Funny Cide",
+        "War Emblem", "Monarchos", "Fusaichi Pegasus", "Charismatic", "Real Quiet", "Silver Charm", "Grindstone", "Thunder Gulch", "Go for Gin", "Sea Hero", "Lil E. Tee",
+        "Strike the Gold", "Unbridled", "Sunday Silence", "Winning Colors", "Alysheba", "Ferdinand", "Spend A Buck", "Swale", "Sunny's Halo", "Gato Del Sol", "Pleasant Colony",
+        "Genuine Risk", "Spectacular Bid", "Affirmed ", "Seattle Slew ", "Bold Forbes", "Foolish Pleasure", "Cannonade", "Secretariat ", "Riva Ridge", "Canonero II",
+        "Dust Commander", "Majestic Prince", "Forward Pass", "Proud Clarion", "Kauai King", "Lucky Debonair", "Northern Dancer", "Chateaugay", "Decidedly", "Carry Back",
+        "Venetian Way", "Tomy Lee", "Tim Tam", "Iron Liege", "Needles", "Swaps", "Determine", "Dark Star", "Hill Gail", "Count Turf", "Middleground", "Ponder", "Citation ",
+        "Jet Pilot", "Assault ", "Hoop Jr.", "Pensive", "Count Fleet ", "Shut Out", "Whirlaway ", "Gallahadion", "Johnstown", "Lawrin", "War Admiral ", "Bold Venture",
+        "Omaha ", "Cavalcade", "Brokers Tip", "Burgoo King", "Twenty Grand", "Gallant Fox ", "Clyde Van Dusen", "Reigh Count", "Whiskery", "Bubbling Over", "Flying Ebony",
+        "Black Gold", "Zev", "Morvich", "Behave Yourself", "Paul Jones", "Sir Barton ", "Exterminator", "Omar Khayyam", "George Smith", "Regret", "Old Rosebud", "Donerail",
+        "Worth", "Meridian", "Donau", "Wintergreen", "Stone Street", "Pink Star", "Sir Huon", "Agile", "Elwood", "Judge Himes", "Alan-a-Dale", "His Eminence", "Lieut. Gibson",
+        "Manuel", "Plaudit", "Typhoon II", "Ben Brush", "Halma", "Chant", "Lookout", "Azra", "Kingman", "Riley", "Spokane", "Macbeth II", "Montrose", "Ben Ali", "Joe Cotton",
+        "Buchanan", "Leonatus", "Apollo", "Hindoo", "Fonso", "Lord Murphy", "Day Star", "Baden-Baden", "Vagrant", "Aristides"];
 
     //comma separated list of global constants
     return {
         ANIMALS: new ReadOnlyArray(animals),
         ADJECTIVES: new ReadOnlyArray(adjectives),
-        US_STATES: new ReadOnlyArray(states)
+        US_STATES: new ReadOnlyArray(states),
+        DERBY_WINNERS: new ReadOnlyArray(derbyWinners)
     };
 
 })();
