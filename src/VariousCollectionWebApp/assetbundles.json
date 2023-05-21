@@ -29,6 +29,13 @@
     ]
   },
   {
+    "name": "horse-racing-styles",
+    "files": [
+      "main-styles",
+      "style/horse-racing/horse-racing.css"
+    ]
+  },
+  {
     "name": "js-initializer",
     "subpath": "modules",
     "filename": "initializer.min.js",

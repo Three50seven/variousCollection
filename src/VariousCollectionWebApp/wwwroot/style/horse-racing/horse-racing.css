@@ -1,0 +1,133 @@
+﻿p {
+    padding-left: 10px;
+}
+
+.active {
+    background-color: yellow;
+}
+
+/*Horse Position Indicator With Image:*/
+#horse-position-img {
+    margin-top: 4px;
+    margin-left: 148px; /*175px is max for right position, 85px is 50 yard line from left-to-right, is 50yd from right-to-left, 0 is max left NOTE: THIS IS SET IN JAVASCRIPT BASED ON BALL POSITION*/
+    height: 10px;
+    width: 5px;
+    position: absolute;
+    background-color: ghostwhite;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+#track-container-img {
+    position: absolute;
+    height: 233px;
+    width: 657px;
+    margin: 10px;
+}
+#track-img {
+    position: static;
+    height: 233px;
+    width: 657px;
+    background-image: url('../../images/horse-racing/horsetrack_tranparent-bg.png');
+}
+
+.error {
+    color: red;
+}
+
+.red-btn {
+    background-color: red;
+}
+
+.winner {
+    color: green;
+    font-size:48px;
+}
+
+.score-number {
+    font-size:48px
+}
+
+img.score-marker {
+    max-height: 100px;
+    max-width: 100px;
+}
+
+/*centering tables: https://www.granneman.com/webdev/coding/css/centertables */
+table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.center {
+    text-align:center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img.score-increment {
+    max-height: 30px;
+    max-width: 30px;
+}
+
+.score-entry {
+    font-size: 12px;
+    padding: 5px 0px;
+    width: 40px;    
+}
+
+.score-entry-help-txt {
+    font-size: 10px;
+    margin-right: 2px;
+}
+
+.scoreboard {
+    margin-bottom: 50px
+}
+
+    .scoreboard td {
+        border-bottom: 1px solid gray;
+    }
+
+.score-board-ctrls {
+    width: 100%;
+    height: 100px;
+}
+
+.killer-score-board-ctrls {
+    width: 100%;
+    height: 100px;
+    margin: 20px;
+}
+
+.killer-indicator {
+    height: 10px;
+    width: 10px;
+    background-color: red;
+    display: inline-block;
+}
+
+.killer-text {
+    color: rgb(255, 0, 0);
+    font-weight: 600;
+}
+
+.killer-score-text {
+    font-size: 1.25em;
+    line-height: 1.85;
+}
+
+.turn-indicator {
+    background-color: rgb(255, 228, 188);
+}
+
+.out-indicator {
+    text-decoration: line-through;
+}
+
+img.player-changer {
+    max-height: 40px;
+    max-width: 40px;
+    margin: 10px;
+    float: left;
+}
