@@ -85,7 +85,7 @@
 
         return useTitleCase ? this.titleCase(name) : name;
     },
-    testNameCombos: function (){
+    testNameCombos: function () {
         let animals = MODULES.DataSets.ANIMALS;
         let adjectives = MODULES.DataSets.ADJECTIVES;
         let i = 0;
@@ -96,5 +96,57 @@
                 console.log(i + ": " + a1 + " " + a2);
             });
         });
-    }
+    },
+    ElementRevolver = (function () {
+        /**references:
+         * https://stackoverflow.com/questions/69712325/move-elements-around-semicircle-orbit-div-around-parent
+         * https://stackoverflow.com/questions/10990942/moving-a-div-along-a-circular-path-using-html-javascript-css
+         * http://jsfiddle.net/nN7ct/
+         * https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animateMotion
+         * */
+        function getPosition(settings, ellapsedTime) {
+            let angle = getAngle(settings, ellapsedTime);
+            return {
+                x: Math.round(settings.center.x + settings.radius * Math.cos(angle)) + 2,
+                y: Math.round(settings.center.y + settings.radius * Math.sin(angle)) + 2
+            };
+        }
+
+        function getAngle(settings, ellapsedTime) {
+            return ellapsedTime / settings.interval * 2 * Math.PI * settings.direction - settings.startPositionRad;
+        }
+
+        function start(id, settings) {
+            
+            let el = document.getElementById(id),
+                startTime = (new Date()).getTime(),
+                width = el.offsetWidth,
+                height = el.offsetHeight;
+
+            if (el["#rev:tm"] !== null) stop(id);
+            el.style.position = settings.cssPosition || "absolute";
+            if (!settings.startPositionRad) settings.startPositionRad = settings.startPositionDeg / 180 * Math.PI;
+            el["#rev:tm"] = setInterval(function () {
+                let pos = getPosition(settings, (new Date()).getTime() - startTime);
+                el.style.left = (pos.x - Math.round(width / 2)) + "px";
+                el.style.top = (pos.y - Math.round(height / 2)) + "px";
+            }, settings.updateInterval);
+            if (settings.iterations > -1) setTimeout(function () {
+                stop(id);
+            }, settings.iterations * settings.interval);
+        }
+
+        function stop(id) {
+            let el = document.getElementById(id);
+            if (el["#rev:tm"] === null) return;
+            clearInterval(el["#rev:tm"]);
+            el["#rev:tm"] = null;
+        }
+
+        return {
+            start: start,
+            stop: stop
+        };
+
+    })()
 };

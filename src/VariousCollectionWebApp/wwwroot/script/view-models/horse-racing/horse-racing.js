@@ -63,6 +63,9 @@
             Initialize: function () {
                 let data = this
 
+                //TODO: Setup multiple players (allow user to choose the number) so they can compete on who wins the most money after X number of races
+
+                //setup a horse race (pick the horses etc.)
                 data.SetupRace();
             },
             SetupRace: function () {
@@ -127,9 +130,11 @@
             },
             Race: function () {
                 let data = this,
-                    betResults = 0;
+                    betResults = 0;                    
 
                 if (data.CheckBalance()) {
+                    data.MoveHorse();
+
                     //determine winning horse - TODO: eventually we'll want to determine 1st, 2nd, 3rd and factor in odds and perhaps the jockey and trainer etc.
                     //TODO: base this on list of horses dynamically generated
                     data.RaceResults = UTILITIES.getRandomInt(1, 5);
@@ -149,9 +154,27 @@
                     data.SetupRace(); //setup a new race
                 }                
             },
-
-            MoveHorse: function () {
+            MoveHorse: function () {                
                 let data = this;
+
+                console.log('moving horse');                
+
+                UTILITIES.ElementRevolver.start("horse-position-img", {
+                    radius: 80,
+                    center: { x: 150, y: 150 },
+                    // time in milliseconds for one revolution
+                    interval: 5000,
+                    // direction = 1 for clockwise, -1 for counterclockwise
+                    direction: -1,
+                    // number of times to animate the revolution (-1 for infinite)
+                    iterations: 1,
+                    // startPosition can be a degree angle
+                    // (0 = right, 90 = top, 180 = left, 270 = bottom)
+                    startPositionDeg: 90,
+                    // how often (in milliseconds) the position of the
+                    // circle should be attempted to be updated
+                    updateInterval: 50
+                });
 
                 //TODO: get a track distance, and for each horse calculate the distance they run within each second (or other time interval)
                 // Use a multiplier based on the horse odds to determine how much the horse ran
