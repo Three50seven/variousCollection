@@ -10,6 +10,8 @@
     model.AccountBalance = 1000;
     model.BetAmount = model.MIN_BET; //TODO: Add Validation - for example, make sure amount min ($2) is met and user cannot enter non numeric, or more than they have in account.
     model.ErrorMessage = "";
+    model.dot = new Object;
+    model.anim = new Object;
 
     model.HorsesModel.Results = [];
 
@@ -126,7 +128,66 @@
                         "BackgroundColor": "#4d801a",
                         "FontColor": "#ffffff"
                     }
-                ];
+                ];                
+
+                /*
+                // reference: https://potatodie.nl/diffuse-write-ups/move-a-dot-along-a-path/
+                let dot = document.getElementById('dot');
+                let curve = document.getElementById('curve');
+                let totalLength = curve.getTotalLength();
+
+                let u = 0.5;
+                let p = curve.getPointAtLength(u * totalLength);
+
+                dot.setAttribute("transform", `translate(${p.x}, ${p.y})`);
+
+                data.dot = {
+                    sprite: null,
+                    track: null,
+
+                    // Initialize the dot: connect sprite and track properties with supplied SVG elements
+                    init: function (sprite, track) {
+                        this.sprite = document.getElementById(sprite);
+                        this.track = document.getElementById(track);
+                    },
+
+                    // Put the dot on its spot
+                    move: function (u) {
+                        const p = this.track.getPointAtLength(u * this.track.getTotalLength());
+                        this.sprite.setAttribute("transform", `translate(${p.x}, ${p.y})`);
+                    }
+                };
+
+                data.anim = {
+                    start: function (duration) {
+                        this.duration = duration;
+                        this.tZero = Date.now();
+
+                        requestAnimationFrame(() => this.run());
+                    },
+
+                    run: function () {
+                        let u = Math.min((Date.now() - this.tZero) / this.duration, 1);
+
+                        if (u < 1) {
+                            // Keep requesting frames, till animation is ready
+                            requestAnimationFrame(() => this.run());
+                        } else {
+                            this.onFinish();
+                        }
+
+                        data.dot.move(u);
+                    },
+
+                    onFinish: function () {
+                        // Schedule the animation to restart
+                        setTimeout(() => this.start(this.duration), 1000);
+                    }
+                };
+
+                data.dot.init('dot', 'curve');
+                data.anim.start(300000);
+                */
             },
             Race: function () {
                 let data = this,
@@ -157,24 +218,35 @@
             MoveHorse: function () {                
                 let data = this;
 
-                console.log('moving horse');                
+                console.log('moving horse');    
 
-                UTILITIES.ElementRevolver.start("horse-position-img", {
-                    radius: 80,
-                    center: { x: 150, y: 150 },
-                    // time in milliseconds for one revolution
-                    interval: 5000,
+                UTILITIES.OrbitAnimation.setup("track-img","horse-position-img", {                    
+                    // time in seconds for one revolution
+                    duration: 10,
                     // direction = 1 for clockwise, -1 for counterclockwise
                     direction: -1,
                     // number of times to animate the revolution (-1 for infinite)
                     iterations: 1,
-                    // startPosition can be a degree angle
-                    // (0 = right, 90 = top, 180 = left, 270 = bottom)
-                    startPositionDeg: 90,
-                    // how often (in milliseconds) the position of the
-                    // circle should be attempted to be updated
-                    updateInterval: 50
+                    // pixels - size of field
+                    gridSize: 100
                 });
+
+                //UTILITIES.ElementRevolver.start("horse-position-img", {
+                //    radius: 80,
+                //    center: { x: 150, y: 150 },
+                //    // time in milliseconds for one revolution
+                //    interval: 5000,
+                //    // direction = 1 for clockwise, -1 for counterclockwise
+                //    direction: -1,
+                //    // number of times to animate the revolution (-1 for infinite)
+                //    iterations: 1,
+                //    // startPosition can be a degree angle
+                //    // (0 = right, 90 = top, 180 = left, 270 = bottom)
+                //    startPositionDeg: 90,
+                //    // how often (in milliseconds) the position of the
+                //    // circle should be attempted to be updated
+                //    updateInterval: 50
+                //});
 
                 //TODO: get a track distance, and for each horse calculate the distance they run within each second (or other time interval)
                 // Use a multiplier based on the horse odds to determine how much the horse ran

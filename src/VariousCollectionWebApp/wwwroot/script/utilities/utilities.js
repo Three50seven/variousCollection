@@ -114,7 +114,7 @@
 
         function getAngle(settings, ellapsedTime) {
             return ellapsedTime / settings.interval * 2 * Math.PI * settings.direction - settings.startPositionRad;
-        }
+        }        
 
         function start(id, settings) {
             
@@ -129,7 +129,7 @@
             el["#rev:tm"] = setInterval(function () {
                 let pos = getPosition(settings, (new Date()).getTime() - startTime);
                 el.style.left = (pos.x - Math.round(width / 2)) + "px";
-                el.style.top = (pos.y - Math.round(height / 2)) + "px";
+                el.style.top = (pos.y - Math.round(height / 2)) + "px";               
             }, settings.updateInterval);
             if (settings.iterations > -1) setTimeout(function () {
                 stop(id);
@@ -148,5 +148,55 @@
             stop: stop
         };
 
+    })(),
+    OrbitAnimation = (function () {        
+        //reference: https://www.the-art-of-web.com/javascript/animate-curved-path/
+        // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
+        // Please acknowledge use of this code by including this header.
+        var field = null;
+        var ball = null;
+
+        var maxX = null;
+        var maxY = null;
+
+        var duration = 4; // seconds
+        var gridSize = 100; // pixels
+
+        var start = null;
+
+        function setup(fieldId, ballId, settings) {
+            field = document.getElementById(fieldId),
+            ball = document.getElementById(ballId);
+
+            maxX = field.clientWidth - ball.offsetWidth,
+            maxY = field.clientHeight - ball.offsetHeight;
+
+            duration = settings.duration, // seconds
+            gridSize = settings.gridSize; // pixels
+
+            requestAnimationFrame(step);
+        }
+
+        function step(timestamp) {
+            var progress, x, y;
+            if (start === null) {
+                start = timestamp;
+            }
+
+            progress = (timestamp - start) / duration / 1000; // percent
+
+            x = Math.sin(progress * 2 * Math.PI); // x = ƒ(t)
+            y = Math.cos(progress * 2 * Math.PI); // y = ƒ(t)
+
+            ball.style.left = maxX / 2 + (gridSize * x) + "px";
+            ball.style.bottom = maxY / 2 + (gridSize * y) + "px";
+
+            if (progress >= 1) start = null; // reset to start position
+            requestAnimationFrame(step);
+        }
+
+        return {
+            setup: setup
+        };
     })()
 };
