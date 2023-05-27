@@ -10,10 +10,14 @@
     model.AccountBalance = 1000;
     model.BetAmount = model.MIN_BET; //TODO: Add Validation - for example, make sure amount min ($2) is met and user cannot enter non numeric, or more than they have in account.
     model.ErrorMessage = "";
-    model.dot = new Object;
-    model.anim = new Object;
 
     model.HorsesModel.Results = [];
+
+    //SVG Animation Controls - TODO: Cleanup
+    model.dot = new Object;
+    model.anim = new Object;
+    model.run_animation = false;
+    model.svganim = new Object;
 
     //initialize variables
     let rowComponent = {
@@ -69,6 +73,13 @@
 
                 //setup a horse race (pick the horses etc.)
                 data.SetupRace();
+
+                //Setup animations
+                data.svganim = document.getElementById("svgobject");
+                data.dot = document.getElementById("dot");
+
+                console.log('svganim', data.svganim);
+                data.svganim.pauseAnimations();
             },
             SetupRace: function () {
                 let data = this,
@@ -218,18 +229,27 @@
             MoveHorse: function () {                
                 let data = this;
 
-                console.log('moving horse');    
+                console.log('moving horse');
 
-                UTILITIES.OrbitAnimation.setup("track-img","horse-position-img", {                    
-                    // time in seconds for one revolution
-                    duration: 10,
-                    // direction = 1 for clockwise, -1 for counterclockwise
-                    direction: -1,
-                    // number of times to animate the revolution (-1 for infinite)
-                    iterations: 1,
-                    // pixels - size of field
-                    gridSize: 100
-                });
+                var starting_position = 0; //TODO: degree of starting position on track
+
+                data.run_animation = !data.run_animation
+                console.log('toggle', data.run_animation);
+                if (data.run_animation) {
+                    data.svganim.unpauseAnimations();
+                }
+                else {
+                    data.svganim.pauseAnimations();
+                }        
+
+                //UTILITIES.OrbitAnimation.orbit("horse-position-img", {                    
+                //    radius: 200, // The radius of the discorectangle
+                //    angle: 0, // The current angle of the div
+                //    speed: 0.1, // The speed of the div in degrees per second
+                //    direction: 1, // The direction of the orbit, 1=clockwise, -1=counter-clockwise
+                //    start: 0, // The start angle
+                //    stopPosition: 360, // The stop angle
+                //});
 
                 //UTILITIES.ElementRevolver.start("horse-position-img", {
                 //    radius: 80,

@@ -150,53 +150,42 @@
 
     })(),
     OrbitAnimation = (function () {        
-        //reference: https://www.the-art-of-web.com/javascript/animate-curved-path/
-        // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
-        // Please acknowledge use of this code by including this header.
-        var field = null;
-        var ball = null;
+        /*reference: https://www.the-art-of-web.com/javascript/animate-curved-path/            
+            Original JavaScript code by Chirp Internet: www.chirpinternet.eu
+            Please acknowledge use of this code by including this header.
+            Custom edits of: https://potatodie.nl/diffuse-write-ups/move-a-dot-along-a-path/ => https://github.com/potatoDie/move-dot
+            https://jsfiddle.net/vjhzysr9/
+            https://jsfiddle.net/56pbc4Ly/
+            https://jsfiddle.net/8pjaqc7g/2/
+            https://jsfiddle.net/3gd75kLs/2/
+        */
+        function orbit(id, settings) {
+            // Get the div
+            var div = document.getElementById(id);
 
-        var maxX = null;
-        var maxY = null;
+            // Get the current position of the div
+            var x = div.style.left;
+            var y = div.style.top;
 
-        var duration = 4; // seconds
-        var gridSize = 100; // pixels
+            // Calculate the new position of the div
+            var newX = x + settings.speed * Math.cos(settings.direction * Math.PI / 180);
+            var newY = y + settings.speed * Math.sin(settings.direction * Math.PI / 180);
 
-        var start = null;
+            // Set the new position of the div
+            div.style.left = newX + "px";
+            div.style.top = newY + "px";
 
-        function setup(fieldId, ballId, settings) {
-            field = document.getElementById(fieldId),
-            ball = document.getElementById(ballId);
-
-            maxX = field.clientWidth - ball.offsetWidth,
-            maxY = field.clientHeight - ball.offsetHeight;
-
-            duration = settings.duration, // seconds
-            gridSize = settings.gridSize; // pixels
-
-            requestAnimationFrame(step);
-        }
-
-        function step(timestamp) {
-            var progress, x, y;
-            if (start === null) {
-                start = timestamp;
+            // If the div has reached the stop position, then stop the animation
+            if (newX === settings.stopPosition && newY === settings.stopPosition) {
+                return;
             }
 
-            progress = (timestamp - start) / duration / 1000; // percent
-
-            x = Math.sin(progress * 2 * Math.PI); // x = ƒ(t)
-            y = Math.cos(progress * 2 * Math.PI); // y = ƒ(t)
-
-            ball.style.left = maxX / 2 + (gridSize * x) + "px";
-            ball.style.bottom = maxY / 2 + (gridSize * y) + "px";
-
-            if (progress >= 1) start = null; // reset to start position
-            requestAnimationFrame(step);
-        }
+            // Call the function again after a delay
+            window.setTimeout(orbit, 1000 / 60); // 60 frames per second
+        }       
 
         return {
-            setup: setup
+            orbit: orbit
         };
     })()
 };
