@@ -80,6 +80,57 @@
 
                 console.log('svganim', data.svganim);
                 data.svganim.pauseAnimations();
+
+                //Setup horses
+                let horseTracker = document.getElementById("horse-tracker");
+                let polePosition = 1;
+
+                // Create an array of 20 divs.
+                const divs = Array(20).fill(null).map((_, i) => {
+                    return document.createElement("div");
+                });
+
+                // Set the divs' width and height.
+                divs.forEach((div) => {
+                    div.style.width = "20px";
+                    div.style.height = "20px";
+                    div.style.position = "relative";
+                    div.style.left = "0px";
+                    div.innerHTML = polePosition;
+                    div.className = "pole-position";
+                    div.id = "pp" + polePosition;
+                    polePosition++;
+                });
+
+                //// Set the divs' positions.
+                //divs.forEach((div, i) => {
+                //    div.style.left = i * 100 + "px";
+                //});
+
+                // Add the divs to the tracker area.
+                divs.forEach((div) => {
+                    horseTracker.appendChild(div);
+                });                
+
+                // Create an interval that will move the divs horizontally.
+                const interval = setInterval(() => {
+                    // Move each div by a different random amount between 1 and 5.
+                    divs.forEach((div, i) => {
+                        let newPosition = parseInt(div.style.left) + UTILITIES.getRandomInt(1, 5);
+                        div.style.left = newPosition + "px";
+                        console.log("left", div.style.left);
+
+                        // If any of the divs have reached the end of the track, stop moving it.
+                        if (newPosition >= 1000) {
+                            clearInterval(interval);
+                        }
+                    });                    
+                }, 100);
+
+                // When the user clicks on the document, clear the interval.
+                document.addEventListener("click", () => {
+                    clearInterval(interval);
+                });
             },
             SetupRace: function () {
                 let data = this,
