@@ -31,9 +31,28 @@
     background-image: url('../../images/horse-racing/horsetrack_tranparent-bg.png');
 }
 
-/*Pole Position Colors*/
+#horse-track {
+    width: 1020px;
+    background-color: #964B00;
+}
+
+#finish-line {
+    width: 20px;
+    height: 96.5%;
+    background-color: #964B00;
+    border-left: solid;
+    border-color: #ffffff;
+    float: right;
+}
+
+/*Pole Position Colors
+    source: https://www.horseracingnation.com/content/ntra_saddle_towel_colors
+*/
 .pole-position {
     text-align: center;
+    width: 20px;
+    height: 20px;
+    position: relative;
 }
 
 #pp1 {
@@ -62,80 +81,99 @@
 }
 
 #pp6 {
-    background-color: #e13838;
-    color: #ffffff;
+    background-color: #000000;
+    color: #ffff00;
 }
 
 #pp7 {
-    background-color: #f5f5f5;
+    background-color: #ff6600;
     color: #000000;
 }
 
 #pp8 {
-    background-color: #295fcc;
-    color: #ffffff;
+    background-color: #ff99cc;
+    color: #000000;
 }
 
 #pp9 {
-    background-color: #fff200;
+    background-color: #00ffff;
     color: #000000;
 }
 
 #pp10 {
-    background-color: #4d801a;
+    background-color: #800080;
     color: #ffffff;
 }
 
 #pp11 {
-    background-color: #e13838;
-    color: #ffffff;
+    background-color: #959595;
+    color: #ff0000;
 }
 
 #pp12 {
-    background-color: #f5f5f5;
+    background-color: #99cc00;
     color: #000000;
 }
 
 #pp13 {
-    background-color: #295fcc;
+    background-color: #281b04;
     color: #ffffff;
 }
 
 #pp14 {
-    background-color: #fff200;
-    color: #000000;
+    background-color: #5e0a0a;
+    color: #ffff00;
 }
 
 #pp15 {
-    background-color: #4d801a;
-    color: #ffffff;
+    background-color: #ddd9c3;
+    color: #000000;
 }
 
 #pp16 {
-    background-color: #e13838;
-    color: #ffffff;
+    background-color: #99ccff;
+    color: #e36c09;
 }
 
 #pp17 {
-    background-color: #f5f5f5;
-    color: #000000;
+    background-color: #0b1d31;
+    color: #ffffff;
 }
 
 #pp18 {
-    background-color: #295fcc;
-    color: #ffffff;
+    background-color: #022206;
+    color: #ffff00;
 }
 
 #pp19 {
-    background-color: #fff200;
-    color: #000000;
+    background-color: #003399;
+    color: #ff0000;
 }
 
 #pp20 {
-    background-color: #4d801a;
+    background-color: #ff3399;
+    color: #ffff00;
+}
+
+#pp21 {
+    background-color: #b5b3d9;
+    color: #0b1d31;
+}
+
+#pp22 {
+    background-color: #10446d;
     color: #ffffff;
 }
 
+#pp23 {
+    background-color: #bdd6cd;
+    color: #003300;
+}
+
+#pp24 {
+    background-color: #42502c;
+    color: #ffffff;
+}
 
 .error {
     color: red;

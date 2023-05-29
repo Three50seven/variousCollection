@@ -154,6 +154,7 @@
             Original JavaScript code by Chirp Internet: www.chirpinternet.eu
             Please acknowledge use of this code by including this header.
             Custom edits of: https://potatodie.nl/diffuse-write-ups/move-a-dot-along-a-path/ => https://github.com/potatoDie/move-dot
+            //SVG Editor: https://yqnn.github.io/svg-path-editor/?ref=awesomeindie.com
             https://jsfiddle.net/vjhzysr9/
             https://jsfiddle.net/56pbc4Ly/
             https://jsfiddle.net/8pjaqc7g/2/

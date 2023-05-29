@@ -82,19 +82,17 @@
                 data.svganim.pauseAnimations();
 
                 //Setup horses
-                let horseTracker = document.getElementById("horse-tracker");
+                let horseTrack = document.getElementById("horse-track");
+                let finishLine = document.getElementById("finish-line");
                 let polePosition = 1;
 
-                // Create an array of 20 divs.
-                const divs = Array(20).fill(null).map((_, i) => {
+                // Create an array of divs. MAX=24 (max number of horse pole positions per: https://www.horseracingnation.com/content/ntra_saddle_towel_colors)
+                const divs = Array(24).fill(null).map((_, i) => {
                     return document.createElement("div");
                 });
 
                 // Set the divs' width and height.
                 divs.forEach((div) => {
-                    div.style.width = "20px";
-                    div.style.height = "20px";
-                    div.style.position = "relative";
                     div.style.left = "0px";
                     div.innerHTML = polePosition;
                     div.className = "pole-position";
@@ -107,16 +105,22 @@
                 //    div.style.left = i * 100 + "px";
                 //});
 
-                // Add the divs to the tracker area.
+                // Add the divs to the track area.
                 divs.forEach((div) => {
-                    horseTracker.appendChild(div);
-                });                
+                    horseTrack.appendChild(div);
+                });
+
+                //set the finish-line to the height of track with horses on it
+                //document.getElementById("finish-line").style.height = horseTrack.style.height;
 
                 // Create an interval that will move the divs horizontally.
                 const interval = setInterval(() => {
                     // Move each div by a different random amount between 1 and 5.
                     divs.forEach((div, i) => {
                         let newPosition = parseInt(div.style.left) + UTILITIES.getRandomInt(1, 5);
+                        //TODO: Add a random number generator variable for horses with better odds, jockey, trainer, etc.
+                        //TODO: check if there can be a tie, we should allow for ties since this can happen in real life
+
                         div.style.left = newPosition + "px";
                         console.log("left", div.style.left);
 
