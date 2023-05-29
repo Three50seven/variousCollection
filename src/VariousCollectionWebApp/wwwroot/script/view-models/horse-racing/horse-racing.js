@@ -10,6 +10,7 @@
     model.AccountBalance = 1000;
     model.BetAmount = model.MIN_BET; //TODO: Add Validation - for example, make sure amount min ($2) is met and user cannot enter non numeric, or more than they have in account.
     model.ErrorMessage = "";
+    model.FinishOrder = [];
 
     model.HorsesModel.Results = [];
 
@@ -83,11 +84,12 @@
 
                 //Setup horses
                 let horseTrack = document.getElementById("horse-track");
-                let finishLine = document.getElementById("finish-line");
+                //let finishLine = document.getElementById("finish-line");
                 let polePosition = 1;
+                let horseCount = 24;
 
                 // Create an array of divs. MAX=24 (max number of horse pole positions per: https://www.horseracingnation.com/content/ntra_saddle_towel_colors)
-                const divs = Array(24).fill(null).map((_, i) => {
+                const divs = Array(horseCount).fill(null).map((_, i) => {
                     return document.createElement("div");
                 });
 
@@ -95,7 +97,8 @@
                 divs.forEach((div) => {
                     div.style.left = "0px";
                     div.innerHTML = polePosition;
-                    div.className = "pole-position";
+                    div.classList.add("pole-position");
+                    div.classList.add("pp" + polePosition);
                     div.id = "pp" + polePosition;
                     polePosition++;
                 });
@@ -113,6 +116,9 @@
                 //set the finish-line to the height of track with horses on it
                 //document.getElementById("finish-line").style.height = horseTrack.style.height;
 
+                // check if a horse is finished
+                const isFinished = (currentValue) => currentValue >= 1000;
+
                 // Create an interval that will move the divs horizontally.
                 const interval = setInterval(() => {
                     // Move each div by a different random amount between 1 and 5.
@@ -124,7 +130,20 @@
                         div.style.left = newPosition + "px";
                         console.log("left", div.style.left);
 
-                        // If any of the divs have reached the end of the track, stop moving it.
+                        //// After a div has reached the end of the track, keep it at the end of the track and add it to the FinishOrder.
+                        //if (newPosition >= 1000) {
+                        //    if (!divs.includes(div.id)) {
+                        //        data.FinishOrder.unshift(div.id);
+                        //    }
+                        //    div.style.left = 1000;
+                        //}
+
+                        //// After all horses have crossed the finish line, end the race:
+                        //if (divs.every(isFinished)) {
+                        //    clearInterval(interval);
+                        //}
+
+                        // After a div has reached the end of the track, stop animation.
                         if (newPosition >= 1000) {
                             clearInterval(interval);
                         }

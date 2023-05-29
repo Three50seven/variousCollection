@@ -117,9 +117,16 @@
                 id="dot"
                 style="fill: #dd1819" />
     </svg>-->
+        <div v-if="FinishOrder.length != 0">
+            <div v-for="(horse, index) in FinishOrder">
+                <ul>
+                    <li>{{ index + 1 }} - {{ horse }}</li>
+                </ul>
+            </div>
+        </div>
         <div id="horse-track">
             <div id="finish-line"></div>
-        </div>    
+        </div>
         
 
         <svg xmlns="http://www.w3.org/2000/svg" id="svgobject" width="100%" height="100%" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 6900 2500" width="451.5px" height="451.5px">
