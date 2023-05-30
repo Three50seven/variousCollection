@@ -36,6 +36,13 @@
     ]
   },
   {
+    "name": "horse-racing-simple-styles",
+    "files": [
+      "main-styles",
+      "style/horse-racing/horse-racing-simple.css"
+    ]
+  },
+  {
     "name": "js-initializer",
     "subpath": "modules",
     "filename": "initializer.min.js",
@@ -152,6 +159,16 @@
       "utilities-bundle",
       "jquery-source",
       "script/view-models/horse-racing/horse-racing.js"
+    ]
+  },
+  {
+    "name": "horse-racing-simple-bundle",
+    "subpath": "viewmodels",
+    "files": [
+      "main-bundle",
+      "utilities-bundle",
+      "jquery-source",
+      "script/view-models/horse-racing/horse-racing-simple.js"
     ]
   }
 ]

@@ -1,0 +1,178 @@
+﻿p {
+    padding-left: 10px;
+}
+
+.active {
+    background-color: yellow;
+}
+
+/*Horse Position Indicator With Image:*/
+#horse-position-img {
+    margin-top: 4px;
+    margin-left: 148px; /*175px is max for right position, 85px is 50 yard line from left-to-right, is 50yd from right-to-left, 0 is max left NOTE: THIS IS SET IN JAVASCRIPT BASED ON BALL POSITION*/
+    height: 10px;
+    width: 5px;
+    position: absolute;
+    background-color: ghostwhite;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+#track-container-img {
+    position: absolute;
+    height: 233px;
+    width: 657px;
+    margin: 10px;
+}
+#track-img {
+    position: static;
+    height: 233px;
+    width: 657px;
+    background-image: url('../../images/horse-racing/horsetrack_tranparent-bg.png');
+}
+
+/*Pole Position Colors
+    source: https://www.horseracingnation.com/content/ntra_saddle_towel_colors
+*/
+.pole-position {
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    position: relative;
+}
+
+.pp1 {
+    background-color: #e13838;
+    color: #ffffff;
+}
+
+.pp2 {
+    background-color: #f5f5f5;
+    color: #000000;
+}
+
+.pp3 {
+    background-color: #295fcc;
+    color: #ffffff;
+}
+
+.pp4 {
+    background-color: #fff200;
+    color: #000000;
+}
+
+.pp5 {
+    background-color: #4d801a;
+    color: #ffffff;
+}
+
+.pp6 {
+    background-color: #000000;
+    color: #ffff00;
+}
+
+.pp7 {
+    background-color: #ff6600;
+    color: #000000;
+}
+
+.pp8 {
+    background-color: #ff99cc;
+    color: #000000;
+}
+
+.pp9 {
+    background-color: #00ffff;
+    color: #000000;
+}
+
+.pp10 {
+    background-color: #800080;
+    color: #ffffff;
+}
+
+.pp11 {
+    background-color: #959595;
+    color: #ff0000;
+}
+
+.pp12 {
+    background-color: #99cc00;
+    color: #000000;
+}
+
+.pp13 {
+    background-color: #281b04;
+    color: #ffffff;
+}
+
+.pp14 {
+    background-color: #5e0a0a;
+    color: #ffff00;
+}
+
+.pp15 {
+    background-color: #ddd9c3;
+    color: #000000;
+}
+
+.pp16 {
+    background-color: #99ccff;
+    color: #e36c09;
+}
+
+.pp17 {
+    background-color: #0b1d31;
+    color: #ffffff;
+}
+
+.pp18 {
+    background-color: #022206;
+    color: #ffff00;
+}
+
+.pp19 {
+    background-color: #003399;
+    color: #ff0000;
+}
+
+.pp20 {
+    background-color: #ff3399;
+    color: #ffff00;
+}
+
+.pp21 {
+    background-color: #b5b3d9;
+    color: #0b1d31;
+}
+
+.pp22 {
+    background-color: #10446d;
+    color: #ffffff;
+}
+
+.pp23 {
+    background-color: #bdd6cd;
+    color: #003300;
+}
+
+.pp24 {
+    background-color: #42502c;
+    color: #ffffff;
+}
+
+.error {
+    color: red;
+}
+
+/*centering tables: https://www.granneman.com/webdev/coding/css/centertables */
+table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.center {
+    text-align:center;
+    margin-left: auto;
+    margin-right: auto;
+}
