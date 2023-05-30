@@ -29,33 +29,39 @@
     </a>
     <p>Select a horse to win and place your bet! Or try <a href="horse-racing-simple.html">Horse Racing (Simple)</a></p>
     <div id="horse-racing-app-wrapper" v-cloak>
-        <h2>Race {{ HorsesModel.RaceCount }}</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>PP#</th> <!--TODO: Center Text in Div and setup CSS classes for each Pole Position div-->
-                    <th>Horse</th>
-                    <th>Odds</th>
-                    <th>Select</th>
-                </tr>
-            </thead>
-            <tbody>
-                <table-row v-for="(item, index) in HorsesModel.Results"
-                           v-bind:key="item.HorseId + '_' + HorsesModel.RaceCount"
-                           v-on:row-selected="SelectRow"
-                           v-bind:value="item"></table-row>
-            </tbody>
-        </table>
+        <div v-for="(race, index) in Races"
+             :key="race.Id">
 
-        <br />
-        <div>
-            <button type="button"
-                    v-on:click.prevent="Race"
-                    v-if="HorseSelected != 0 && AccountBalance > 0">
-                Race
-            </button>
+            <h2>Race {{ race.RaceNumber }}</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>PP#</th> <!--TODO: Center Text in Div and setup CSS classes for each Pole Position div-->
+                        <th>Horse</th>
+                        <th>Odds</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--"horse.HorseId + '_' + HorsesModel.RaceCount"-->
+                    <table-row v-for="(horse, index) in race.Horses"
+                               v-bind:key="horse.HorseId"
+                               v-on:row-selected="SelectRow"
+                               v-bind:value="horse"></table-row>
+                </tbody>
+            </table>
+
+            <br />
+            <div>
+                <button type="button"
+                        v-on:click.prevent="Race"
+                        v-if="HorseSelected != 0 && AccountBalance > 0">
+                    Race
+                </button>
+            </div>
+            <br />
         </div>
-        <br />
+        
 
         <div>
             <span v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>
@@ -74,91 +80,24 @@
             Account Balance: ${{ AccountBalance }}
         </div>
 
-        <div id="main-track-display" style="display:none;">
-            <div id="track-container-img">
-                <div id="track-img">
-                    <div id="horse-position-img"></div>
-                </div>
-            </div>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <!--<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="640pt" height="245pt" viewBox="0 0 640 245" preserveAspectRatio="xMinYMin meet" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <g transform="translate(0.000000,245.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
-                <path id="dirt-track" d="M2770 2343 c-767 -13 -1456 -21 -1530 -18 -162 7 -291 -10 -418 -55 -463 -161 -758 -650 -692 -1147 15 -109 72 -283 122 -375 184 -331 502 -529 878 -544 69 -3 820 6 1670 20 1647 28 1625 27 1783 80 484 163 786 668 703 1179 -52 316 -238 593 -511 756 -38 23 -97 52 -130 64 l-60 22 344 3 343 2 505 -91 c277 -50 507 -88 511 -85 3 4 1 11 -4 16 -6 6 -233 50 -505 99 l-494 88 -560 5 c-356 2 -1069 -4 -1955 -19z m1780 -38 c339 -109 593 -378 687 -730 23 -89 26 -118 26 -260 0 -142 -3 -171 -26 -260 -107 -398 -415 -688 -809 -760 -116 -21 -3244 -73 -3385 -56 -411 49 -749 350 -860 766 -23 89 -26 118 -26 260 0 142 3 171 26 260 95 353 357 630 691 729 124 37 216 48 366 41 74 -3 765 6 1535 19 1654 29 1659 29 1775 -9z" />
-                <path id="turf-track" d="M2485 2079 c-1541 -21 -1471 -16 -1633 -95 -189 -91 -330 -265 -399 -491 -23 -78 -26 -104 -26 -233 0 -129 3 -155 26 -233 78 -256 243 -441 470 -526 146 -54 107 -54 1799 -26 918 15 1579 29 1617 35 137 23 286 103 387 206 205 210 283 529 199 819 -82 282 -282 481 -548 545 -99 24 -14 24 -1892 -1z m1940 -42 c346 -121 556 -489 494 -867 -42 -259 -210 -486 -432 -585 -125 -55 -83 -53 -1747 -80 -1534 -24 -1615 -24 -1745 6 -198 46 -391 217 -478 425 -49 115 -61 180 -61 324 0 111 4 149 22 214 73 255 245 443 477 522 66 22 103 28 210 32 231 8 2682 40 2935 38 240 -1 247 -2 325 -29z" />
-            </g>
-            <circle r="2" fill="white">
-                <animateMotion dur="5s"
-                               repeatCount="indefinite"
-                               mpath="M2485 2079 c-1541 -21 -1471 -16 -1633 -95 -189 -91 -330 -265 -399 -491 -23 -78 -26 -104 -26 -233 0 -129 3 -155 26 -233 78 -256 243 -441 470 -526 146 -54 107 -54 1799 -26 918 15 1579 29 1617 35 137 23 286 103 387 206 205 210 283 529 199 819 -82 282 -282 481 -548 545 -99 24 -14 24 -1892 -1z m1940 -42 c346 -121 556 -489 494 -867 -42 -259 -210 -486 -432 -585 -125 -55 -83 -53 -1747 -80 -1534 -24 -1615 -24 -1745 6 -198 46 -391 217 -478 425 -49 115 -61 180 -61 324 0 111 4 149 22 214 73 255 245 443 477 522 66 22 103 28 210 32 231 8 2682 40 2935 38 240 -1 247 -2 325 -29z" />
-            </circle>
-        </svg>-->
-        </div>
-
-        <!--<svg xmlns="http://www.w3.org/2000/svg"
-         viewBox="0 0 7000 2500">
-        <path id="curve"
-              d="M2770 2343 c-767 -13 -1456 -21 -1530 -18 -162 7 -291 -10 -418 -55 -463 -161 -758 -650 -692 -1147 15 -109 72 -283 122 -375 184 -331 502 -529 878 -544 69 -3 820 6 1670 20 1647 28 1625 27 1783 80 484 163 786 668 703 1179 -52 316 -238 593 -511 756 -38 23 -97 52 -130 64 l-60 22 344 3 343 2 505 -91 c277 -50 507 -88 511 -85 3 4 1 11 -4 16 -6 6 -233 50 -505 99 l-494 88 -560 5 c-356 2 -1069 -4 -1955 -19z m1780 -38 c339 -109 593 -378 687 -730 23 -89 26 -118 26 -260 0 -142 -3 -171 -26 -260 -107 -398 -415 -688 -809 -760 -116 -21 -3244 -73 -3385 -56 -411 49 -749 350 -860 766 -23 89 -26 118 -26 260 0 142 3 171 26 260 95 353 357 630 691 729 124 37 216 48 366 41 74 -3 765 6 1535 19 1654 29 1659 29 1775 -9z"
-              style="fill: none; stroke: #000; stroke-width: 1" />
-        <circle r="100"
-                cy="0"
-                cx="0"a
-                id="dot"
-                style="fill: #dd1819" />
-    </svg>-->
-        <div v-if="FinishOrder.length != 0">
-            <div v-for="(horse, index) in FinishOrder">
-                <ul>
-                    <li>{{ index + 1 }} - {{ horse }}</li>
-                </ul>
-            </div>
-        </div>
+        Race Time: {{ RaceTime }}
         <div id="horse-track">
             <div id="finish-line"></div>
         </div>
-        
 
-        <svg xmlns="http://www.w3.org/2000/svg" id="svgobject" width="100%" height="100%" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 6900 2500" width="451.5px" height="451.5px">
-            <g>
-                <path fill="none" stroke="#964B00" stroke-width="250"
-                      d="M1195 2176
-                                      c-290-46-523-168-712-371-137-146-227-327-258-516-19-118-19-190 0-306 71-435
-                                      426-777 915-880 80-17 189-18 1785-18 1628 0 1704 1 1790 19 484 101 840 445
-                                      910 879 19 116 19 188 0 306-33 204-124 378-280 537-175 178-352 276-610
-                                      337-90 21-91 21-1775 23-1322 2-1702-1-1765-10z" />
+        <div v-if="FinishOrder.length != 0">
+            Race Results:
+            <div v-for="(horse, index) in FinishOrder">
+                {{ index + 1 }} -
+                <span :class="['pole-position', horse]">{{ horse.replace('pp','') }}</span>
+            </div>
+        </div>
 
-                <circle id="dot" r="100"
-                        cy="0"
-                        cx="0" width="300" height="300" fill="#fff" stroke="black" stroke-width="1" transform="translate(-25, -10)">
-
-                    <animateMotion path="M1195 2176
-                                      c-290-46-523-168-712-371-137-146-227-327-258-516-19-118-19-190 0-306 71-435
-                                      426-777 915-880 80-17 189-18 1785-18 1628 0 1704 1 1790 19 484 101 840 445
-                                      910 879 19 116 19 188 0 306-33 204-124 378-280 537-175 178-352 276-610
-                                      337-90 21-91 21-1775 23-1322 2-1702-1-1765-10z"
-                                   begin="0s" dur="30s" repeatCount="1" rotate="auto" fill="freeze"
-                                   keyPoints="1;0" keyTimes="0;1" calcMode="linear" />
-
-                </circle>
-            </g>
-
-        </svg>
     </div>
 
     <script type="text/x-template" id="table-row-template">
         <tr :class="{ active: IsSelected }">
-            <td :style="{'background-color':BackgroundColor, color: FontColor}" class="pole-position">{{ PolePosition }}</td>
+            <td :class=[ClassList]>{{ PolePosition }}</td>
             <td>{{ HorseName }}</td>
             <td>{{ Odds }}</td>
             <td>

@@ -34,11 +34,11 @@
 #horse-track {
     width: 1020px;
     background-color: #964B00;
+    position: relative;
 }
 
 #finish-line {
     width: 20px;
-    height: 96.5%;
     background-color: #964B00;
     border-left: solid;
     border-color: #ffffff;
