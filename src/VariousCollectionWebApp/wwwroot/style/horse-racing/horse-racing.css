@@ -6,6 +6,71 @@
     background-color: yellow;
 }
 
+/*Race Menu dropdown*/
+.dropdown-hover:hover .dropdown-content {
+    display: block
+}
+
+.btn-group-sides {
+    display: inline-block;
+    overflow: auto;
+    margin: 0px auto;
+}
+
+.btn-side-left {
+    float: left;
+}
+
+.btn-side-right {
+    float: right;
+}
+
+.race-number {
+    font-size: 1.5em;
+    padding: 5px;
+    display: inline-block;
+    min-width: 200px;
+    text-align: center;
+}
+
+.menu li {
+    list-style: none;
+}
+
+.bar-block .dropdown-hover, .bar-block .dropdown-click {
+    width: 100%
+}
+
+.bar-block .dropdown-hover .button, .bar-block .dropdown-click .button {
+    width: 100%;
+    text-align: left;
+    padding: 8px 16px
+}
+
+.dropdown-content {
+    cursor: auto;
+    color: #000;
+    background-color: #fff;
+    display: none;
+    position: absolute;
+    min-width: 160px;
+    margin: 0;
+    padding: 0;
+    z-index: 1
+}
+
+.bar-block .dropdown-hover .dropdown-content, .bar-block .dropdown-click .dropdown-content {
+    min-width: 100%
+}
+
+.dropdown-hover.mobile .dropdown-content, .dropdown-click.mobile .dropdown-content {
+    position: relative
+}
+
+.show {
+    display: block !important
+}
+
 /*Horse Position Indicator With Image:*/
 #horse-position-img {
     margin-top: 4px;

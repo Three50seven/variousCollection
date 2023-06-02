@@ -85,6 +85,25 @@
 
         return useTitleCase ? this.titleCase(name) : name;
     },
+    // keep getting a horse name until a unique one is returned
+    getUniqueHorseName: function (horseName, horseNameArray) {
+        let loopSafety = 0;
+        while (horseNameArray.includes(horseName) && loopSafety <= 10000) {
+            return UTILITIES.getRandomHorseName();
+        }
+        return horseName;
+    },
+    // Reduce a fraction by finding the Greatest Common Divisor and dividing by it. source: https://stackoverflow.com/questions/4652468/is-there-a-javascript-function-that-reduces-a-fraction
+    reduceFraction: function (numerator, denominator) {
+        var gcd = function gcd(a, b) {
+            return b ? gcd(b, a % b) : a;
+        };
+        gcd = gcd(numerator, denominator);
+        return {
+            Numerator: numerator / gcd,
+            Denominator: denominator / gcd
+        };
+    },
     testNameCombos: function () {
         let animals = MODULES.DataSets.ANIMALS;
         let adjectives = MODULES.DataSets.ADJECTIVES;
@@ -114,10 +133,10 @@
 
         function getAngle(settings, ellapsedTime) {
             return ellapsedTime / settings.interval * 2 * Math.PI * settings.direction - settings.startPositionRad;
-        }        
+        }
 
         function start(id, settings) {
-            
+
             let el = document.getElementById(id),
                 startTime = (new Date()).getTime(),
                 width = el.offsetWidth,
@@ -129,7 +148,7 @@
             el["#rev:tm"] = setInterval(function () {
                 let pos = getPosition(settings, (new Date()).getTime() - startTime);
                 el.style.left = (pos.x - Math.round(width / 2)) + "px";
-                el.style.top = (pos.y - Math.round(height / 2)) + "px";               
+                el.style.top = (pos.y - Math.round(height / 2)) + "px";
             }, settings.updateInterval);
             if (settings.iterations > -1) setTimeout(function () {
                 stop(id);
@@ -149,7 +168,7 @@
         };
 
     })(),
-    OrbitAnimation = (function () {        
+    OrbitAnimation = (function () {
         /*reference: https://www.the-art-of-web.com/javascript/animate-curved-path/            
             Original JavaScript code by Chirp Internet: www.chirpinternet.eu
             Please acknowledge use of this code by including this header.
@@ -183,7 +202,7 @@
 
             // Call the function again after a delay
             window.setTimeout(orbit, 1000 / 60); // 60 frames per second
-        }       
+        }
 
         return {
             orbit: orbit

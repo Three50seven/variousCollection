@@ -9,10 +9,12 @@ MODULES.Constructors.HorseRacing = (function () {
             this.IsSelected = isSelected;
             this.ClassList = classList;
         },
-        Race: function (id, raceNumber, horses) {
+        Race: function (id, raceNumber, horses, isCompleted, results) {
             this.Id = id;
-            this.RaceNumber = raceNumber;
+            this.RaceNumber = raceNumber;            
             this.Horses = horses;
+            this.IsCompleted = isCompleted;
+            this.Results = results;
         }
     };
 })();

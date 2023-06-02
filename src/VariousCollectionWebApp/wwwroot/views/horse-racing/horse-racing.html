@@ -29,14 +29,31 @@
     </a>
     <p>Select a horse to win and place your bet! Or try <a href="horse-racing-simple.html">Horse Racing (Simple)</a></p>
     <div id="horse-racing-app-wrapper" v-cloak>
-        <div v-for="(race, index) in Races"
-             :key="race.Id">
-
-            <h2>Race {{ race.RaceNumber }}</h2>
+        <div>
+            <div class="btn-group-sides">
+                <button class="btn-side-left" type="button" value="Previous Race"
+                        v-on:click.prevent="PreviousRace">
+                    <<
+                </button>
+                <span class="race-number" v-on:click.prevent="ShowRaceMenu">Race {{ CurrentRace.RaceNumber }}</span>
+                <div id="raceMenuDropdown" :class="['dropdown-content', 'bar-block', 'border', 'menu', {show:RaceMenuIsShowing}]">
+                    <ul>
+                        <race-menu v-for="(race, index) in Races"
+                                   v-bind:key="race.Id"
+                                   v-on:race-selected="SelectRace"
+                                   v-bind:value="race"></race-menu>
+                    </ul>
+                </div>
+                <button class="btn-side-right" type="button" value="Next Race"
+                        v-on:click.prevent="NextRace">
+                    >>
+                </button>
+            </div>
+            
             <table class="table">
                 <thead>
                     <tr>
-                        <th>PP#</th> <!--TODO: Center Text in Div and setup CSS classes for each Pole Position div-->
+                        <th>PP#</th>
                         <th>Horse</th>
                         <th>Odds</th>
                         <th>Select</th>
@@ -44,8 +61,8 @@
                 </thead>
                 <tbody>
                     <!--"horse.HorseId + '_' + HorsesModel.RaceCount"-->
-                    <table-row v-for="(horse, index) in race.Horses"
-                               v-bind:key="horse.HorseId"
+                    <table-row v-for="(horse, index) in CurrentRace.Horses"
+                               v-bind:key="horse.HorseId + '_' + CurrentRace.Id"
                                v-on:row-selected="SelectRow"
                                v-bind:value="horse"></table-row>
                 </tbody>
@@ -106,6 +123,12 @@
                 </a>
             </td>
         </tr>
+    </script>
+
+    <script type="text/x-template" id="race-menu-template">
+        <li class="list-group-item">
+            <a href="#" class="bar-item button" v-on:click.prevent="Select">Race {{ RaceNumber }}</a>
+        </li>
     </script>
 
     <script src="/assets/js/viewmodels/horse-racing-bundle.min.js"></script>
