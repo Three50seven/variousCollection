@@ -15,6 +15,7 @@
     model.RaceTime = 0,
     model.HorseIcons = new Object;
     model.CurrentRace = new Object;
+    model.CurrentRaceResults = new Object;
     model.CurrentRaceToRun = new Object;
     model.RaceResults = 0; //TODO: make this an object so odds, etc. are kept with horse
     model.RaceResultMessage = "";
@@ -125,6 +126,8 @@
                 
                 data.Races.forEach((race, index) => {
                     let horseCount = UTILITIES.getRandomInt(MIN_HORSES, MAX_HORSES);
+
+                    race.Results = [];
                     
                     race.Horses = Array(horseCount).fill(null).map((_, i) => {
                         let pp = i + 1,
@@ -151,7 +154,7 @@
                 });
 
                 //start with the first race
-                data.CurrentRace = data.Races[0];    
+                data.CurrentRace = data.Races[0];
                 data.CurrentRaceToRun = data.Races[0];
 
                 data.SetupNextRace();
@@ -226,6 +229,7 @@
                 let data = this;
 
                 data.CurrentRace = data.Races[raceId];
+                data.CurrentRaceResults = CurrentRace.Results;
                 //data.Races.find(({ Id }) => Id === raceId);
 
                 //hide the race menu if it was used to select a race
@@ -292,7 +296,8 @@
 
                         // After all horses have crossed the finish line, end the race:
                         if (data.HorseIcons.every(isFinished)) {
-                            clearInterval(data.RaceInterval);                            
+                            clearInterval(data.RaceInterval);
+                            data.CurrentRaceToRun.Results = data.GetRaceResults();
                             data.CurrentRaceToRun.IsCompleted = true;
                             currentRaceId++;
                             data.CurrentRaceToRun = data.Races[currentRaceId];
@@ -300,6 +305,27 @@
                         }
                     });
                 }, RACE_INTERVAL_SPEED);                
+            },
+            GetRaceResults: function () {
+                let data = this,
+                    raceResults = [];
+
+                data.CurrentRaceToRun.Horses.forEach((horse) => { 
+                    data.FinishOrder.forEach((pp) => {
+                        let polePositionNumber = pp.replace("pp");
+
+                        if (horse.PolePosition == polePositionNumber)
+                            raceResults.push(horse);
+                    });
+                });
+                //TODO: WORKING ON THIS 6/3/2023
+
+                //data.Races.find(({ Id }) => Id === raceId);
+
+                //reset the finishorder array for the next race
+                //data.FinishOrder = [];
+
+                return raceResults;                    
             },
             CheckBalance: function () {
                 let data = this;
@@ -328,14 +354,17 @@
                 console.log('horseSelected', horseSelected.Id);
 
                 //reset IsSelected to false for all horses:
-                data.Races[0].Horses.forEach(horse => {
-                    if (horse.Id == horseSelected.Id) {
-                        horse.IsSelected = true;
-                    }
-                    else
-                        horse.IsSelected = false;
+                data.Races.forEach(race => {
+                    race.Horses.forEach(horse => {
+                        if (horse.Id == horseSelected.Id) {
+                            horse.IsSelected = true;
+                        }
+                        else
+                            horse.IsSelected = false;
+                    });
                 });
 
+                //TODO: Need to get horse and race and later we'll add finish order bets etc.  But for now, we're just getting a simple horse pole position
                 data.HorseSelected = horseSelected.PolePosition;
                 data.HorseSelectedOddsMultiplier = horseSelected.Odds.split('-')[0];
             }

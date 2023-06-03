@@ -1,5 +1,7 @@
 <html>
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56252502-1"></script>
     <script>
@@ -16,6 +18,7 @@
     <!-- prod-->
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/horse-racing-styles.min.css" />
 </head>
 <body>
@@ -49,7 +52,7 @@
                     >>
                 </button>
             </div>
-            
+
             <table class="table">
                 <thead>
                     <tr>
@@ -78,7 +81,7 @@
             </div>
             <br />
         </div>
-        
+
 
         <div>
             <span v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>
@@ -131,6 +134,7 @@
         </li>
     </script>
 
+    <!--<script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>-->
     <script src="/assets/js/viewmodels/horse-racing-bundle.min.js"></script>
 </body>
 </html>
