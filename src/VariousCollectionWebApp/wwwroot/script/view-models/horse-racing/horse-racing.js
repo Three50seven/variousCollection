@@ -6,7 +6,7 @@
         MIN_BET = 2,
         TRACK_LENGTH = 1000, // length of track to reach finish line
         ICON_HEIGHT = 20, //height of an icon - setting here, since elements added to DOM do not have a height, this needs to match the horse-racing.css class .pole-position height property
-        RACE_INTERVAL_SPEED = 10; // controls how fast the divs move on the track (e.g. 1000 = horse is moved every second)
+        RACE_INTERVAL_SPEED = 100; // controls how fast the divs move on the track (e.g. 1000 = horse is moved every second)
 
     let model = new Object;
 
@@ -26,8 +26,9 @@
     model.ErrorMessage = "";
     model.FinishOrder = [];
     model.RaceMenuIsShowing = false;
+    model.RaceIsStarted = false;
     model.Races = new Object;
-    model.LiveRacePositions = new Object; 
+    model.LiveRacePositions = new Object; //TODO: left off here on 6/4/2023 - show the top 4 horses sorted in an array by length on track
 
     /*sample component props for multi props:
      props: {
@@ -150,7 +151,7 @@
                         // reduce the fraction
                         horseOddsFraction = UTILITIES.reduceFraction(horseOddsNumerator, horseOddsDenominator); 
 
-                        return new MODULES.Constructors.HorseRacing.Horse(i, pp, horseOddsFraction.Numerator + '-' + horseOddsFraction.Denominator, horseName, false, "pole-position pp" + pp);
+                        return new MODULES.Constructors.HorseRacing.Horse(i, pp, horseOddsFraction.Numerator + '-' + horseOddsFraction.Denominator, horseName, false, "pole-position pp" + pp, 0);
                     });
                 });
 
@@ -230,7 +231,7 @@
                 let data = this;
 
                 data.CurrentRace = data.Races[raceId];
-                data.CurrentRaceResults = data.CurrentRace.Results;
+                data.CurrentRaceResults = data.CurrentRace.Results;                
 
                 //hide the race menu if it was used to select a race
                 if (data.RaceMenuIsShowing)
@@ -239,6 +240,9 @@
             Race: function () {
                 let data = this,
                     currentRaceId = data.CurrentRaceToRun.Id;
+
+                // flag that the race has started
+                data.RaceIsStarted = true;
 
                 const trackContainer = document.getElementById('track-container');
                 const trackContainerScrollWidth = trackContainer.scrollWidth;
@@ -262,6 +266,10 @@
                             //TODO: check if there can be a tie, we should allow for ties since this can happen in real life
 
                             icon.style.left = newPosition + "px";
+                            data.CurrentRaceToRun.Horses[i].CurrentDistance = newPosition;
+
+                            data.LiveRacePositions = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
+                            console.log("live race positions", data.LiveRacePositions[0].CurrentDistance);
 
                             //scroll to end of track
                             if (trackContainer.scrollLeft !== trackContainerScrollWidth) {
@@ -278,6 +286,7 @@
                         // After all horses have crossed the finish line, end the race:
                         if (data.HorseIcons.every(isFinished)) {
                             clearInterval(data.RaceInterval);
+                            data.RaceIsStarted = false; //indicate the race has ended
                             data.GetRaceResults();
                             currentRaceId++;
                             data.CurrentRaceToRun = data.Races[currentRaceId];

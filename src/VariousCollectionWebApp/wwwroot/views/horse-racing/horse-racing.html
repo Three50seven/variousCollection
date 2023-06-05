@@ -75,7 +75,7 @@
             <div>
                 <button type="button"
                         v-on:click.prevent="Race"
-                        v-if="HorseSelected != 0 && AccountBalance > 0">
+                        v-if="HorseSelected != 0 && AccountBalance > 0 && !RaceIsStarted">
                     Race
                 </button>
             </div>
@@ -118,6 +118,17 @@
                 <div id="finish-line"></div>
             </div>
         </div>
+
+        <div class="container" v-if="LiveRacePositions.length != 0">
+            Live Results:
+
+            <div class="row" v-for="(horse, index) in LiveRacePositions">
+                {{ index + 1 }} -
+                <div :class=[horse.ClassList]>{{ horse.PolePosition }}</div>
+                <span>{{ horse.HorseName }} - ({{ horse.Odds }})</span>
+            </div>
+        </div>
+        
     </div>
 
     <script type="text/x-template" id="table-row-template">

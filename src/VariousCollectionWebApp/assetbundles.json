@@ -61,7 +61,8 @@
       "script/modules/environment.js",
       "script/modules/constructors.js",
       "script/modules/lookup-types.js",
-      "script/modules/static-data-sets.js"
+      "script/modules/static-data-sets.js",
+      "script/modules/extensions.js"
     ]
   },
   {
