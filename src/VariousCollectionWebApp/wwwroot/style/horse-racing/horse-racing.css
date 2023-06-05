@@ -83,6 +83,11 @@
     display: inline-block;
 }
 
+#track-container {
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
 #track-container-img {
     position: absolute;
     height: 233px;

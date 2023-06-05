@@ -32,7 +32,7 @@
     </a>
     <p>Select a horse to win and place your bet! Or try <a href="horse-racing-simple.html">Horse Racing (Simple)</a></p>
     <div id="horse-racing-app-wrapper" v-cloak>
-        <div>
+        <div class="container">
             <div class="btn-group-sides">
                 <button class="btn-side-left" type="button" value="Previous Race"
                         v-on:click.prevent="PreviousRace">
@@ -40,7 +40,7 @@
                 </button>
                 <span class="race-number" v-on:click.prevent="ShowRaceMenu">Race {{ CurrentRace.RaceNumber }}</span>
                 <div id="raceMenuDropdown" :class="['dropdown-content', 'bar-block', 'border', 'menu', {show:RaceMenuIsShowing}]">
-                    <ul>
+                    <ul class="list-group">
                         <race-menu v-for="(race, index) in Races"
                                    v-bind:key="race.Id"
                                    v-on:race-selected="SelectRace"
@@ -80,10 +80,19 @@
                 </button>
             </div>
             <br />
+
+            <div class="container" v-if="CurrentRaceResults.length != 0">
+                Race Results:
+                <div class="row" v-for="(horse, index) in CurrentRaceResults">
+                    {{ index + 1 }} -
+                    <div :class=[horse.ClassList]>{{ horse.PolePosition }}</div>
+                    <span>{{ horse.HorseName }} - ({{ horse.Odds }})</span>
+                </div>
+            </div>
         </div>
 
 
-        <div>
+        <div class="container-fluid text-info">
             <span v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>
             <div v-if="RaceResults != 0">
                 Winner: {{ RaceResults }}
@@ -95,24 +104,20 @@
             <br />
             <br />
             Amount Bet: $<input v-model="BetAmount" type="number">
-            <span>Minimum Bet: $2</span>
+            <span class="small">Minimum Bet: $2</span>
             <br />
             Account Balance: ${{ AccountBalance }}
         </div>
 
-        Race Time: {{ RaceTime }}
-        <div id="horse-track">
-            <div id="finish-line"></div>
+        <div class="text-info">
+            Race Time: {{ RaceTime }}
+            <h4>Next Race: {{ CurrentRaceToRun.RaceNumber }}</h4>
         </div>
-
-        <div v-if="FinishOrder.length != 0">
-            Race Results:
-            <div v-for="(horse, index) in FinishOrder">
-                {{ index + 1 }} -
-                <span :class="['pole-position', horse]">{{ horse.replace('pp','') }}</span>
+        <div id="track-container" class="container">
+            <div id="horse-track">
+                <div id="finish-line"></div>
             </div>
         </div>
-
     </div>
 
     <script type="text/x-template" id="table-row-template">
