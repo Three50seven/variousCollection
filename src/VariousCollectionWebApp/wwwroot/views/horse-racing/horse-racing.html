@@ -53,19 +53,18 @@
                 </button>
             </div>
 
-            <table class="table">
+            <table class="table table-dark">
                 <thead>
                     <tr>
-                        <th>PP#</th>
-                        <th>Horse</th>
-                        <th>Odds</th>
-                        <th>Select</th>
+                        <th scope="col" v-on:click.prevent="GetSortedCurrentHorses('PolePosition', SortDirection)">PP# <span v-html="SortIcon"></span></th>
+                        <th scope="col" v-on:click.prevent="GetSortedCurrentHorses('HorseName', SortDirection)">Horse <span v-html="SortIcon"></span></th>
+                        <th scope="col" v-on:click.prevent="GetSortedCurrentHorses('OddsRatio', SortDirection)">Odds <span v-html="SortIcon"></span></th>
+                        <th scope="col">Select</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!--"horse.HorseId + '_' + HorsesModel.RaceCount"-->
                     <table-row v-for="(horse, index) in CurrentRace.Horses"
-                               v-bind:key="horse.HorseId + '_' + CurrentRace.Id"
+                               v-bind:key="horse.HorseId + '_' + SortCount"
                                v-on:row-selected="SelectRow"
                                v-bind:value="horse"></table-row>
                 </tbody>
@@ -132,7 +131,7 @@
     </div>
 
     <script type="text/x-template" id="table-row-template">
-        <tr :class="{ active: IsSelected }">
+        <tr scope="row" :class="{ active: IsSelected }">
             <td :class=[ClassList]>{{ PolePosition }}</td>
             <td>{{ HorseName }}</td>
             <td>{{ Odds }}</td>

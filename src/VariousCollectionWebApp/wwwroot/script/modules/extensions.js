@@ -198,8 +198,6 @@
                 return { index: i, value: item[sortBy] ? item[sortBy] : '' };
             })
 
-            console.log("mapped", mapped);
-
             //need this to map back to original array
             let origArray = this;
 

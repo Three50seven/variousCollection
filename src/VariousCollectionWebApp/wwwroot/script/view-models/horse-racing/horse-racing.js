@@ -28,7 +28,10 @@
     model.RaceMenuIsShowing = false;
     model.RaceIsStarted = false;
     model.Races = new Object;
-    model.LiveRacePositions = new Object; //TODO: left off here on 6/4/2023 - show the top 4 horses sorted in an array by length on track
+    model.LiveRacePositions = new Object; //TODO: left off here on 6/5/2023 - add a horseId to help with matching icon results back to horses, instead of parsing id (e.g. pp2)
+    model.SortDirection = "asc";
+    model.SortCount = 1;
+    model.SortIcon = "&uarr;";
 
     /*sample component props for multi props:
      props: {
@@ -91,12 +94,18 @@
             //    },
             //    deep: true
             //},
-            //"HorsesModel.Results": function () {
-            //    this.CurrentRace++;
-            //}
+            "CurrentRace.Horses": function () {
+                this.SortCount++;
+            }
         },
         computed: {
             //TODO: left here for examples, for now
+            FavoritesInCurrentRace: function () {
+                return this.GetSortedCurrentHorses("OddsRatio", "asc");
+            },
+            FavoriteInCurrentRace: function () {
+                return this.FavoritesInCurrentRace[0].Id;
+            }            
             //AnyUsersSelected: function () {
             //    return this.SelectedUsers.length;
             //},
@@ -114,6 +123,16 @@
 
                 //setup a horse race (pick the horses etc.)
                 data.SetupRaces();
+            },
+            GetSortedCurrentHorses: function (sortBy, sortDirection) {
+                let data = this;
+
+                sortDirection = ((sortDirection === "asc") ? "desc" : "asc");
+
+                data.SortDirection = sortDirection;
+                data.SortIcon = ((sortDirection === "asc") ? "&uarr;" : "&darr;");
+
+                return data.CurrentRace.Horses = data.CurrentRace.Horses.toSortedArray(sortBy, sortDirection);
             },
             SetupRaces: function () {
                 let data = this,
@@ -151,7 +170,10 @@
                         // reduce the fraction
                         horseOddsFraction = UTILITIES.reduceFraction(horseOddsNumerator, horseOddsDenominator); 
 
-                        return new MODULES.Constructors.HorseRacing.Horse(i, pp, horseOddsFraction.Numerator + '-' + horseOddsFraction.Denominator, horseName, false, "pole-position pp" + pp, 0);
+                        return new MODULES.Constructors.HorseRacing.Horse(i, pp,
+                            horseOddsFraction.Numerator + '-' + horseOddsFraction.Denominator,
+                            horseOddsFraction.Numerator / horseOddsFraction.Denominator,
+                            horseName, false, "pole-position pp" + pp, 0);
                     });
                 });
 
@@ -169,11 +191,8 @@
 
                 //remove the track after a race so the next race can be setup
                 horseTrack.innerHTML = "";
-                //let children = horseTrack.children;
-                //for (var i = 0; i < children.length; i++) {
-                //    let currChild = children[i];
-                //    horseTrack.removeChild(currChild);
-                //}                
+
+                //add the finish-line marker back to the track
                 horseTrack.appendChild(finishLine); 
 
                 //for each horse, create an icon (in this case a div) that represents the horse on the track
@@ -239,7 +258,8 @@
             },
             Race: function () {
                 let data = this,
-                    currentRaceId = data.CurrentRaceToRun.Id;
+                    currentRaceId = data.CurrentRaceToRun.Id,
+                    raceFavorites = data.CurrentRaceToRun.Horses.toSortedArray("OddsRatio", "asc");
 
                 // flag that the race has started
                 data.RaceIsStarted = true;
@@ -255,26 +275,38 @@
                 // Create an interval that will move the icons horizontally.
                 data.RaceInterval = setInterval(() => {
                     data.RaceTime++;
+
+                    //scroll to end of track
+                    if (trackContainer.scrollLeft !== trackContainerScrollWidth) {
+                        trackContainer.scrollTo(trackContainer.scrollLeft + 2, 0);
+                    }
+
                     // Move each icon by a different random amount between 1 and 5.
                     data.HorseIcons.forEach((icon, i) => {
                         let currentIconPosition = parseInt(icon.style.left)
 
                         //keep horse moving if it's not finished yet
                         if (currentIconPosition < TRACK_LENGTH) {
-                            let newPosition = currentIconPosition + UTILITIES.getRandomInt(1, MAX_ICON_MOVEMENT);
-                            //TODO: Add a random number generator variable for horses with better odds, jockey, trainer, etc.
-                            //TODO: check if there can be a tie, we should allow for ties since this can happen in real life
+                            let currentHorse = data.CurrentRaceToRun.Horses[i],
+                                currentHorseOddsRatio = currentHorse.OddsRatio,
+                                thirdHorseFavoriteOddsRatio = raceFavorites[2].OddsRatio,
+                                calculatedMaxIconMovement = MAX_ICON_MOVEMENT,
+                                newPosition = currentIconPosition;
+
+                            //if the horse is one of the top 3 favorites, they have a possibility of moving a bit faster
+                            if (currentHorseOddsRatio <= thirdHorseFavoriteOddsRatio) {
+                                //TODO: Add a random number generator variable for horses with better odds, jockey, trainer, etc.
+                                //TODO: check if there can be a tie, we should allow for ties since this can happen in real life
+                                calculatedMaxIconMovement += 1;
+                            }
+
+                            newPosition = currentIconPosition + UTILITIES.getRandomInt(1, calculatedMaxIconMovement);
+                            //console.log(`HorsePP: ${currentHorse.PolePosition} Odds: ${currentHorseOddsRatio} calculatedMaxIconMovement: ${calculatedMaxIconMovement} newPosition: ${newPosition}`);
 
                             icon.style.left = newPosition + "px";
-                            data.CurrentRaceToRun.Horses[i].CurrentDistance = newPosition;
+                            currentHorse.CurrentDistance = newPosition;
 
-                            data.LiveRacePositions = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
-                            console.log("live race positions", data.LiveRacePositions[0].CurrentDistance);
-
-                            //scroll to end of track
-                            if (trackContainer.scrollLeft !== trackContainerScrollWidth) {
-                                trackContainer.scrollTo(trackContainer.scrollLeft + 1, 0);
-                            }
+                            data.LiveRacePositions = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");                            
 
                             // After a icon has reached the end of the track, keep it at the end of the track and add it to the FinishOrder.
                             if (isFinished(icon)) {
@@ -289,9 +321,11 @@
                             data.RaceIsStarted = false; //indicate the race has ended
                             data.GetRaceResults();
                             currentRaceId++;
-                            data.CurrentRaceToRun = data.Races[currentRaceId];
-                            data.SetupNextRace();
-                            trackContainer.scrollLeft = 0; //go back to beginning of track
+                            if (currentRaceId <= data.NumberOfRaces - 1) {
+                                data.CurrentRaceToRun = data.Races[currentRaceId];
+                                data.SetupNextRace();
+                                trackContainer.scrollLeft = 0; //go back to beginning of track
+                            }
                         }
                     });
                 }, RACE_INTERVAL_SPEED);                      
@@ -300,28 +334,31 @@
                 let data = this,
                     raceResults = [];
 
-                data.FinishOrder.forEach((pp) => {
-                    data.CurrentRaceToRun.Horses.forEach((horse) => {
-                        let polePositionNumber = parseInt(pp.replace("pp", ""));
+                if (data.FinishOrder.length > 0) {
 
-                        if (horse.PolePosition == polePositionNumber)
-                            raceResults.push(horse);
-                    });                    
-                });
+                    data.FinishOrder.forEach((pp) => {
+                        data.CurrentRaceToRun.Horses.forEach((horse) => {
+                            let polePositionNumber = parseInt(pp.replace("pp", ""));
 
-                data.CurrentRaceToRun.Results = raceResults;
-                data.CurrentRaceToRun.IsCompleted = true;
-                data.CurrentRaceResults = raceResults;
+                            if (horse.PolePosition == polePositionNumber)
+                                raceResults.push(horse);
+                        });
+                    });
 
-                let raceToUpdate = data.Races.find(({ Id }) => Id === data.CurrentRaceToRun.Id);
+                    data.CurrentRaceToRun.Results = raceResults;
+                    data.CurrentRaceToRun.IsCompleted = true;
+                    data.CurrentRaceResults = raceResults;
 
-                if (raceToUpdate != undefined)
-                    raceToUpdate.Results = raceResults;
+                    let raceToUpdate = data.Races.find(({ Id }) => Id === data.CurrentRaceToRun.Id);
 
-                //reset finish order for next race
-                data.FinishOrder = [];
+                    if (raceToUpdate != undefined)
+                        raceToUpdate.Results = raceResults;
 
-                data.DetermineBetResults();
+                    //reset finish order for next race
+                    data.FinishOrder = [];
+
+                    data.DetermineBetResults();
+                }
             },
             DetermineBetResults: function () {
                 let data = this,
@@ -370,8 +407,6 @@
             },
             SelectRow: function (horseSelected) {
                 let data = this;
-
-                console.log('horseSelected', horseSelected.Id);
 
                 //reset IsSelected to false for all horses:
                 data.Races.forEach(race => {
