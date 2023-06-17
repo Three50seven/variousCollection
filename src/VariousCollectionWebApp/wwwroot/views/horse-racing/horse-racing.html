@@ -13,140 +13,167 @@
     </script>
 
     <!-- Load vue.js library -->
-    <!-- dev
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>-->
+    <!-- dev-->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- prod-->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <!--<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>-->
 
-    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" type="text/css" href="/assets/css/horse-racing-styles.min.css" />
 </head>
-<body>
+<body data-bs-theme="dark">
     <div id="jsconfig" style="display:none;visibility:hidden">
         <input type="hidden" value="Production" id="app-environment" />
     </div>
-    <a href="/" class="header-link" title="Horse Racing (Click to go back home)">
-        <div id="header">
-            <h1>Horse Racing</h1>
-        </div>
-    </a>
-    <p>Select a horse to win and place your bet! Or try <a href="horse-racing-simple.html">Horse Racing (Simple)</a></p>
-    <div id="horse-racing-app-wrapper" v-cloak>
-        <div class="container">
-            <div class="btn-group-sides">
-                <button class="btn-side-left" type="button" value="Previous Race"
-                        v-on:click.prevent="PreviousRace">
-                    <<
-                </button>
-                <span class="race-number" v-on:click.prevent="ShowRaceMenu">Race {{ CurrentRace.RaceNumber }}</span>
-                <div id="raceMenuDropdown" :class="['dropdown-content', 'bar-block', 'border', 'menu', {show:RaceMenuIsShowing}]">
-                    <ul class="list-group">
-                        <race-menu v-for="(race, index) in Races"
-                                   v-bind:key="race.Id"
-                                   v-on:race-selected="SelectRace"
-                                   v-bind:value="race"></race-menu>
-                    </ul>
+    <div class="container">
+        <div class="container text-center">
+            <div class="row">
+                <div id="horse-racing-app-wrapper" v-cloak class="col">
+                    <div class="container">
+                        <a href="/" class="header-link" title="Horse Racing (Click to go back home)">
+                            <div id="header">
+                                <h1>Horse Racing</h1>
+                            </div>
+                        </a>
+                        <p>Select a horse to win and place your bet! Or try <a href="horse-racing-simple.html">Horse Racing (Simple)</a></p>
+
+                        <div class="btn-group-sides">
+                            <button class="btn-side-left" type="button" value="Previous Race"
+                                    v-on:click.prevent="PreviousRace">
+                                <<
+                            </button>
+                            <span class="race-number" v-on:click.prevent="ShowRaceMenu">Race {{ CurrentRace.RaceNumber }}</span>
+                            <div id="raceMenuDropdown" :class="['dropdown-content', 'bar-block', 'border', 'menu', {show:RaceMenuIsShowing}]">
+                                <ul class="list-group">
+                                    <race-menu v-for="(race, index) in Races"
+                                               v-bind:key="race.Id"
+                                               v-on:race-selected="SelectRace"
+                                               v-bind:value="race"></race-menu>
+                                </ul>
+                            </div>
+                            <button class="btn-side-right" type="button" value="Next Race"
+                                    v-on:click.prevent="NextRace">
+                                >>
+                            </button>
+                        </div>
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <sorting-column :sort-by="PolePosition" :direction="SortDirection" text="PP#" column="PolePosition" v-on:sort-click="SortHorses"></sorting-column><span v-html="SortIcon"></span>
+                                </div>
+                                <div class="col">
+                                    <sorting-column :sort-by="HorseName" :direction="SortDirection" text="Horse" column="HorseName" v-on:sort-click="SortHorses"></sorting-column><span v-html="SortIcon"></span>
+                                </div>
+                                <div class="col">
+                                    <sorting-column :sort-by="OddsRatio" :direction="SortDirection" text="Odds" column="OddsRatio" v-on:sort-click="SortHorses"></sorting-column><span v-html="SortIcon"></span>
+                                </div>
+                                <div class="col">
+                                    Select
+                                </div>
+                            </div>
+                            <table-row :is="table-row" v-for="(horse, index) in CurrentRace.Horses"
+                                       v-bind:key="horse.HorseId + '_' + SortCount"
+                                       v-on:row-selected="SelectRow"
+                                       v-bind:value="horse"></table-row>
+                        </div>
+
+
+                        <br />
+                        <div>
+                            <button type="button"
+                                    v-on:click.prevent="Race"
+                                    v-if="HorseSelected != 0 && AccountBalance > 0 && !RaceIsStarted">
+                                Race
+                            </button>
+                        </div>
+                        <br />
+                        <div class="container" v-if="!CurrentRaceResultsIsEmpty">
+                            Race Results:
+                            <ul class="list-group">
+                                <li class="list-group-item" v-for="(horse, index) in CurrentRaceResults">
+                                    <div class="col">{{ GetNumberWithEnding(index + 1) }}</div>
+                                    <div :class="['col', horse.ClassList]">{{ horse.PolePosition }}</div>
+                                    <div class="col">{{ horse.HorseName }} - ({{ horse.Odds }})</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <div class="container-fluid text-info">
+                        <span v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>
+                        <div v-if="RaceResults != 0">
+                            <span> Winner: {{ RaceResults }}</span>
+                            <br />
+                            <span>{{ RaceResultMessage }}</span>
+                        </div>
+                        <br />
+                        <span v-if="HorseSelected != 0">Horse Selected: {{ HorseSelected }}</span>
+                        <br />
+                        <br />
+                        <span>Amount Bet: $<input v-model="BetAmount" type="number"></span>
+                        <span class="small">Minimum Bet: $2</span>
+                        <br />
+                        <span>Account Balance: ${{ AccountBalance }}</span>
+                    </div>
+
+                    <div class="text-info">
+                        <span>Race Time: {{ RaceTime }}</span>
+                        <h4>Next Race: {{ CurrentRaceToRun.RaceNumber }}</h4>
+                    </div>
+                    <div id="track-container" class="container">
+                        <div id="horse-track">
+                            <div id="finish-line"></div>
+                        </div>
+                    </div>
+                    <div v-if="!LiveRacePositionsIsEmpty">
+                        <span>Live Results:</span>
+                        <ul class="list-group">
+                            <li class="list-group-item" v-for="(horse, index) in LiveRacePositions">
+                                <div class="col">{{ GetNumberWithEnding(index + 1) }} - Distance: {{ horse.CurrentDistance }}</div>                                
+                                <div :class="['col', horse.ClassList]">{{ horse.PolePosition }}</div>
+                                <div class="col">{{ horse.HorseName }} - ({{ horse.Odds }})</div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <button class="btn-side-right" type="button" value="Next Race"
-                        v-on:click.prevent="NextRace">
-                    >>
-                </button>
-            </div>
-
-            <table class="table table-dark">
-                <thead>
-                    <tr>
-                        <th scope="col" v-on:click.prevent="GetSortedCurrentHorses('PolePosition', SortDirection)">PP# <span v-html="SortIcon"></span></th>
-                        <th scope="col" v-on:click.prevent="GetSortedCurrentHorses('HorseName', SortDirection)">Horse <span v-html="SortIcon"></span></th>
-                        <th scope="col" v-on:click.prevent="GetSortedCurrentHorses('OddsRatio', SortDirection)">Odds <span v-html="SortIcon"></span></th>
-                        <th scope="col">Select</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <table-row v-for="(horse, index) in CurrentRace.Horses"
-                               v-bind:key="horse.HorseId + '_' + SortCount"
-                               v-on:row-selected="SelectRow"
-                               v-bind:value="horse"></table-row>
-                </tbody>
-            </table>
-
-            <br />
-            <div>
-                <button type="button"
-                        v-on:click.prevent="Race"
-                        v-if="HorseSelected != 0 && AccountBalance > 0 && !RaceIsStarted">
-                    Race
-                </button>
-            </div>
-            <br />
-
-            <div class="container" v-if="CurrentRaceResults.length != 0">
-                Race Results:
-                <div class="row" v-for="(horse, index) in CurrentRaceResults">
-                    {{ index + 1 }} -
-                    <div :class=[horse.ClassList]>{{ horse.PolePosition }}</div>
-                    <span>{{ horse.HorseName }} - ({{ horse.Odds }})</span>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="container-fluid text-info">
-            <span v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>
-            <div v-if="RaceResults != 0">
-                Winner: {{ RaceResults }}
-                <br />
-                {{ RaceResultMessage }}
-            </div>
-            <br />
-            <span v-if="HorseSelected != 0">Horse Selected: {{ HorseSelected }}</span>
-            <br />
-            <br />
-            Amount Bet: $<input v-model="BetAmount" type="number">
-            <span class="small">Minimum Bet: $2</span>
-            <br />
-            Account Balance: ${{ AccountBalance }}
-        </div>
-
-        <div class="text-info">
-            Race Time: {{ RaceTime }}
-            <h4>Next Race: {{ CurrentRaceToRun.RaceNumber }}</h4>
-        </div>
-        <div id="track-container" class="container">
-            <div id="horse-track">
-                <div id="finish-line"></div>
-            </div>
-        </div>
-
-        <div class="container" v-if="LiveRacePositions.length != 0">
-            Live Results:
-
-            <div class="row" v-for="(horse, index) in LiveRacePositions">
-                {{ index + 1 }} -
-                <div :class=[horse.ClassList]>{{ horse.PolePosition }}</div>
-                <span>{{ horse.HorseName }} - ({{ horse.Odds }})</span>
             </div>
         </div>
         
     </div>
 
     <script type="text/x-template" id="table-row-template">
-        <tr scope="row" :class="{ active: IsSelected }">
-            <td :class=[ClassList]>{{ PolePosition }}</td>
-            <td>{{ HorseName }}</td>
-            <td>{{ Odds }}</td>
-            <td>
+        <div :class="['row', { active: IsSelected }]">
+            <div class="col">
+                <div :class=[ClassList]>
+                    {{ PolePosition }}
+                </div>
+            </div>
+            <div class="col">
+                {{ HorseName }}
+            </div>
+            <div class="col">
+                {{ Odds }}
+            </div>
+            <div class="col">
                 <a href="#" v-on:click.prevent="Select">
                     Select
                 </a>
-            </td>
-        </tr>
+            </div>
+        </div>       
     </script>
 
     <script type="text/x-template" id="race-menu-template">
-        <li class="list-group-item">
-            <a href="#" class="bar-item button" v-on:click.prevent="Select">Race {{ RaceNumber }}</a>
+        <li class="list-group-item list-group-item-action">
+            <span href="#" class="bar-item button" v-on:click.prevent="Select">Race {{ RaceNumber }}</span>
         </li>
+    </script>
+
+    <script type="text/x-template" id="sorting-column-template">
+        <span class="sortable" v-bind:class="IsCurrentSort ? SortDirectionClass : ''" v-on:click="OnClick">{{ text }}</span>
     </script>
 
     <!--<script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>-->

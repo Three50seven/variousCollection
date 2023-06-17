@@ -31,7 +31,6 @@
   {
     "name": "horse-racing-styles",
     "files": [
-      "main-styles",
       "style/horse-racing/horse-racing.css"
     ]
   },

@@ -11,12 +11,14 @@ MODULES.Constructors.HorseRacing = (function () {
             this.ClassList = classList;
             this.CurrentDistance = currentDistance;
         },
-        Race: function (id, raceNumber, horses, isCompleted, results) {
+        Race: function (id, raceNumber, horses, isCompleted, results, sortDirection, sortBy) {
             this.Id = id;
             this.RaceNumber = raceNumber;            
             this.Horses = horses;
             this.IsCompleted = isCompleted;
             this.Results = results;
+            this.SortDirection = sortDirection;
+            this.SortBy = sortBy;
         }
     };
 })();
