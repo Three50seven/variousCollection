@@ -62,20 +62,20 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <sorting-column :sort-by="PolePosition" :direction="SortDirection" text="PP#" column="PolePosition" v-on:sort-click="SortHorses"></sorting-column><span v-html="SortIcon"></span>
+                                    <sorting-column :sort-by="'PolePosition'" :direction="SortDirection" text="PP#" column="PolePosition" v-on:sort-click="SortHorses"></sorting-column><span v-html="SortIcon"></span>
                                 </div>
                                 <div class="col">
-                                    <sorting-column :sort-by="HorseName" :direction="SortDirection" text="Horse" column="HorseName" v-on:sort-click="SortHorses"></sorting-column><span v-html="SortIcon"></span>
+                                    <sorting-column :sort-by="'HorseName'" :direction="SortDirection" text="Horse" column="HorseName" v-on:sort-click="SortHorses"></sorting-column><span v-html="SortIcon"></span>
                                 </div>
                                 <div class="col">
-                                    <sorting-column :sort-by="OddsRatio" :direction="SortDirection" text="Odds" column="OddsRatio" v-on:sort-click="SortHorses"></sorting-column><span v-html="SortIcon"></span>
+                                    <sorting-column :sort-by="'OddsRatio'" :direction="SortDirection" text="Odds" column="OddsRatio" v-on:sort-click="SortHorses"></sorting-column><span v-html="SortIcon"></span>
                                 </div>
                                 <div class="col">
                                     Select
                                 </div>
                             </div>
                             <table-row :is="table-row" v-for="(horse, index) in CurrentRace.Horses"
-                                       v-bind:key="horse.HorseId + '_' + SortCount"
+                                       v-bind:key="horse.Id + '_' + SortCount"
                                        v-on:row-selected="SelectRow"
                                        v-bind:value="horse"></table-row>
                         </div>

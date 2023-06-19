@@ -104,16 +104,20 @@
 #horse-track {
     width: 1020px;
     background-color: #964B00;
+    background-image: url("../../images/horse-racing/dirt-track.jpg");
+    background-repeat: repeat;
     position: relative;
 }
 
 #finish-line {
     width: 20px;
     background-color: #964B00;
+    background-image: url("../../images/horse-racing/dirt-track.jpg");
     border-left: solid;
     border-color: #ffffff;
     float: right;
 }
+
 
 /*Pole Position Colors
     source: https://www.horseracingnation.com/content/ntra_saddle_towel_colors

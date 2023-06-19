@@ -7,7 +7,8 @@
         MIN_BET = 2,
         TRACK_LENGTH = 1000, // length of track to reach finish line
         ICON_HEIGHT = 20, //height of an icon - setting here, since elements added to DOM do not have a height, this needs to match the horse-racing.css class .pole-position height property
-        RACE_INTERVAL_SPEED = 100; // controls how fast the divs move on the track (e.g. 1000 = horse is moved every second), lower numbers = faster movements, higher numbers = slower movements
+        RACE_INTERVAL_SPEED = 100, // controls how fast the divs move on the track (e.g. 1000 = horse is moved every second), lower numbers = faster movements, higher numbers = slower movements
+        TRACK_SCROLL_SPEED = 3; // higher number makes the track scroll faster as the horse icons are moved per interval - TODO: this should be a ratio of RACE_INTERVAL_SPEED instead of just hard-coded
 
     let model = new Object;
 
@@ -253,12 +254,14 @@
                     trackHeight = 0,
                     horseTrack = document.getElementById("horse-track"),
                     finishLine = document.createElement("div");
+                    //numberOfTrackMarkers = 4,
+                    //markerMargin = 0;
 
                 //remove the track after a race so the next race can be setup
                 horseTrack.innerHTML = "";
 
                 //add the finish-line marker back to the track
-                horseTrack.appendChild(finishLine);
+                horseTrack.appendChild(finishLine);                
 
                 //for each horse, create an icon (in this case a div) that represents the horse on the track
                 data.HorseIcons = Array(data.CurrentRaceToRun.Horses.length).fill(null).map((_, i) => {
@@ -283,6 +286,19 @@
                 //set the finish-line id and set the height of track with horses on it
                 finishLine.id = "finish-line";
                 finishLine.style.height = trackHeight;
+
+                ////add track markers to the track                               
+                //for (let i = 0; i < numberOfTrackMarkers; i++) {
+                //    let trackMarker = document.createElement("span");
+
+                //    trackMarker.className = "track-marker";
+                //    markerMargin += parseInt(horseTrack.clientWidth) / numberOfTrackMarkers;
+                //    trackMarker.style.marginLeft = markerMargin + "px";
+                //    trackMarker.style.height = trackHeight;
+                //    //trackMarker.style.left = markerMargin + "px";
+                //    trackMarker.id = "track-marker-" + i;
+                //    horseTrack.appendChild(trackMarker);
+                //}                
             },
             NextRace: function () {
                 let data = this,
@@ -342,9 +358,9 @@
                     data.RaceInterval = setInterval(() => {
                         data.RaceTime++;
 
-                        //scroll to end of track
+                        //scroll to end of track as horses move
                         if (trackContainer.scrollLeft !== trackContainerScrollWidth) {
-                            trackContainer.scrollTo(trackContainer.scrollLeft + 2, 0);
+                            trackContainer.scrollTo(trackContainer.scrollLeft + TRACK_SCROLL_SPEED, 0);
                         }
 
                         // Move each icon by a different random amount between 1 and 5.
