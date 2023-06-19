@@ -129,6 +129,16 @@
     position: relative;
 }
 
+.horse-racing-icon {
+    background-image: url("../../images/horse-racing/horse-racing-start.gif");
+    font-size: 0.75em;
+    padding-right: 16px;
+}
+
+.horse-racing-icon-moving {
+    background-image: url("../../images/horse-racing/horse-racing.gif");
+}
+
 .pp1 {
     background-color: #e13838;
     color: #ffffff;

@@ -275,6 +275,7 @@
                     icon.innerHTML = polePosition;
                     icon.classList.add("pole-position");
                     icon.classList.add("pp" + polePosition);
+                    icon.classList.add("horse-racing-icon");
                     icon.id = "pp" + polePosition;
                     polePosition++;
 
@@ -366,6 +367,9 @@
                         // Move each icon by a different random amount between 1 and 5.
                         data.HorseIcons.forEach((icon, i) => {
                             let currentIconPosition = parseInt(icon.style.left)
+
+                            //add animated gif for moving horse
+                            icon.classList.add("horse-racing-icon-moving");
 
                             //keep horse moving if it's not finished yet
                             if (currentIconPosition < TRACK_LENGTH) {
