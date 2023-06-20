@@ -14,9 +14,9 @@
 
     <!-- Load vue.js library -->
     <!-- dev-->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!--<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>-->
     <!-- prod-->
-    <!--<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>-->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
@@ -92,13 +92,30 @@
                         <br />
                         <div class="container" v-if="!CurrentRaceResultsIsEmpty">
                             Race Results:
-                            <ul class="list-group">
-                                <li class="list-group-item" v-for="(horse, index) in CurrentRaceResults">
-                                    <div class="col">{{ GetNumberWithEnding(index + 1) }}</div>
-                                    <div :class="['col', horse.ClassList]">{{ horse.PolePosition }}</div>
-                                    <div class="col">{{ horse.HorseName }} - ({{ horse.Odds }})</div>
-                                </li>
-                            </ul>
+                            <div class="row">
+                                <div class="col">
+                                    Pos
+                                </div>
+                                <div class="col">
+                                    PP#
+                                </div>
+                                <div class="col">
+                                    Horse
+                                </div>
+                                <div class="col">
+                                    Odds
+                                </div>
+                                <div class="col">
+                                    Time
+                                </div>
+                                <div class="col">
+                                    Lengths
+                                </div>
+                            </div>
+                            <result-row v-for="(horse, index) in CurrentRaceResults"
+                                       v-bind:key="horse.Id"
+                                       v-bind:value="horse"
+                                       v-bind:position="index + 1"></result-row>                            
                         </div>
                     </div>
 
@@ -130,18 +147,20 @@
                     </div>
                     <div v-if="!LiveRacePositionsIsEmpty">
                         <span>Live Results:</span>
-                        <ul class="list-group">
-                            <li class="list-group-item" v-for="(horse, index) in LiveRacePositions">
-                                <div class="col">{{ GetNumberWithEnding(index + 1) }} - Distance: {{ horse.CurrentDistance }}</div>                                
-                                <div :class="['col', horse.ClassList]">{{ horse.PolePosition }}</div>
-                                <div class="col">{{ horse.HorseName }} - ({{ horse.Odds }})</div>
-                            </li>
-                        </ul>
+                        <div class="row">
+                            <div class="col">
+                                Pos - PP# - Horse (Odds) - Distance - Lengths Back
+                            </div>
+                        </div>
+                        <live-row v-for="(horse, index) in LiveRacePositions"
+                                    v-bind:key="horse.Id + '_' + RaceTime"
+                                    v-bind:value="horse"
+                                    v-bind:position="index + 1"></live-row>
                     </div>
                 </div>
             </div>
         </div>
-        
+
     </div>
 
     <script type="text/x-template" id="table-row-template">
@@ -162,7 +181,42 @@
                     Select
                 </a>
             </div>
-        </div>       
+        </div>
+    </script>
+
+    <script type="text/x-template" id="result-row-template">
+        <div class="row">
+            <div class="col">
+                {{ GetNumberWithEnding(Position) }}
+            </div>
+            <div class="col">
+                <div :class=[ClassList]>
+                    {{ PolePosition }}
+                </div>
+            </div>
+            <div class="col">
+                {{ HorseName }}
+            </div>
+            <div class="col">
+                {{ Odds }}
+            </div>
+            <div class="col">
+                {{ FinishTime }}
+            </div>
+            <div class="col">
+                {{ FinishLengthsBack }}
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="live-row-template">
+        <div class="row">
+            <div class="col">
+                <div :class="LiveClass">
+                    {{ GetNumberWithEnding(Position) }} - {{ PolePosition }} - {{ HorseName }} - ({{ Odds }}) - {{ CurrentDistance }} - {{ LengthsBack }}
+                </div>
+            </div>
+        </div>
     </script>
 
     <script type="text/x-template" id="race-menu-template">

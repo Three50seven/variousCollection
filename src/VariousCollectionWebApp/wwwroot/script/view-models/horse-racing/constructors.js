@@ -1,7 +1,7 @@
 ﻿//HORSE RACING CONSTRUCTORS
 MODULES.Constructors.HorseRacing = (function () {
     return {
-        Horse: function (id, polePosition, odds, oddsRatio, horseName, isSelected, classList, currentDistance) {
+        Horse: function (id, polePosition, odds, oddsRatio, horseName, isSelected, classList, currentDistance, finishTime, finishLengthsBack) {
             this.Id = id;
             this.PolePosition = polePosition;
             this.Odds = odds;
@@ -10,6 +10,8 @@ MODULES.Constructors.HorseRacing = (function () {
             this.IsSelected = isSelected;
             this.ClassList = classList;
             this.CurrentDistance = currentDistance;
+            this.FinishTime = finishTime;
+            this.FinishLengthsBack = finishLengthsBack;
         },
         Race: function (id, raceNumber, horses, isCompleted, results, sortDirection, sortBy) {
             this.Id = id;

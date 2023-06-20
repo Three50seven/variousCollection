@@ -7,6 +7,7 @@
         MIN_BET = 2,
         TRACK_LENGTH = 1000, // length of track to reach finish line
         ICON_HEIGHT = 20, //height of an icon - setting here, since elements added to DOM do not have a height, this needs to match the horse-racing.css class .pole-position height property
+        ICON_WIDTH = 20, //width of horse icon - used in determining if a horse if finished with a race, this needs to match the .pole-position width
         RACE_INTERVAL_SPEED = 100, // controls how fast the divs move on the track (e.g. 1000 = horse is moved every second), lower numbers = faster movements, higher numbers = slower movements
         TRACK_SCROLL_SPEED = 3; // higher number makes the track scroll faster as the horse icons are moved per interval - TODO: this should be a ratio of RACE_INTERVAL_SPEED instead of just hard-coded
 
@@ -98,6 +99,56 @@
         }
     }
 
+    let resultRowComponent = {
+        template: "#result-row-template",
+        props: {
+            value: {
+                type: Object,
+                required: true
+            },
+            position: {
+                type: Number,
+                required: true
+            }
+        },
+        data: function () {
+            let data = this.value;
+            data.Position = this.position;
+
+            return data;
+        },
+        methods: {
+            GetNumberWithEnding: function (number) {
+                return UTILITIES.getNumberWithEnding(number);
+            }
+        }
+    }
+
+    let liveRowComponent = {
+        template: "#live-row-template",
+        props: {
+            value: {
+                type: Object,
+                required: true
+            },
+            position: {
+                type: Number,
+                required: true
+            }
+        },
+        data: function () {
+            let data = this.value;
+            data.Position = this.position;
+
+            return data;
+        },
+        methods: {
+            GetNumberWithEnding: function (number) {
+                return UTILITIES.getNumberWithEnding(number);
+            }
+        }
+    }
+
     let raceMenuComponent = {
         template: "#race-menu-template",
         props: ["value"],
@@ -121,6 +172,8 @@
         },
         components: {
             "table-row": rowComponent,
+            "result-row": resultRowComponent,
+            "live-row": liveRowComponent,
             "race-menu": raceMenuComponent,
             "sorting-column": sortComponent
         },
@@ -224,7 +277,7 @@
                         return new MODULES.Constructors.HorseRacing.Horse(i, pp,
                             horseOddsFraction.Numerator + '-' + horseOddsFraction.Denominator,
                             horseOddsFraction.Numerator / horseOddsFraction.Denominator,
-                            horseName, false, "pole-position pp" + pp, 0);
+                            horseName, false, "pole-position pp" + pp, 0, 0, 0);
                     });
                 });
 
@@ -326,7 +379,8 @@
             Race: function () {
                 let data = this,
                     currentRaceId = data.CurrentRaceToRun.Id,
-                    raceFavorites = data.CurrentRaceToRun.Horses.toSortedArray("OddsRatio", "asc");
+                    raceFavorites = data.CurrentRaceToRun.Horses.toSortedArray("OddsRatio", "asc"),
+                    trackFinishLine = TRACK_LENGTH - ICON_WIDTH;
 
                 if (data.CheckBalance()) {
                     // flag that the race has started
@@ -337,7 +391,7 @@
 
                     // check if a horse is finished
                     function isFinished(icon) {
-                        return parseInt(icon.style.left) >= TRACK_LENGTH;
+                        return parseInt(icon.style.left) >= trackFinishLine;
                     }
 
                     // Create an interval that will move the icons horizontally.
@@ -357,8 +411,9 @@
                             icon.classList.add("horse-racing-icon-moving");
 
                             //keep horse moving if it's not finished yet
-                            if (currentIconPosition < TRACK_LENGTH) {
-                                let currentHorse = data.CurrentRaceToRun.Horses[i],
+                            if (currentIconPosition < trackFinishLine) {
+                                let currentHorse = data.CurrentRaceToRun.Horses.find(({ PolePosition }) => PolePosition === parseInt(icon.id.replace("pp", ""))),
+                                    //currentHorse = data.CurrentRaceToRun.Horses[i],
                                     currentHorseOddsRatio = currentHorse.OddsRatio,
                                     thirdHorseFavoriteOddsRatio = raceFavorites[2].OddsRatio,
                                     calculatedMaxIconMovement = MAX_ICON_MOVEMENT,
@@ -376,13 +431,17 @@
 
                                 icon.style.left = newPosition + "px";
                                 currentHorse.CurrentDistance = newPosition;
+                                currentHorse.LiveClass = currentHorse.ClassList.replace("pole-position", "");                                                                
 
-                                data.LiveRacePositions = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
+                                let sortedByDistance = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
+                                currentHorse.LengthsBack = (sortedByDistance[0].CurrentDistance - currentHorse.CurrentDistance) / ICON_WIDTH;
+                                data.LiveRacePositions = sortedByDistance;
 
                                 // After a icon has reached the end of the track, keep it at the end of the track and add it to the FinishOrder.
                                 if (isFinished(icon)) {
+                                    currentHorse.FinishTime = data.RaceTime;
                                     data.FinishOrder.push(icon.id);
-                                    icon.style.left = TRACK_LENGTH;
+                                    icon.style.left = trackFinishLine;
                                 }
                             }
 
@@ -392,6 +451,7 @@
                                 data.RaceIsStarted = false; //indicate the race has ended
                                 data.LiveRacePositions = new Object;
                                 data.GetRaceResults();
+                                data.RaceTime = 0; //reset the race time for the next race
                                 currentRaceId++;
                                 if (currentRaceId <= data.NumberOfRaces - 1) {
                                     data.CurrentRaceToRun = data.Races[currentRaceId];
@@ -409,9 +469,14 @@
 
                 if (data.FinishOrder.length > 0) {
 
-                    data.FinishOrder.forEach((pp) => {
+                    data.FinishOrder.forEach((pp, i) => {
                         data.CurrentRaceToRun.Horses.forEach((horse) => {
                             let polePositionNumber = parseInt(pp.replace("pp", ""));
+
+                            // calculate the lengths back for all horses that did not finish first
+                            if (i > 0 && raceResults.length > 0) {
+                                horse.FinishLengthsBack = (raceResults[0].FinishTime - horse.FinishTime) / ICON_WIDTH;
+                            }
 
                             if (horse.PolePosition == polePositionNumber)
                                 raceResults.push(horse);
