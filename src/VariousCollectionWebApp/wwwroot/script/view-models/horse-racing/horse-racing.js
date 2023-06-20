@@ -17,6 +17,9 @@
         model.RaceTime = 0,
         model.HorseIcons = new Object;
     model.CurrentRace = new Object;
+    model.CurrentRace.SortBy = "";
+    model.CurrentRace.SortDirection = "";
+    model.CurrentRace.SortCount = 0;
     model.CurrentRaceResults = new Object;
     model.CurrentRaceToRun = new Object;
     model.RaceResults = 0; //TODO: make this an object so odds, etc. are kept with horse
@@ -30,24 +33,9 @@
     model.RaceMenuIsShowing = false;
     model.RaceIsStarted = false;
     model.Races = new Object;
-    model.LiveRacePositions = new Object; //TODO: left off here on 6/5/2023 - add a horseId to help with matching icon results back to horses, instead of parsing id (e.g. pp2)
-    model.SortDirection = "asc";
-    model.SortCount = 1;
-    model.SortIcon = "&uarr;";
+    model.LiveRacePositions = new Object; //TODO: left off here on 6/5/2023 - add a horseId to help with matching icon results back to horses, instead of parsing id (e.g. pp2)    
 
-    /*sample component props for multi props:
-     props: {
-            value: {
-                type: Object,
-                required: true
-            },
-            isShowing: {
-                type: Boolean,
-                default: false,
-            },
-        },
-     */
-
+    // Custom Vue Components:
     let sortComponent = {
         template: "#sorting-column-template",
         props: {
@@ -126,6 +114,7 @@
         }
     }
 
+    // Vue.js Model:
     Vue.createApp({
         data: function () {
             return model;
@@ -144,7 +133,7 @@
             //    deep: true
             //},
             "CurrentRace.Horses": function () {
-                this.SortCount++;
+                this.CurrentRace.SortCount++;
             }
         },
         computed: {
@@ -182,18 +171,14 @@
             GetSortedCurrentHorses: function (sortBy, sortDirection) {
                 let data = this;
 
-                sortDirection = ((sortDirection === "asc") ? "desc" : "asc");
-
-                data.SortDirection = sortDirection;
-                data.SortIcon = ((sortDirection === "asc") ? "&uarr;" : "&darr;");
+                data.CurrentRace.SortDirection = sortDirection;
+                data.CurrentRace.SortBy = sortBy;                
 
                 return data.CurrentRace.Horses = data.CurrentRace.Horses.toSortedArray(sortBy, sortDirection);
             },
             SortHorses: function (sort) {
                 let data = this;
 
-                //data.CurrentRace.Horses.Sorting.SortBy = sort.SortBy;
-                //data.CurrentRace.Horses.Sorting.DirectionAbbr = sort.Direction;
                 data.GetSortedCurrentHorses(sort.SortBy, sort.Direction);
             },
             SetupRaces: function () {
@@ -204,7 +189,7 @@
                 data.HorseSelectedOddsMultiplier = 1;
 
                 data.Races = Array(data.NumberOfRaces).fill(null).map((_, i) => {
-                    return new MODULES.Constructors.HorseRacing.Race(i, i + 1, false, [], "asc", "Id");
+                    return new MODULES.Constructors.HorseRacing.Race(i, i + 1, [], false, [], "asc", "", "");
                 });
 
                 data.Races.forEach((race, index) => {

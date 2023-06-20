@@ -19,6 +19,7 @@ MODULES.Constructors.HorseRacing = (function () {
             this.Results = results;
             this.SortDirection = sortDirection;
             this.SortBy = sortBy;
+            this.SortCount = 0;
         }
     };
 })();
