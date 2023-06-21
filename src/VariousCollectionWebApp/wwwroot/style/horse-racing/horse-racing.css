@@ -2,8 +2,8 @@
     padding-left: 10px;
 }
 
-.active {
-    background-color: yellow;
+.row-selected {
+    background-color: #745757;
 }
 
 /*Race Menu dropdown*/
@@ -277,6 +277,7 @@
     }
 
 
+/*table Sorting styles:*/
 .col span.sortable {
     cursor: pointer;
     padding: 0px 2rem 0px 0px !important;
@@ -320,3 +321,5 @@
         background-repeat: no-repeat;
         background-position: center;
     }
+
+/*end table sorting styles*/

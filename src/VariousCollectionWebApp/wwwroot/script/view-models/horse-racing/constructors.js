@@ -13,10 +13,11 @@ MODULES.Constructors.HorseRacing = (function () {
             this.FinishTime = finishTime;
             this.FinishLengthsBack = finishLengthsBack;
         },
-        Race: function (id, raceNumber, horses, isCompleted, results, sortDirection, sortBy) {
+        Race: function (id, raceNumber, horses, isStarted, isCompleted, results, sortDirection, sortBy) {
             this.Id = id;
             this.RaceNumber = raceNumber;            
             this.Horses = horses;
+            this.IsStarted = isStarted;
             this.IsCompleted = isCompleted;
             this.Results = results;
             this.SortDirection = sortDirection;

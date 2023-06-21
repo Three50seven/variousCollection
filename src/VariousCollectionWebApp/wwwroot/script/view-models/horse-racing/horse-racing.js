@@ -16,7 +16,9 @@
     model.RaceInterval = new Object;
     model.NumberOfRaces = 10,
         model.RaceTime = 0,
-        model.HorseIcons = new Object;
+        model.LiveUpdateCount = 0;
+
+    model.HorseIcons = new Object;
     model.CurrentRace = new Object;
     model.CurrentRace.SortBy = "";
     model.CurrentRace.SortDirection = "";
@@ -34,7 +36,7 @@
     model.RaceMenuIsShowing = false;
     model.RaceIsStarted = false;
     model.Races = new Object;
-    model.LiveRacePositions = new Object; //TODO: left off here on 6/5/2023 - add a horseId to help with matching icon results back to horses, instead of parsing id (e.g. pp2)    
+    model.LiveRacePositions = new Object;
 
     // Custom Vue Components:
     let sortComponent = {
@@ -84,11 +86,26 @@
         }
     }
 
-    let rowComponent = {
-        template: "#table-row-template",
-        props: ["value"],
+    let bettingRowComponent = {
+        template: "#betting-row-template",
+        props: {
+            value: {
+                type: Object,
+                required: true
+            },
+            raceIsStarted: {
+                type: Boolean,
+                required: false
+            }
+        },
         data: function () {
-            return this.value;
+            let data = this.value;
+            data.RaceIsStarted = this.raceIsStarted;
+
+            //TODO: left off here on 6/21/2023 - need to get a flag that the race is started, so "Select" betting options are disabled
+            console.log('race is started', data.RaceIsStarted);
+
+            return data;
         },
         methods: {
             Select: function () {
@@ -171,7 +188,7 @@
             return model;
         },
         components: {
-            "table-row": rowComponent,
+            "betting-row": bettingRowComponent,
             "result-row": resultRowComponent,
             "live-row": liveRowComponent,
             "race-menu": raceMenuComponent,
@@ -242,7 +259,7 @@
                 data.HorseSelectedOddsMultiplier = 1;
 
                 data.Races = Array(data.NumberOfRaces).fill(null).map((_, i) => {
-                    return new MODULES.Constructors.HorseRacing.Race(i, i + 1, [], false, [], "asc", "", "");
+                    return new MODULES.Constructors.HorseRacing.Race(i, i + 1, [], false, false, [], "asc", "", "");
                 });
 
                 data.Races.forEach((race, index) => {
@@ -385,6 +402,7 @@
                 if (data.CheckBalance()) {
                     // flag that the race has started
                     data.RaceIsStarted = true;
+                    data.CurrentRace.IsStarted = true;
 
                     const trackContainer = document.getElementById('track-container');
                     const trackContainerScrollWidth = trackContainer.scrollWidth;
@@ -429,13 +447,18 @@
                                 newPosition = currentIconPosition + UTILITIES.getRandomInt(1, calculatedMaxIconMovement);
                                 //console.log(`HorsePP: ${currentHorse.PolePosition} Odds: ${currentHorseOddsRatio} calculatedMaxIconMovement: ${calculatedMaxIconMovement} newPosition: ${newPosition}`);
 
-                                icon.style.left = newPosition + "px";
-                                currentHorse.CurrentDistance = newPosition;
-                                currentHorse.LiveClass = currentHorse.ClassList.replace("pole-position", "");                                                                
+                                icon.style.left = newPosition + "px";                                                              
 
+                                currentHorse.CurrentDistance = newPosition;
                                 let sortedByDistance = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
                                 currentHorse.LengthsBack = (sortedByDistance[0].CurrentDistance - currentHorse.CurrentDistance) / ICON_WIDTH;
-                                data.LiveRacePositions = sortedByDistance;
+
+                                // update live race positions after a certain number of intervals has passed (instead of constantly; this is more visually appealing)
+                                if (data.RaceTime % 20 === 0) {
+                                    data.LiveUpdateCount++;                                    
+                                    currentHorse.LiveClass = currentHorse.ClassList.replace("pole-position", "");                                      
+                                    data.LiveRacePositions = sortedByDistance;
+                                }
 
                                 // After a icon has reached the end of the track, keep it at the end of the track and add it to the FinishOrder.
                                 if (isFinished(icon)) {
@@ -475,6 +498,7 @@
 
                             // calculate the lengths back for all horses that did not finish first
                             if (i > 0 && raceResults.length > 0) {
+                                //TODO: This needs to be adjusted, not sure it should be divided by the icon-width - maybe by the icon movement avg. like 2.5 or something?
                                 horse.FinishLengthsBack = (raceResults[0].FinishTime - horse.FinishTime) / ICON_WIDTH;
                             }
 
