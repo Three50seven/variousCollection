@@ -29,6 +29,12 @@
     ]
   },
   {
+    "name": "rick-yer-ast-styles",
+    "files": [
+      "style/risk-yer-ast/risk-yer-ast.css"
+    ]
+  },
+  {
     "name": "horse-racing-styles",
     "files": [
       "style/horse-racing/horse-racing.css"
@@ -149,6 +155,13 @@
       "utilities-bundle",
       "jquery-source",
       "script/view-models/vue-playground/vue-playground.js"
+    ]
+  },
+  {
+    "name": "risk-yer-ast-bundle",
+    "subpath": "viewmodels",
+    "files": [
+      "script/view-models/risk-yer-ast/risk-yer-ast.js"
     ]
   },
   {

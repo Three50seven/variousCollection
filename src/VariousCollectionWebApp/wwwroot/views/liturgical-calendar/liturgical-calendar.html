@@ -16,11 +16,12 @@
     <div id="jsconfig" style="display:none;visibility:hidden">
         <input type="hidden" value="Production" id="app-environment" />
     </div>
-    <a href="/" class="header-link" title="Litrugical Calendar (Click to go back home)">
-        <div id="header">
-            <h1>Liturgical Calendar</h1>
-        </div>
+    <a href="/" class="header-link" title="Click to go back home">
+        Home
     </a>
+    <div id="header">
+        <h1>Liturgical Calendar</h1>
+    </div>
     <form name="liturgical-form" defaultbutton="calculate-dates">
         <button data-bind="click: resetCalendar">Reset</button>
         <p>Enter Year: <input data-bind="value: yearToCalculate" type="number" /></p>
@@ -35,7 +36,6 @@
         <p class="error">Errors: <strong data-bind="text: errors"></strong></p>
         <!-- /ko -->
         <!-- ko if: liturgicalDates().length > 0-->
-        <h1>Liturgical Calendar</h1>
 
         <table>
             <thead>

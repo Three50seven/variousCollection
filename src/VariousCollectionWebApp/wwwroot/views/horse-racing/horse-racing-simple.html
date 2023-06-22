@@ -22,14 +22,15 @@
     <div id="jsconfig" style="display:none;visibility:hidden">
         <input type="hidden" value="Production" id="app-environment" />
     </div>
-    <a href="/" class="header-link" title="Horse Racing (Click to go back home)">
-        <div id="header">
-            <h1>Horse Racing (Simple)</h1>
-        </div>
+    <a href="/" class="header-link" title="Click to go back home">
+        Home
     </a>
+    <div id="header">
+        <h1>Horse Racing (Simple)</h1>
+    </div>
     <p>
         <a href="/views/vue-js-playground/vue-js-playground.html">Vue JS (WIP)</a>
-        Select a horse to win and place your bet!        
+        Select a horse to win and place your bet!
     </p>
     <div id="horse-racing-app-wrapper" v-cloak>
         <h2>Race {{ HorsesModel.RaceCount }}</h2>
@@ -80,7 +81,7 @@
             <span>Minimum Bet: $2</span>
             <br />
             Account Balance: ${{ AccountBalance }}
-        </div>        
+        </div>
     </div>
 
     <script type="text/x-template" id="table-row-template">

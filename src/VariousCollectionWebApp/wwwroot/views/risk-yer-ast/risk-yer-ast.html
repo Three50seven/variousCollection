@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--PREVENT SCRIPT WARNING WHEN RUNNING ON LOCAL HOST, otherwise, for internet zone change to: url=(0014)about:internet-->
+<!-- saved from url=(0016)http://localhost -->
+<HTML>
+<!-- NAME: Paul Krimm          						-->
+<!-- ORIGINAL PROJECT: CIS199-02, Homework 6_part2	-->
+<!-- ORIGINAL DUE DATE: 10.5.2007 					-->
+<!-- MODIFIED DATE: 09.30.2014 						-->
+
+<HEAD>
+    <TITLE>Risk Yer Ast: A Game with an Asterisk</TITLE>
+
+    <script language="JavaScript" src="/assets/js/viewmodels/risk-yer-ast-bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/rick-yer-ast-styles.min.css" media="screen" />
+
+</HEAD>
+
+<BODY onload="load()">
+    <a class="codrops-icon" href="/" title="Click to go back home"><span>Home</span></a>
+    <div ID="pnlGamePicker" align="center">
+        <DIV align="center">
+            <FONT COLOR="#FFFFFF">
+                <br><STRONG><EM>Risk Yer Ast!!!</EM></STRONG><br>GAME SETTINGS:<BR>
+                <form action="">
+                    CHOOSE GAME SPEED:<br />
+                    <input type="radio" name="selectGameSpeed" value="1" checked>Normal<br>
+                    <input type="radio" name="selectGameSpeed" value="2">Daring<br>
+                    <input type="radio" name="selectGameSpeed" value="3">Extreme
+                    <br /><br />
+                    CHOOSE GAME TYPE:<br />
+                    <input type="radio" name="selectGameType" value="1" checked>Normal - Asterisk will move from left to right, and then back.<br>
+                    <input type="radio" name="selectGameType" value="2">Random - Asterisk will move randomly across the screen
+                    <br /><br />
+                    CHOOSE NUMBER OF PLAYERS:<br />
+                    <input type="radio" name="selectPlayerCount" onclick="handlePlayerCountChanged(this);" value="2" checked>2 Players<br>
+                    <input type="radio" name="selectPlayerCount" onclick="handlePlayerCountChanged(this);" value="3">3 Players<br>
+                    <input type="radio" name="selectPlayerCount" onclick="handlePlayerCountChanged(this);" value="4">4 Players<br>
+                    <input type="radio" name="selectPlayerCount" onclick="handlePlayerCountChanged(this);" value="5">5 Players<br>
+                    <input type="radio" name="selectPlayerCount" onclick="handlePlayerCountChanged(this);" value="6">6 Players
+                    <br /><br />
+                    CHOOSE NUMBER OF ROUNDS PER PLAYER:<br />
+                    <input type="radio" name="selectRoundCount" onclick="handleRoundsChanged(this);" value="1">1 Round<br>
+                    <input type="radio" name="selectRoundCount" onclick="handleRoundsChanged(this);" value="2" checked>2 Rounds<br>
+                    <input type="radio" name="selectRoundCount" onclick="handleRoundsChanged(this);" value="3">3 Rounds<br>
+                    <input type="radio" name="selectRoundCount" onclick="handleRoundsChanged(this);" value="4">4 Rounds<br>
+                    <input type="radio" name="selectRoundCount" onclick="handleRoundsChanged(this);" value="5">5 Rounds
+                    <br /><br />
+                    CHOOSE THE DURATION FOR EACH ROUND:<br />
+                    <input type="radio" name="selectRoundDuration" onclick="handleChangeDuration(this);" value="2" checked>2 Seconds<br>
+                    <input type="radio" name="selectRoundDuration" onclick="handleChangeDuration(this);" value="5">5 Seconds<br>
+                    <input type="radio" name="selectRoundDuration" onclick="handleChangeDuration(this);" value="10">10 Seconds<br>
+                    <input type="radio" name="selectRoundDuration" onclick="handleChangeDuration(this);" value="20">20 Seconds<br>
+                    <input type="radio" name="selectRoundDuration" onclick="handleChangeDuration(this);" value="30">30 Seconds
+                    <br /><br />
+                    <INPUT ID="showPlayerInfo" TYPE="button" VALUE="Next" ONCLICK="showPlayerInfoPanel()" class="btn-default btn-default-small">
+                    <br /><br />
+                    TOTAL GAME DURATION: <a ID="totalGameDuration">XX:XX</a> (hh:mm:ss)
+                </form>
+            </FONT>
+        </DIV>
+    </div>
+
+    <div ID="pnlPlayerInfo" align="center" STYLE="display:none;">
+        <DIV align="center">
+            <FONT COLOR="#FFFFFF">
+                <form name="fPlayerInfo" action="">
+                    <div ID="divPlayerInfo">
+                        <br><STRONG><EM>Risk Yer Ast!!!</EM></STRONG><br>PLAYER INFO:<BR>
+
+                        CHOOSE PLAYER <a ID="playerInfoID">1</a>'s Name and Color below:<br />
+                        NAME: <input ID="txtSelectPlayerName" type="text" name="selectPlayerName" maxlength="10"><br>
+                        <input type="hidden" runat="server" id="hdnPlayerInfo" />
+                        <br /><br />
+                        CHOOSE COLOR:<br />
+                        <input type="radio" name="selectPlayerColor" value="red" checked><font color="red">Red</font><br>
+                        <input type="radio" name="selectPlayerColor" value="blue"><font color="blue">Blue</font><br>
+                        <input type="radio" name="selectPlayerColor" value="green"><font color="green">Green</font><br>
+                        <input type="radio" name="selectPlayerColor" value="orange"><font color="orange">Orange</font><br>
+                        <input type="radio" name="selectPlayerColor" value="yellow"><font color="yellow">Yellow</font><br>
+                        <input type="radio" name="selectPlayerColor" value="pink"><font color="pink">Pink</font><br>
+                        <input type="radio" name="selectPlayerColor" value="#66FF66"><font color="#66FF66">Neon Green</font><br>
+                        <input type="radio" name="selectPlayerColor" value="#FF0066"><font color="#FF0066">Violet Red</font><br>
+                        <input type="radio" name="selectPlayerColor" value="#66CCFF"><font color="#66CCFF">Light Blue</font><br>
+                        <br /><br />
+                        <INPUT ID="nextPlayersInfo" TYPE="button" VALUE="Next Player" ONCLICK="addPlayerInfo()" class="btn-default btn-default-small">
+                        <br /><br /><br /><br />
+                    </div>
+                    <br /><br /><br /><br />
+                    <div ID="divPlayGameControls" style="display:none;">
+                        <INPUT ID="showGame" TYPE="button" VALUE="OK, Let's PLAY!!" ONCLICK="showGamePanel()" class="btn-default btn-default-small">
+                        &nbsp;&nbsp;
+                        <INPUT ID="showGameOptions" TYPE="button" VALUE="Back" ONCLICK="showGameOptions()" class="btn-default btn-default-small">
+                    </div>
+                    <br /><br />
+                </form>
+            </FONT>
+        </DIV>
+    </div>
+
+    <div ID="pnlGame" STYLE="display:none;">
+        <!--these p text lines display the asterisk and the points-->
+        <P ID="pCharacter" class="pointPosition" STYLE="left: 0;">*</P>
+        <P class="pointPosition" STYLE="left: 0;">0</P>
+        <P class="pointPosition" STYLE="left: 70px;">70</P>
+        <P class="pointPosition" STYLE="left: 140px;">140</P>
+        <P class="pointPosition" STYLE="left: 210px;">210</P>
+        <P class="pointPosition" STYLE="left: 280px;">280</P>
+        <P class="pointPosition" STYLE="left: 350px;">350</P>
+        <P class="pointPosition" STYLE="left: 420px;">420</P>
+        <P class="pointPosition" STYLE="left: 490px;">490</P>
+        <P class="pointPosition" STYLE="left: 560px;">560</P>
+        <P class="pointPosition" STYLE="left: 630px;">630</P>
+        <P class="pointPosition" STYLE="left: 700px;">700 &nbsp&nbsp&nbsp&nbsp&nbsp= POINTS</P>
+
+        <BR><BR><HR class="pointBar">
+
+        <!-- this displays the points -->
+        <P><FONT COLOR="#FFFFFF">Current Player: <A ID="aCurrentPlayer">1</A> </FONT></P>
+        <P><FONT COLOR="#FFFFFF">This is turn #: <A ID="playTurn">1</A> </FONT></P>
+        <P><FONT COLOR="#FFFFFF">POINTS = <A ID="Points">0</A> </FONT></P>
+        <P><FONT COLOR="#FFFFFF">Winner Results: <A ID="winnerResults">Wait and see the outcome...</A> </FONT></P>
+        <DIV ID="resultsDIV" STYLE="display:none;">
+            <FONT COLOR="#FFFFFF">RESULTS:</FONT>
+            <!--FLAG CSS SOURCE: https://css-tricks.com/forums/topic/css3-flag-wave-ribbon-animated/-->
+            <div ID="playersVictoryFlag" class="flag">
+                <div class="flagwave"></div>
+                <span class="flagtxt"><span id="playersVictoryName" style='font-size:30px;'></span><br />Wins!</span>
+            </div>
+            <br>
+            <table ID="tblResults" class="results" cellpadding="2" cellspacing="2" border="1">
+                <tr>
+                    <td>
+                        Player
+                    </td>
+                    <td>
+                        Name
+                    </td>
+                    <td>
+                        Points
+                    </td>
+                </tr>
+            </table>
+        </DIV>
+
+        <!--this displays how much time is left for each player's turn-->
+        <P ID="pSecondsLeft" STYLE="display:non;">
+            <FONT COLOR="#FFFFFF">
+                Hurry, because you have <A ID="soFar" STYLE="font-weight: bold"></A>
+                seconds left for this turn!!!
+            </FONT>
+        </P>
+
+
+        <!--this adds the start button for beginning the game as well as the TAG/points button-->
+        <P align="center">
+            <INPUT ID="startTimer" TYPE="button" VALUE="Start Game" ONCLICK="startTimer()" class="btn-default btn-default-small">
+            <br /><br />
+            <INPUT ID="pointTotal" TYPE="button" VALUE="Tag the Asterisk" ONCLICK="getPoints()" class="btn-default btn-default-small btn-default-point-total">
+            <br /><br />
+            <INPUT ID="restart" TYPE="button" VALUE="Restart Game" ONCLICK="restartGame()" class="btn-default btn-default-small">
+        </P>
+    </div>
+
+    <hr />
+    <P align="center"><FONT COLOR="#FFFFFF"><BR><STRONG><EM>Risk Yer Ast!!!</EM></STRONG><BR>Instructions</FONT></P>
+
+    <P align="center">
+        <FONT COLOR="#FFFFFF">
+            Each player takes a turn that lasts <A ID="TimeResetval1"></A> seconds.<BR>
+            On each turn, the player is to "tag" an asterisk (*) on the screen that starts <BR>
+            on the left-hand side of the screen and travels across the screen and back.<BR><BR>
+            The asterisk begins at the far left of the screen and travels across ten<BR>
+            different points on the screen until it reaches the far right side of the screen, <BR>
+            then returns to the left of the screen.  The player "tags" the asterisk by clicking <BR>
+            the "Tag the Asterisk" button at the bottom of the screen.  The further the asterisk is to the <BR>
+            right of the screen, the more points are scored when a player "tags" the asterisk.<BR>
+            When the asterisk is "tagged" the player receives the point value associated with the <BR>
+            position on the screen.  Each point value is displayed next to the position of the asterisk.<BR><BR>
+            The game is started when you click "Ok" on the alert box.  The game plays out <A ID="maxTurns1"></A> turns each player, <BR>
+            then ends and displays the winner.  You can restart the game by either refreshing the browser,<BR>
+            or clicking a "new game" button, then clicking "OK" once again.<BR>
+            When the browser loads, the asterisks will start at the left-hand side of the screen and travel<BR>
+            10 positions to the right and then travels 10 positions back.  Positions on the left are worth fewer<BR>
+            points than positions on the right.<BR><BR><BR>
+            The goal is to get the most points within <A ID="TimeResetval2"></A> seconds and have fun doing so!!!<BR>
+        </FONT>
+    </P>
+</BODY>
+</HTML>
