@@ -37,6 +37,7 @@
     model.RaceIsStarted = false;
     model.Races = new Object;
     model.LiveRacePositions = new Object;
+    model.RaceCounter = 0;
 
     // Custom Vue Components:
     let sortComponent = {
@@ -204,6 +205,12 @@
             //},
             "CurrentRace.Horses": function () {
                 this.CurrentRace.SortCount++;
+            },
+            "CurrentRace": function () {
+                this.RaceCounter++;
+            },
+            "CurrentRace.IsStarted": function () {
+                this.RaceCounter++;
             }
         },
         computed: {

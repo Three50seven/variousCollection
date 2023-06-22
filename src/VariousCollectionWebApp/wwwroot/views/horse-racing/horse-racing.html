@@ -39,7 +39,6 @@
             <div class="container-fluid text-info">
                 <div class="text-info">
                     <h4>Current Race: {{ CurrentRaceToRun.RaceNumber }}</h4>
-                    <span class="smaller">1 MTP</span>
                 </div>
                 <span v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>
                 <div v-if="RaceResults != 0">
@@ -103,7 +102,7 @@
                             </div>
                         </div>
                         <betting-row v-for="(horse, index) in CurrentRace.Horses"
-                                     v-bind:key="horse.Id + '_' + CurrentRace.Id"
+                                     v-bind:key="horse.Id + '_' + RaceCounter"
                                      v-on:row-selected="SelectRow"
                                      v-bind:value="horse"
                                      v-bind:race-is-started="CurrentRace.IsStarted"></betting-row>
