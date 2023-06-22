@@ -47,7 +47,7 @@
                     <span>{{ RaceResultMessage }}</span>
                 </div>
                 <br />
-                <span v-if="HorseSelected != 0">Horse Selected: {{ HorseSelected }}</span>
+                <span v-if="HorseSelected != 0">Bet: ${{ BetAmount }} to Win on Horse #{{ HorseSelected }} for Race {{ CurrentRaceToRun.RaceNumber }}</span>
                 <br />
                 <br />
             </div>
@@ -86,6 +86,13 @@
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-bet" role="tabpanel" aria-labelledby="pills-bet-tab">
                     <h4>Bet:</h4>
+                    <br />
+                    <div v-if="!RaceIsStarted">
+                        <span>Amount Bet: $<input v-model="BetAmount" type="number"></span>
+                        <span class="small">Minimum Bet: $2</span>
+                    </div>
+                    <br />
+                    <span>Account Balance: ${{ AccountBalance }}</span>
                     <div class="container">
                         <div class="row">
                             <div class="col">
@@ -107,13 +114,6 @@
                                      v-bind:value="horse"
                                      v-bind:race-is-started="CurrentRace.IsStarted"></betting-row>
                     </div>
-                    <br />
-                    <div v-if="!RaceIsStarted">
-                        <span>Amount Bet: $<input v-model="BetAmount" type="number"></span>
-                        <span class="small">Minimum Bet: $2</span>
-                    </div>
-                    <br />
-                    <span>Account Balance: ${{ AccountBalance }}</span>
                 </div>
                 <div class="tab-pane fade" id="pills-results" role="tabpanel" aria-labelledby="pills-results-tab">
                     <h4>Race Results:</h4>
