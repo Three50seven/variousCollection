@@ -135,9 +135,9 @@ nav > ul {
     .header-link:visited {
         text-decoration:none;
     }
-
+ 
 .main-site-link {
-    font-size: 32px;
+    font-size: 1em;
     color: #FE9428;
 }
 
