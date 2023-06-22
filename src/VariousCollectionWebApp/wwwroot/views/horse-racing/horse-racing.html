@@ -38,7 +38,8 @@
         <div id="horse-racing-app-wrapper" v-cloak class="col">
             <div class="container-fluid text-info">
                 <div class="text-info">
-                    <h4>Next Race: {{ CurrentRaceToRun.RaceNumber }}</h4>
+                    <h4>Current Race: {{ CurrentRaceToRun.RaceNumber }}</h4>
+                    <span class="smaller">1 MTP</span>
                 </div>
                 <span v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>
                 <div v-if="RaceResults != 0">
@@ -102,7 +103,7 @@
                             </div>
                         </div>
                         <betting-row v-for="(horse, index) in CurrentRace.Horses"
-                                     v-bind:key="horse.Id + '_' + CurrentRace.SortCount"
+                                     v-bind:key="horse.Id + '_' + CurrentRace.Id"
                                      v-on:row-selected="SelectRow"
                                      v-bind:value="horse"
                                      v-bind:race-is-started="CurrentRace.IsStarted"></betting-row>
@@ -139,7 +140,7 @@
                             </div>
                         </div>
                         <result-row v-for="(horse, index) in CurrentRaceResults"
-                                    v-bind:key="horse.Id"
+                                    v-bind:key="horse.Id + '_' + CurrentRace.Id"
                                     v-bind:value="horse"
                                     v-bind:position="index + 1"></result-row>
                     </div>
@@ -169,11 +170,11 @@
                         <span>Live Results:</span>
                         <div class="row">
                             <div class="col">
-                                Pos - PP# - Horse (Odds) - Distance - Lengths Back
+                                Pos - PP# - Horse (Odds) - Distance - Lengths Back - Speed
                             </div>
                         </div>
                         <live-row v-for="(horse, index) in LiveRacePositions"
-                                  v-bind:key="horse.Id + '_' + LiveUpdateCount"
+                                  v-bind:key="horse.Id + '_' + RaceTime"
                                   v-bind:value="horse"
                                   v-bind:position="index + 1"></live-row>
                     </div>
@@ -196,7 +197,7 @@
                 {{ Odds }}
             </div>
             <div class="col">
-                <a href="#" v-on:click.prevent="Select" v-bind:class="{ disabled: RaceIsStarted }">
+                <a v-if="!RaceIsStarted" href="#" v-on:click.prevent="Select">
                     Select
                 </a>
             </div>
@@ -232,7 +233,7 @@
         <div class="row">
             <div class="col">
                 <div :class="LiveClass">
-                    {{ GetNumberWithEnding(Position) }} - {{ PolePosition }} - {{ HorseName }} - ({{ Odds }}) - {{ CurrentDistance }} - {{ LengthsBack }}
+                    {{ GetNumberWithEnding(Position) }} - {{ PolePosition }} - {{ HorseName }} - ({{ Odds }}) - {{ CurrentDistance }} - {{ LengthsBack }} - {{ CurrentSpeed }}
                 </div>
             </div>
         </div>

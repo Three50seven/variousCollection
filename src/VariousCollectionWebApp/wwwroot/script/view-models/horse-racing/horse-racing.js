@@ -294,7 +294,7 @@
                         return new MODULES.Constructors.HorseRacing.Horse(i, pp,
                             horseOddsFraction.Numerator + '-' + horseOddsFraction.Denominator,
                             horseOddsFraction.Numerator / horseOddsFraction.Denominator,
-                            horseName, false, "pole-position pp" + pp, 0, 0, 0);
+                            horseName, false, "pole-position pp" + pp, 0, 0, 0, 0);
                     });
                 });
 
@@ -450,6 +450,7 @@
                                 icon.style.left = newPosition + "px";                                                              
 
                                 currentHorse.CurrentDistance = newPosition;
+                                currentHorse.CurrentSpeed = newPosition - currentIconPosition;
                                 let sortedByDistance = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
                                 currentHorse.LengthsBack = (sortedByDistance[0].CurrentDistance - currentHorse.CurrentDistance) / ICON_WIDTH;
 
@@ -486,6 +487,18 @@
                     }, RACE_INTERVAL_SPEED);
                 }
             },
+            ShowResults: function () {
+                let resultsTab = document.getElementById("pills-results-tab");
+
+                //show the results tab:
+                resultsTab.click();
+            },
+            ShowRace: function () {
+                let raceTab = document.getElementById("pills-race-tab");
+
+                //show the race tab:
+                raceTab.click();
+            },
             GetRaceResults: function () {
                 let data = this,
                     raceResults = [];
@@ -515,6 +528,9 @@
 
                     if (raceToUpdate != undefined)
                         raceToUpdate.Results = raceResults;
+
+                    //show the results tab:
+                    data.ShowResults();
 
                     //reset finish order for next race
                     data.FinishOrder = [];
@@ -582,6 +598,7 @@
                 //TODO: Need to get horse and race and later we'll add finish order bets etc.  But for now, we're just getting a simple horse pole position
                 data.HorseSelected = horseSelected.PolePosition;
                 data.HorseSelectedOddsMultiplier = horseSelected.Odds.split('-')[0];
+                data.ShowRace();
             },
             GetNumberWithEnding: function (number) {
                 return UTILITIES.getNumberWithEnding(number);
