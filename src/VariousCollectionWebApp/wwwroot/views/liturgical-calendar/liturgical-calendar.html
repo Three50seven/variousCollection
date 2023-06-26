@@ -15,21 +15,23 @@
 <body>
     <div id="jsconfig" style="display:none;visibility:hidden">
         <input type="hidden" value="Production" id="app-environment" />
-    </div>
-    <a href="/" class="header-link" title="Click to go back home">
-        Home
-    </a>
-    <div id="header">
+    </div>    
+    <div class="header">
         <h1>Liturgical Calendar</h1>
+        <div class="home-div">
+            <a class="btn" href="/" title="Click to go back home">
+                Home
+            </a>
+        </div>
     </div>
     <form name="liturgical-form" defaultbutton="calculate-dates">
-        <button data-bind="click: resetCalendar">Reset</button>
         <p>Enter Year: <input data-bind="value: yearToCalculate" type="number" /></p>
         <button data-bind="click: prevYear"> << </button>&nbsp;&nbsp;<span data-bind="text: yearToCalculate"></span>&nbsp;&nbsp;
         <button data-bind="click: nextYear"> >> </button>
         <p>Enter the year above to calculate the Liturgical Year.</p>
 
         <button id="calculate-dates" data-bind="click: getLiturgicalYear" autofocus>Calculate</button>
+        <button data-bind="click: resetCalendar">Reset</button>
 
 
         <!-- ko if: errors -->

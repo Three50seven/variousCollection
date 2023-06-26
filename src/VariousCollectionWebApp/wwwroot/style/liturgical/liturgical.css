@@ -16,6 +16,12 @@ form {
   color: red;
 }
 
+.header {
+    margin: 10px;
+    color: cornflowerblue;
+    display: flow-root;
+}
+
 .header-link {
     text-decoration: none;
     color: #0E97D2;
@@ -25,6 +31,10 @@ form {
     .header-link:visited {
         text-decoration: none;
     }
+
+.home-div {
+    float: left;
+}
 
 /* Forms
    ========================================================================== */
