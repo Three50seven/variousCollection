@@ -15,8 +15,7 @@
 
     model.RaceInterval = new Object;
     model.NumberOfRaces = 10,
-        model.RaceTime = 0,
-        model.LiveUpdateCount = 0;
+        model.RaceTime = 0;
 
     model.HorseIcons = new Object;
     model.CurrentRace = new Object;
@@ -36,7 +35,7 @@
     model.RaceMenuIsShowing = false;
     model.RaceIsStarted = false;
     model.Races = new Object;
-    model.LiveRacePositions = new Object;
+    model.LiveRacePositions = [];
     model.RaceCounter = 0;
 
     // Custom Vue Components:
@@ -103,9 +102,6 @@
             let data = this.value;
             data.RaceIsStarted = this.raceIsStarted;
 
-            //TODO: left off here on 6/21/2023 - need to get a flag that the race is started, so "Select" betting options are disabled
-            console.log('race is started', data.RaceIsStarted);
-
             return data;
         },
         methods: {
@@ -148,16 +144,10 @@
             value: {
                 type: Object,
                 required: true
-            },
-            position: {
-                type: Number,
-                required: true
             }
         },
         data: function () {
             let data = this.value;
-            data.Position = this.position;
-
             return data;
         },
         methods: {
@@ -181,7 +171,7 @@
                 data.$emit("race-selected", data.Id);
             }
         }
-    }
+    }    
 
     // Vue.js Model:
     Vue.createApp({
@@ -223,9 +213,6 @@
             },
             CurrentRaceResultsIsEmpty: function () {
                 return Object.keys(this.CurrentRaceResults).length === 0;
-            },
-            LiveRacePositionsIsEmpty: function () {
-                return Object.keys(this.LiveRacePositions).length === 0;
             }
             //AnyUsersSelected: function () {
             //    return this.SelectedUsers.length;
@@ -240,7 +227,7 @@
             Initialize: function () {
                 let data = this;
 
-                //TODO: Setup multiple players (allow user to choose the number) so they can compete on who wins the most money after X number of races
+                //TODO: Setup multiple players (allow user to choose the number) so they can compete on who wins the most money after X number of races                
 
                 //setup a horse race (pick the horses etc.)
                 data.SetupRaces();
@@ -249,7 +236,7 @@
                 let data = this;
 
                 data.CurrentRace.SortDirection = sortDirection;
-                data.CurrentRace.SortBy = sortBy;                
+                data.CurrentRace.SortBy = sortBy;
 
                 return data.CurrentRace.Horses = data.CurrentRace.Horses.toSortedArray(sortBy, sortDirection);
             },
@@ -307,7 +294,7 @@
 
                 //start with the first race
                 data.CurrentRace = data.Races[0];
-                data.CurrentRaceToRun = data.Races[0];
+                data.CurrentRaceToRun = data.Races[0];                
 
                 data.SetupNextRace();
             },
@@ -457,14 +444,22 @@
                                 icon.style.left = newPosition + "px";                                                              
 
                                 currentHorse.CurrentDistance = newPosition;
-                                currentHorse.CurrentSpeed = newPosition - currentIconPosition;
-                                let sortedByDistance = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
-                                currentHorse.LengthsBack = (sortedByDistance[0].CurrentDistance - currentHorse.CurrentDistance) / ICON_WIDTH;
+                                currentHorse.CurrentSpeed = newPosition - currentIconPosition;                                
 
                                 // update live race positions after a certain number of intervals has passed (instead of constantly; this is more visually appealing)
                                 if (data.RaceTime % 20 === 0) {
-                                    data.LiveUpdateCount++;                                    
-                                    currentHorse.LiveClass = currentHorse.ClassList.replace("pole-position", "");                                      
+                                    let sortedByDistance = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");                                    
+                                    let firstHorseDistance = sortedByDistance[0].CurrentDistance;
+
+                                    currentHorse.LengthsBack = (firstHorseDistance - currentHorse.CurrentDistance) / ICON_WIDTH;
+
+                                    //Setup additional properties for live race results:
+                                    sortedByDistance.forEach(function (horse, index) {
+                                        horse.RacePosition = index + 1;
+                                        horse.LiveClass = "pp" + horse.PolePosition;
+                                        horse.LengthsBack = 0;
+                                        horse.LengthsBack = (firstHorseDistance - horse.CurrentDistance) / ICON_WIDTH;;
+                                    });
                                     data.LiveRacePositions = sortedByDistance;
                                 }
 
@@ -478,9 +473,9 @@
 
                             // After all horses have crossed the finish line, end the race:
                             if (data.HorseIcons.every(isFinished)) {
-                                clearInterval(data.RaceInterval);
+                                data.StopRace();
                                 data.RaceIsStarted = false; //indicate the race has ended
-                                data.LiveRacePositions = new Object;
+                                data.LiveRacePositions = [];
                                 data.GetRaceResults();
                                 data.RaceTime = 0; //reset the race time for the next race
                                 currentRaceId++;
@@ -493,6 +488,11 @@
                         });
                     }, RACE_INTERVAL_SPEED);
                 }
+            },
+            StopRace: function () {
+                let data = this;
+                
+                clearInterval(data.RaceInterval);
             },
             ShowResults: function () {
                 let resultsTab = document.getElementById("pills-results-tab");

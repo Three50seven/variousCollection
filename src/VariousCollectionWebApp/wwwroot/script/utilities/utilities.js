@@ -116,6 +116,15 @@
             });
         });
     },
+    shuffleArray: function(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    },
     ElementRevolver = (function () {
         /**references:
          * https://stackoverflow.com/questions/69712325/move-elements-around-semicircle-orbit-div-around-parent

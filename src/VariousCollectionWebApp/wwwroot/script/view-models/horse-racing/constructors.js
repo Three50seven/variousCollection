@@ -13,6 +13,7 @@ MODULES.Constructors.HorseRacing = (function () {
             this.CurrentSpeed = currentSpeed;
             this.FinishTime = finishTime;
             this.FinishLengthsBack = finishLengthsBack;
+            this.RacePosition = polePosition;
         },
         Race: function (id, raceNumber, horses, isStarted, isCompleted, results, sortDirection, sortBy) {
             this.Id = id;

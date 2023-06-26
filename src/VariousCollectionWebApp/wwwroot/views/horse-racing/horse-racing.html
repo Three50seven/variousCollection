@@ -118,35 +118,37 @@
                 </div>
                 <div class="tab-pane fade" id="pills-results" role="tabpanel" aria-labelledby="pills-results-tab">
                     <h4>Race Results:</h4>
-                    <div class="container" v-if="!CurrentRaceResultsIsEmpty">
-                        <div class="row">
-                            <div class="col">
-                                Pos
+                    <transition name="slide-fade">
+                        <div class="container" v-if="!CurrentRaceResultsIsEmpty">
+                            <div class="row">
+                                <div class="col">
+                                    Pos
+                                </div>
+                                <div class="col">
+                                    PP#
+                                </div>
+                                <div class="col">
+                                    Horse
+                                </div>
+                                <div class="col">
+                                    Odds
+                                </div>
+                                <div class="col">
+                                    Time
+                                </div>
+                                <div class="col">
+                                    Lengths
+                                </div>
                             </div>
-                            <div class="col">
-                                PP#
-                            </div>
-                            <div class="col">
-                                Horse
-                            </div>
-                            <div class="col">
-                                Odds
-                            </div>
-                            <div class="col">
-                                Time
-                            </div>
-                            <div class="col">
-                                Lengths
-                            </div>
+                            <result-row v-for="(horse, index) in CurrentRaceResults"
+                                        v-bind:key="horse.Id + '_' + CurrentRace.Id"
+                                        v-bind:value="horse"
+                                        v-bind:position="index + 1"></result-row>
                         </div>
-                        <result-row v-for="(horse, index) in CurrentRaceResults"
-                                    v-bind:key="horse.Id + '_' + CurrentRace.Id"
-                                    v-bind:value="horse"
-                                    v-bind:position="index + 1"></result-row>
-                    </div>
-                    <div class="text-info" v-if="CurrentRaceResultsIsEmpty">
-                        Race Results Pending...
-                    </div>
+                        <div class="text-info" v-if="CurrentRaceResultsIsEmpty">
+                            Race Results Pending...
+                        </div>
+                    </transition>
                 </div>
                 <div class="tab-pane fade" id="pills-race" role="tabpanel" aria-labelledby="pills-race-tab">
                     <h4>Live Race:</h4>
@@ -166,20 +168,25 @@
                             <div id="finish-line"></div>
                         </div>
                     </div>
-                    <div v-if="!LiveRacePositionsIsEmpty">
+                    <div v-if="LiveRacePositions.length">
                         <span>Live Results:</span>
-                        <div class="row">
-                            <div class="col">
-                                Pos - PP# - Horse (Odds) - Distance - Lengths Back - Speed
+                        <div>
+                            <div class="row list-styling">
+                                <div class="col">
+                                    <div>
+                                        Pos - PP# - Horse (Odds) - Distance - Lengths Back - Speed
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <live-row v-for="(horse, index) in LiveRacePositions"
-                                  v-bind:key="horse.Id + '_' + RaceTime"
-                                  v-bind:value="horse"
-                                  v-bind:position="index + 1"></live-row>
+                        <transition-group tag="div" style="list-style-type: none" name="list">
+                            <live-row v-for="(horse, index) in LiveRacePositions"
+                                      v-bind:key="horse.Id + '_' + RaceCounter"
+                                      v-bind:value="horse"></live-row>
+                        </transition-group>
                     </div>
                 </div>
-            </div>
+            </div>            
         </div><!--END OF VUE JS APP CONTAINER-->
     </div>
 
@@ -230,10 +237,10 @@
     </script>
 
     <script type="text/x-template" id="live-row-template">
-        <div class="row">
+        <div :class="['row','list-styling', LiveClass]">
             <div class="col">
-                <div :class="LiveClass">
-                    {{ GetNumberWithEnding(Position) }} - {{ PolePosition }} - {{ HorseName }} - ({{ Odds }}) - {{ CurrentDistance }} - {{ LengthsBack }} - {{ CurrentSpeed }}
+                <div>
+                    {{ GetNumberWithEnding(RacePosition) }} - {{ PolePosition }} - {{ HorseName }} - ({{ Odds }}) - {{ CurrentDistance }} - {{ LengthsBack }} - {{ CurrentSpeed }}
                 </div>
             </div>
         </div>

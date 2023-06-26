@@ -117,7 +117,7 @@
             AddItems(this);
             return list;
         };
-    }
+    }    
 
     if (typeof Array.prototype.sum !== 'function') {
         Array.prototype.sum = function (options) {
@@ -185,7 +185,7 @@
     }
 
     if (typeof Array.prototype.toSortedArray !== 'function') {
-        Array.prototype.toSortedArray = function (sortBy, sortDirection) {            
+        Array.prototype.toSortedArray = function (sortBy, sortDirection) {
             if (sortBy === undefined || sortBy === null)
                 return this;
 
@@ -194,7 +194,7 @@
             }
 
             // temporary array holds objects with position and sort-value
-            let mapped = this.map(function (item, i) {                
+            let mapped = this.map(function (item, i) {
                 return { index: i, value: item[sortBy] ? item[sortBy] : '' };
             })
 
@@ -224,6 +224,7 @@
             });
         };
     }
+
     if (typeof Date.prototype.getMeridiem !== 'function') {
         Date.prototype.getMeridiem = function () {
             return this.getHours() > 12 ? 'PM' : 'AM';
