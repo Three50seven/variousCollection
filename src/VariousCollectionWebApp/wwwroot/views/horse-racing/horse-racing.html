@@ -28,13 +28,17 @@
     <div id="jsconfig" style="display:none;visibility:hidden">
         <input type="hidden" value="Production" id="app-environment" />
     </div>
-    <a href="/" class="header-link" title="Click to go back home">
-        Home
-    </a>
-    <div class="container">
-        <div id="header">
+    <div class="container">        
+        <header class="flex-wrap justify-content-center py-3 mb-4 border-bottom">
             <h1>Horse Racing</h1>
-        </div>
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a href="/" title="Click to go back home" class="nav-link active" aria-current="page">Home</a></li>
+                <li class="nav-item"><a href="horse-racing-simple.html" title="Horse Racing (Simple)" class="nav-link">Horse Racing (Simple)</a></li>
+            </ul>
+        </header>
+    </div>
+
+    <div class="container">
         <p>Select a horse to win and place your bet! Or try <a href="horse-racing-simple.html">Horse Racing (Simple)</a></p>
         <div id="horse-racing-app-wrapper" v-cloak class="col">
             <div class="container-fluid text-info">
@@ -152,7 +156,7 @@
                 </div>
                 <div class="tab-pane fade" id="pills-race" role="tabpanel" aria-labelledby="pills-race-tab">
                     <h4>Live Race:</h4>
-                    <div>
+                    <div class="text-center">
                         <button class="btn btn-primary" type="button"
                                 v-on:click.prevent="Race"
                                 v-if="HorseSelected != 0 && AccountBalance > 0 && !RaceIsStarted">
@@ -186,7 +190,7 @@
                         </transition-group>
                     </div>
                 </div>
-            </div>            
+            </div>
         </div><!--END OF VUE JS APP CONTAINER-->
     </div>
 

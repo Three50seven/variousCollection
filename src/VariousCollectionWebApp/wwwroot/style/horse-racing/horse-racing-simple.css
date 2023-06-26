@@ -6,6 +6,10 @@
     background-color: yellow;
 }
 
+.table {
+    display: contents;
+}
+
 /*Horse Position Indicator With Image:*/
 #horse-position-img {
     margin-top: 4px;
