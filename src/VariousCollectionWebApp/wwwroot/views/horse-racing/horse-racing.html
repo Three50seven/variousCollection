@@ -91,7 +91,7 @@
                     <p>Select a bet type, enter your bet amount and select a horse.</p>
                     <div v-if="!RaceIsStarted">
                         <span>Amount Bet: $<input v-model="BetAmount" type="number"></span>
-                        <span class="small">Minimum Bet: $2</span>
+                        <span class="small">&nbsp;Minimum Bet: $2</span>
                     </div>
                     <br />
                     <span class="text-warning" v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>

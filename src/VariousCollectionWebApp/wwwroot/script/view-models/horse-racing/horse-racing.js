@@ -266,6 +266,15 @@
                     return "N/A - Bet Type Not Selected";
 
                 return MODULES.DataSets.BET_TYPES.find(({ Id }) => Id === parseInt(this.SelectedBetTypeId));
+            },
+            TotalCostOfBet: function () {
+                let data = this,
+                    totalCostOfBet = data.BetAmount;
+                
+                if (this.SelectedBetTypeId === 4)
+                    totalCostOfBet = totalCostOfBet * 3;
+
+                return totalCostOfBet;
             }
         },
         methods: {
@@ -438,9 +447,13 @@
                     trackFinishLine = TRACK_LENGTH - ICON_WIDTH;
 
                 if (data.BetIsValid()) {
+
                     // flag that the race has started
                     data.RaceIsStarted = true;
                     data.CurrentRace.IsStarted = true;
+
+                    //deduct the amount for the bet
+                    data.AccountBalance = data.AccountBalance - data.TotalCostOfBet;
 
                     const trackContainer = document.getElementById('track-container');
                     const trackContainerScrollWidth = trackContainer.scrollWidth;
@@ -485,14 +498,14 @@
                                 newPosition = currentIconPosition + UTILITIES.getRandomInt(1, calculatedMaxIconMovement);
                                 //console.log(`HorsePP: ${currentHorse.PolePosition} Odds: ${currentHorseOddsRatio} calculatedMaxIconMovement: ${calculatedMaxIconMovement} newPosition: ${newPosition}`);
 
-                                icon.style.left = newPosition + "px";                                                              
+                                icon.style.left = newPosition + "px";
 
                                 currentHorse.CurrentDistance = newPosition;
-                                currentHorse.CurrentSpeed = newPosition - currentIconPosition;                                
+                                currentHorse.CurrentSpeed = newPosition - currentIconPosition;
 
                                 // update live race positions after a certain number of intervals has passed (instead of constantly; this is more visually appealing)
                                 if (data.RaceTime % 20 === 0) {
-                                    let sortedByDistance = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");                                    
+                                    let sortedByDistance = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
                                     let firstHorseDistance = sortedByDistance[0].CurrentDistance;
 
                                     currentHorse.LengthsBack = (firstHorseDistance - currentHorse.CurrentDistance) / ICON_WIDTH;
@@ -594,16 +607,14 @@
                     betResults = 0,
                     winHorse = data.CurrentRaceResults[0],
                     placeHorse = data.CurrentRaceResults[1],
-                    showHorse = data.CurrentRaceResults[2],
-                    totalCostOfBet = data.BetAmount;
-                    
+                    showHorse = data.CurrentRaceResults[2];
                 
                 //calculate the new account balance - TODO: make this seperate function
                 if (winHorse.PolePosition == data.HorseSelected
                     || placeHorse.PolePosition == data.HorseSelected
                     || showHorse.PolePosition == data.HorseSelected) {
 
-                    //TODO: Need to make sure these are right
+                    //TODO: Need to make sure these are right - Still showing congratulations when horse is chosen to win, but only places or shows
                     switch (data.SelectedBetTypeId) {
                         case 1: //Win
                             if (winHorse.PolePosition == data.HorseSelected) {
@@ -654,11 +665,7 @@
                     data.RaceResultMessage = "Congratulations! You won " + UTILITIES.CurrencyFormatter(betResults);
                 }
                 else {
-                    if (data.SelectedBetTypeId === 4)
-                        totalCostOfBet = totalCostOfBet * 3;
-
-                    data.AccountBalance = data.AccountBalance - totalCostOfBet;
-                    data.RaceResultMessage = "Sorry, your horse did not " + data.SelectedBetType.Name + ", you lose " + data.GetFormattedCurrency(totalCostOfBet);
+                    data.RaceResultMessage = "Sorry, your horse did not " + data.SelectedBetType.Name + ", you lose " + data.GetFormattedCurrency(data.TotalCostOfBet);
                 }
 
                 data.HorseSelected = 0;
@@ -713,7 +720,7 @@
 
                     data.CurrentRace.Bet = "Bet: " + data.GetFormattedCurrency(data.BetAmount) + " to " + data.SelectedBetType.Name +
                         " on Horse #" + data.HorseSelected + " for Race " + data.CurrentRaceToRun.RaceNumber + ".  Total Cost of Bet: " +
-                        data.GetFormattedCurrency(totalCostOfBet); 
+                        data.GetFormattedCurrency(data.TotalCostOfBet);                     
 
                     data.ShowRace();
                 }
