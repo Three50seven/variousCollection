@@ -25,6 +25,21 @@ MODULES.Constructors.HorseRacing = (function () {
             this.SortDirection = sortDirection;
             this.SortBy = sortBy;
             this.SortCount = 0;
+            this.Bet = ""; //TODO: temporarily hold the bet details for a race until players and bets are added (see below constructors)
+        },
+        //TODO: Add multiple players and bets per player
+        Player: function (id, playerName, bets, accountAmount) {
+            this.Id = id;
+            this.PlayerName = playerName;
+            this.Bets = bets;
+            this.AccountAmount = accountAmount;
+        },
+        Bet: function (id, raceNumber, betAmount, betTypeId, horseSelected) {
+            this.Id = id;
+            this.RaceNumber = raceNumber;
+            this.BetAmount = betAmount;
+            this.betTypeId = betTypeId;
+            this.horseSelected = horseSelected;
         }
     };
 })();

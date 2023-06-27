@@ -79,12 +79,15 @@ MODULES.DataSets = (function () {
         "Manuel", "Plaudit", "Typhoon II", "Ben Brush", "Halma", "Chant", "Lookout", "Azra", "Kingman", "Riley", "Spokane", "Macbeth II", "Montrose", "Ben Ali", "Joe Cotton",
         "Buchanan", "Leonatus", "Apollo", "Hindoo", "Fonso", "Lord Murphy", "Day Star", "Baden-Baden", "Vagrant", "Aristides"];
 
+    const betTypes = [{ Id: 1, Name: "Win" }, { Id: 2, Name: "Place" }, { Id: 3, Name: "Show" }, { Id: 4, Name: "WPS" }];
+
     //comma separated list of global constants
     return {
         ANIMALS: new ReadOnlyArray(animals),
         ADJECTIVES: new ReadOnlyArray(adjectives),
         US_STATES: new ReadOnlyArray(states),
-        DERBY_WINNERS: new ReadOnlyArray(derbyWinners)
+        DERBY_WINNERS: new ReadOnlyArray(derbyWinners),
+        BET_TYPES: new ReadOnlyArray(betTypes)
     };
 
 })();

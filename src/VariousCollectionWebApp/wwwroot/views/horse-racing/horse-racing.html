@@ -28,7 +28,7 @@
     <div id="jsconfig" style="display:none;visibility:hidden">
         <input type="hidden" value="Production" id="app-environment" />
     </div>
-    <div class="container">        
+    <div class="container">
         <header class="flex-wrap justify-content-center py-3 mb-4 border-bottom">
             <h1>Horse Racing</h1>
             <ul class="nav nav-pills">
@@ -39,20 +39,17 @@
     </div>
 
     <div class="container">
-        <p>Select a horse to win and place your bet! Or try <a href="horse-racing-simple.html">Horse Racing (Simple)</a></p>
+        <p>Place your bet and start the race.</p>
         <div id="horse-racing-app-wrapper" v-cloak class="col">
             <div class="container-fluid text-info">
                 <div class="text-info">
                     <h4>Current Race: {{ CurrentRaceToRun.RaceNumber }}</h4>
-                </div>
-                <span v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>
-                <div v-if="RaceResults != 0">
-                    <span> Winner: {{ RaceResults }}</span>
-                    <br />
+                </div>                
+                <div v-if="RaceResultMessage.length">                    
                     <span>{{ RaceResultMessage }}</span>
                 </div>
                 <br />
-                <span v-if="HorseSelected != 0">Bet: ${{ BetAmount }} to Win on Horse #{{ HorseSelected }} for Race {{ CurrentRaceToRun.RaceNumber }}</span>
+                {{ CurrentRace.Bet }}
                 <br />
                 <br />
             </div>
@@ -91,14 +88,23 @@
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-bet" role="tabpanel" aria-labelledby="pills-bet-tab">
                     <h4>Bet:</h4>
-                    <br />
+                    <p>Select a bet type, enter your bet amount and select a horse.</p>
                     <div v-if="!RaceIsStarted">
                         <span>Amount Bet: $<input v-model="BetAmount" type="number"></span>
                         <span class="small">Minimum Bet: $2</span>
                     </div>
                     <br />
-                    <span>Account Balance: ${{ AccountBalance }}</span>
+                    <span class="text-warning" v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>
+                    <br />
+                    <span>Account Balance: {{ GetFormattedCurrency(AccountBalance) }}</span>
+                    <br /><br />
                     <div class="container">
+                        <div>
+                            <select v-model="SelectedBetTypeId">
+                                <option disabled value="0" selected>Bet Type</option>
+                                <option v-for="type in BetTypes" :value="type.Id">{{type.Name}}</option>
+                            </select>
+                        </div>
                         <div class="row">
                             <div class="col">
                                 <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="PP#" column="PolePosition" v-on:sort-click="SortHorses"></sorting-column>
@@ -115,7 +121,7 @@
                         </div>
                         <betting-row v-for="(horse, index) in CurrentRace.Horses"
                                      v-bind:key="horse.Id + '_' + RaceCounter"
-                                     v-on:row-selected="SelectRow"
+                                     v-on:row-selected="SelectHorse"
                                      v-bind:value="horse"
                                      v-bind:race-is-started="CurrentRace.IsStarted"></betting-row>
                     </div>
@@ -124,6 +130,33 @@
                     <h4>Race Results:</h4>
                     <transition name="slide-fade">
                         <div class="container" v-if="!CurrentRaceResultsIsEmpty">
+                            <p>Payouts: </p>
+                            <div class="row">
+                                <div class="col">
+                                    PP#
+                                </div>
+                                <div class="col">
+                                    Runner
+                                </div>
+                                <div class="col">
+                                    Win
+                                </div>
+                                <div class="col">
+                                    Place
+                                </div>
+                                <div class="col">
+                                    Show
+                                </div>
+                            </div>
+                            <payout-row v-for="(horse, index) in CurrentRaceResults"
+                                        v-bind:key="horse.Id + '_' + CurrentRace.Id"
+                                        v-bind:value="horse"
+                                        v-bind:position="index + 1"></payout-row>
+                        </div>                        
+                    </transition>
+                    <transition name="slide-fade">                        
+                        <div class="container" v-if="!CurrentRaceResultsIsEmpty">
+                            <p>Other Result Details: </p>
                             <div class="row">
                                 <div class="col">
                                     Pos
@@ -163,7 +196,7 @@
                             Start Race
                         </button>
                         <p v-if="!HorseSelected">
-                            Select a horse to win on the "Bet" tab to start the race.
+                            Place your bet on the "Bet" tab to start the race.
                         </p>
                     </div>
                     <br />
@@ -193,6 +226,10 @@
             </div>
         </div><!--END OF VUE JS APP CONTAINER-->
     </div>
+    <div class="container">
+        <footer class="flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        </footer>
+    </div>
 
     <script type="text/x-template" id="betting-row-template">
         <div :class="['row', { 'row-selected': IsSelected }]">
@@ -211,6 +248,28 @@
                 <a v-if="!RaceIsStarted" href="#" v-on:click.prevent="Select">
                     Select
                 </a>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="payout-row-template">
+        <div class="row">
+            <div class="col">
+                <div :class=[ClassList]>
+                    {{ PolePosition }}
+                </div>
+            </div>            
+            <div class="col">
+                {{ HorseName }}
+            </div>
+            <div class="col">
+                {{ WinPayout }}
+            </div>
+            <div class="col">
+                {{ PlacePayout }}
+            </div>
+            <div class="col">
+                {{ ShowPayout }}
             </div>
         </div>
     </script>
