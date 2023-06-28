@@ -8,7 +8,7 @@
         TRACK_LENGTH = 1000, // length of track to reach finish line
         ICON_HEIGHT = 20, //height of an icon - setting here, since elements added to DOM do not have a height, this needs to match the horse-racing.css class .pole-position height property
         ICON_WIDTH = 20, //width of horse icon - used in determining if a horse if finished with a race, this needs to match the .pole-position width
-        RACE_INTERVAL_SPEED = 100, // controls how fast the divs move on the track (e.g. 1000 = horse is moved every second), lower numbers = faster movements, higher numbers = slower movements
+        RACE_INTERVAL_SPEED = 10, // controls how fast the divs move on the track (e.g. 1000 = horse is moved every second), lower numbers = faster movements, higher numbers = slower movements
         TRACK_SCROLL_SPEED = 3, // higher number makes the track scroll faster as the horse icons are moved per interval - TODO: this should be a ratio of RACE_INTERVAL_SPEED instead of just hard-coded
         WIN_MULTIPLIER = 1, //TODO: factor in a betting or facility fee, also we may want to adjust these multipliers to make them more realistic
         PLACE_MULTIPLIER = .5,
@@ -147,13 +147,13 @@
             },
             PlacePayout: function () {
                 if (this.Position === 1 || this.Position === 2)
-                    return UTILITIES.CurrencyFormatter(MIN_BET * this.OddsRatio * .5 + MIN_BET);
+                    return UTILITIES.CurrencyFormatter(MIN_BET * this.OddsRatio * PLACE_MULTIPLIER + MIN_BET);
                 else
                     return "";
             },
             ShowPayout: function () {
                 if (this.Position === 1 || this.Position === 2 || this.Position === 3)
-                    return UTILITIES.CurrencyFormatter(MIN_BET * this.OddsRatio * .25 + MIN_BET);
+                    return UTILITIES.CurrencyFormatter(MIN_BET * this.OddsRatio * SHOW_MULTIPLIER + MIN_BET);
                 else
                     return "";
             }
@@ -252,6 +252,12 @@
             }
         },
         computed: {
+            BetIsValid: function () {
+                return this.SelectedBetTypeId
+                    && this.HorseSelected
+                    && this.BetAmount <= this.AccountBalance
+                    && this.BetAmount >= MIN_BET;
+            },
             FavoritesInCurrentRace: function () {
                 return this.GetSortedCurrentHorses("OddsRatio", "asc");
             },
@@ -363,7 +369,17 @@
                 horseTrack.innerHTML = "";
 
                 //add the finish-line marker back to the track
-                horseTrack.appendChild(finishLine);                
+                horseTrack.appendChild(finishLine);
+
+                //disable show and WPS betting when there are less than 4 horses:
+                data.BetTypes.forEach((type, index) => {                    
+                    if (data.CurrentRaceToRun.Horses.length < 4 && (type.Name == 'Show' || type.Name == 'WPS'))
+                        type.disabled = true;
+                    else
+                        type.disabled = false;
+
+                    console.log('TypeName:', type.Name + ' disabled:' + type.disabled);
+                });
 
                 //for each horse, create an icon (in this case a div) that represents the horse on the track
                 data.HorseIcons = Array(data.CurrentRaceToRun.Horses.length).fill(null).map((_, i) => {
@@ -446,105 +462,99 @@
                     raceFavorites = data.CurrentRaceToRun.Horses.toSortedArray("OddsRatio", "asc"),
                     trackFinishLine = TRACK_LENGTH - ICON_WIDTH;
 
-                if (data.BetIsValid()) {
+                // flag that the race has started
+                data.RaceIsStarted = true;
+                data.CurrentRace.IsStarted = true;                    
 
-                    // flag that the race has started
-                    data.RaceIsStarted = true;
-                    data.CurrentRace.IsStarted = true;
+                const trackContainer = document.getElementById('track-container');
+                const trackContainerScrollWidth = trackContainer.scrollWidth;
 
-                    //deduct the amount for the bet
-                    data.AccountBalance = data.AccountBalance - data.TotalCostOfBet;
+                // check if a horse is finished
+                function isFinished(icon) {
+                    return parseInt(icon.style.left) >= trackFinishLine;
+                }
 
-                    const trackContainer = document.getElementById('track-container');
-                    const trackContainerScrollWidth = trackContainer.scrollWidth;
+                // Create an interval that will move the icons horizontally.
+                data.RaceInterval = setInterval(() => {
+                    data.RaceTime++;
 
-                    // check if a horse is finished
-                    function isFinished(icon) {
-                        return parseInt(icon.style.left) >= trackFinishLine;
+                    //scroll to end of track as horses move
+                    if (trackContainer.scrollLeft !== trackContainerScrollWidth) {
+                        trackContainer.scrollTo(trackContainer.scrollLeft + TRACK_SCROLL_SPEED, 0);
                     }
 
-                    // Create an interval that will move the icons horizontally.
-                    data.RaceInterval = setInterval(() => {
-                        data.RaceTime++;
+                    // Move each icon by a different random amount between 1 and 5.
+                    data.HorseIcons.forEach((icon, i) => {
+                        let currentIconPosition = parseInt(icon.style.left)
 
-                        //scroll to end of track as horses move
-                        if (trackContainer.scrollLeft !== trackContainerScrollWidth) {
-                            trackContainer.scrollTo(trackContainer.scrollLeft + TRACK_SCROLL_SPEED, 0);
+                        //add animated gif for moving horse
+                        icon.classList.add("horse-racing-icon-moving");
+
+                        //keep horse moving if it's not finished yet
+                        if (currentIconPosition < trackFinishLine) {
+                            let currentHorse = data.CurrentRaceToRun.Horses.find(({ PolePosition }) => PolePosition === parseInt(icon.id.replace("pp", ""))),
+                                //currentHorse = data.CurrentRaceToRun.Horses[i],
+                                currentHorseOddsRatio = currentHorse.OddsRatio,
+                                thirdHorseFavoriteOddsRatio = raceFavorites[2].OddsRatio,
+                                calculatedMaxIconMovement = MAX_ICON_MOVEMENT,
+                                newPosition = currentIconPosition;
+
+                            //if the horse is one of the top 3 favorites and x # of intervals have gone by, they have a possibility of moving a bit faster
+                            if (data.RaceTime % 100 == 0 && currentHorseOddsRatio <= thirdHorseFavoriteOddsRatio) {
+                                //TODO: Add a random number generator variable for horses with better odds, jockey, trainer, etc.
+                                //TODO: check if there can be a tie, we should allow for ties since this can happen in real life
+                                calculatedMaxIconMovement += 1;
+                            }
+
+                            newPosition = currentIconPosition + UTILITIES.getRandomInt(1, calculatedMaxIconMovement);
+                            //console.log(`HorsePP: ${currentHorse.PolePosition} Odds: ${currentHorseOddsRatio} calculatedMaxIconMovement: ${calculatedMaxIconMovement} newPosition: ${newPosition}`);
+
+                            icon.style.left = newPosition + "px";
+
+                            currentHorse.CurrentDistance = newPosition;
+                            currentHorse.CurrentSpeed = newPosition - currentIconPosition;
+
+                            // update live race positions after a certain number of intervals has passed (instead of constantly; this is more visually appealing)
+                            if (data.RaceTime % 20 === 0) {
+                                let sortedByDistance = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
+                                let firstHorseDistance = sortedByDistance[0].CurrentDistance;
+
+                                currentHorse.LengthsBack = (firstHorseDistance - currentHorse.CurrentDistance) / ICON_WIDTH;
+
+                                //Setup additional properties for live race results:
+                                sortedByDistance.forEach(function (horse, index) {
+                                    horse.RacePosition = index + 1;
+                                    horse.LiveClass = "pp" + horse.PolePosition;
+                                    horse.LengthsBack = 0;
+                                    horse.LengthsBack = (firstHorseDistance - horse.CurrentDistance) / ICON_WIDTH;;
+                                });
+                                data.LiveRacePositions = sortedByDistance;
+                            }
+
+                            // After a icon has reached the end of the track, keep it at the end of the track and add it to the FinishOrder.
+                            if (isFinished(icon)) {
+                                currentHorse.FinishTime = data.RaceTime;
+                                data.FinishOrder.push(icon.id);
+                                icon.style.left = trackFinishLine;
+                            }
                         }
 
-                        // Move each icon by a different random amount between 1 and 5.
-                        data.HorseIcons.forEach((icon, i) => {
-                            let currentIconPosition = parseInt(icon.style.left)
-
-                            //add animated gif for moving horse
-                            icon.classList.add("horse-racing-icon-moving");
-
-                            //keep horse moving if it's not finished yet
-                            if (currentIconPosition < trackFinishLine) {
-                                let currentHorse = data.CurrentRaceToRun.Horses.find(({ PolePosition }) => PolePosition === parseInt(icon.id.replace("pp", ""))),
-                                    //currentHorse = data.CurrentRaceToRun.Horses[i],
-                                    currentHorseOddsRatio = currentHorse.OddsRatio,
-                                    thirdHorseFavoriteOddsRatio = raceFavorites[2].OddsRatio,
-                                    calculatedMaxIconMovement = MAX_ICON_MOVEMENT,
-                                    newPosition = currentIconPosition;
-
-                                //if the horse is one of the top 3 favorites and x # of intervals have gone by, they have a possibility of moving a bit faster
-                                if (data.RaceTime % 100 == 0 && currentHorseOddsRatio <= thirdHorseFavoriteOddsRatio) {
-                                    //TODO: Add a random number generator variable for horses with better odds, jockey, trainer, etc.
-                                    //TODO: check if there can be a tie, we should allow for ties since this can happen in real life
-                                    calculatedMaxIconMovement += 1;
-                                }
-
-                                newPosition = currentIconPosition + UTILITIES.getRandomInt(1, calculatedMaxIconMovement);
-                                //console.log(`HorsePP: ${currentHorse.PolePosition} Odds: ${currentHorseOddsRatio} calculatedMaxIconMovement: ${calculatedMaxIconMovement} newPosition: ${newPosition}`);
-
-                                icon.style.left = newPosition + "px";
-
-                                currentHorse.CurrentDistance = newPosition;
-                                currentHorse.CurrentSpeed = newPosition - currentIconPosition;
-
-                                // update live race positions after a certain number of intervals has passed (instead of constantly; this is more visually appealing)
-                                if (data.RaceTime % 20 === 0) {
-                                    let sortedByDistance = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
-                                    let firstHorseDistance = sortedByDistance[0].CurrentDistance;
-
-                                    currentHorse.LengthsBack = (firstHorseDistance - currentHorse.CurrentDistance) / ICON_WIDTH;
-
-                                    //Setup additional properties for live race results:
-                                    sortedByDistance.forEach(function (horse, index) {
-                                        horse.RacePosition = index + 1;
-                                        horse.LiveClass = "pp" + horse.PolePosition;
-                                        horse.LengthsBack = 0;
-                                        horse.LengthsBack = (firstHorseDistance - horse.CurrentDistance) / ICON_WIDTH;;
-                                    });
-                                    data.LiveRacePositions = sortedByDistance;
-                                }
-
-                                // After a icon has reached the end of the track, keep it at the end of the track and add it to the FinishOrder.
-                                if (isFinished(icon)) {
-                                    currentHorse.FinishTime = data.RaceTime;
-                                    data.FinishOrder.push(icon.id);
-                                    icon.style.left = trackFinishLine;
-                                }
+                        // After all horses have crossed the finish line, end the race:
+                        if (data.HorseIcons.every(isFinished)) {
+                            data.StopRace();
+                            data.RaceIsStarted = false; //indicate the race has ended
+                            data.LiveRacePositions = [];
+                            data.GetRaceResults();
+                            data.RaceTime = 0; //reset the race time for the next race
+                            currentRaceId++;
+                            if (currentRaceId <= data.NumberOfRaces - 1) {
+                                data.CurrentRaceToRun = data.Races[currentRaceId];
+                                data.SetupNextRace();
+                                trackContainer.scrollLeft = 0; //go back to beginning of track
                             }
-
-                            // After all horses have crossed the finish line, end the race:
-                            if (data.HorseIcons.every(isFinished)) {
-                                data.StopRace();
-                                data.RaceIsStarted = false; //indicate the race has ended
-                                data.LiveRacePositions = [];
-                                data.GetRaceResults();
-                                data.RaceTime = 0; //reset the race time for the next race
-                                currentRaceId++;
-                                if (currentRaceId <= data.NumberOfRaces - 1) {
-                                    data.CurrentRaceToRun = data.Races[currentRaceId];
-                                    data.SetupNextRace();
-                                    trackContainer.scrollLeft = 0; //go back to beginning of track
-                                }
-                            }
-                        });
-                    }, RACE_INTERVAL_SPEED);
-                }
+                        }
+                    });
+                }, RACE_INTERVAL_SPEED);
             },
             StopRace: function () {
                 let data = this;
@@ -599,7 +609,8 @@
                     //reset finish order for next race
                     data.FinishOrder = [];
 
-                    data.DetermineBetResults();
+                    if (data.BetIsValid)
+                        data.DetermineBetResults();
                 }
             },
             DetermineBetResults: function () {
@@ -607,60 +618,58 @@
                     betResults = 0,
                     winHorse = data.CurrentRaceResults[0],
                     placeHorse = data.CurrentRaceResults[1],
-                    showHorse = data.CurrentRaceResults[2];
+                    showHorse = data.CurrentRaceResults[2],
+                    horseOddsRatio = winHorse.OddsRatio;
+
+                if (placeHorse.PolePosition == data.HorseSelected)
+                    horseOddsRatio = placeHorse.OddsRatio;
+                else if (showHorse.PolePosition == data.HorseSelected)
+                    horseOddsRatio = showHorse.OddsRatio;;
+
+                console.log('winHorse:', winHorse);
+                console.log('placeHorse:', placeHorse);
+                console.log('showHorse:', showHorse);
+                console.log('horseOddsRatio:', horseOddsRatio);
+                console.log('HorseSelected:', data.HorseSelected);
+
+                //TODO: Need to make sure these are right - Still showing congratulations when horse is chosen to win, but only places or shows
+                switch (data.SelectedBetTypeId) {
+                    case 1: //Win
+                        if (winHorse.PolePosition == data.HorseSelected) {
+                            betResults = data.BetAmount * horseOddsRatio * WIN_MULTIPLIER + data.BetAmount;
+                        }
+                        break;
+                    case 2: //Place
+                        if (winHorse.PolePosition == data.HorseSelected || placeHorse.PolePosition == data.HorseSelected) {
+                            betResults = data.BetAmount * horseOddsRatio * PLACE_MULTIPLIER + data.BetAmount;
+                        }
+                        break;
+                    case 3: //Show
+                        if (winHorse.PolePosition == data.HorseSelected
+                            || placeHorse.PolePosition == data.HorseSelected
+                            || showHorse.PolePosition == data.HorseSelected) {
+                            betResults = data.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + data.BetAmount;
+                        }
+                        break;
+                    case 4: //WPS
+                        if (winHorse.PolePosition == data.HorseSelected) {
+                            betResults = (data.BetAmount * horseOddsRatio * WIN_MULTIPLIER + data.BetAmount)
+                                + (data.BetAmount * horseOddsRatio * PLACE_MULTIPLIER + data.BetAmount)
+                                + (data.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + data.BetAmount);
+                        }
+                        else if (placeHorse.PolePosition == data.HorseSelected)
+                            betResults = (data.BetAmount * horseOddsRatio * PLACE_MULTIPLIER + data.BetAmount)
+                                + (data.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + data.BetAmount);
+                        else if (showHorse.PolePosition == data.HorseSelected)
+                            betResults = data.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + data.BetAmount;
+                        break;
+                    default:
+                        data.RaceResultMessage = "Error: Invalid Bet Type detected!";
+                        break;
+                }
                 
                 //calculate the new account balance - TODO: make this seperate function
-                if (winHorse.PolePosition == data.HorseSelected
-                    || placeHorse.PolePosition == data.HorseSelected
-                    || showHorse.PolePosition == data.HorseSelected) {
-
-                    //TODO: Need to make sure these are right - Still showing congratulations when horse is chosen to win, but only places or shows
-                    switch (data.SelectedBetTypeId) {
-                        case 1: //Win
-                            if (winHorse.PolePosition == data.HorseSelected) {
-                                betResults = data.BetAmount * winHorse.OddsRatio * WIN_MULTIPLIER + data.BetAmount;
-                            }
-                            break;
-                        case 2: //Place
-                            if (winHorse.PolePosition == data.HorseSelected || placeHorse.PolePosition == data.HorseSelected) {
-                                if (winHorse.PolePosition == data.HorseSelected)
-                                    PLACE_MULTIPLIER = winHorse.OddsRatio * PLACE_MULTIPLIER;
-                                else
-                                    PLACE_MULTIPLIER = placeHorse.OddsRatio * PLACE_MULTIPLIER;
-                                
-                                betResults = data.BetAmount * PLACE_MULTIPLIER + data.BetAmount;
-                            }
-                            break;
-                        case 3: //Show
-                            if (winHorse.PolePosition == data.HorseSelected
-                                || placeHorse.PolePosition == data.HorseSelected
-                                || showHOrse.PolePosition == data.HorseSelected) {
-                                if (winHorse.PolePosition == data.HorseSelected)
-                                    SHOW_MULTIPLIER = winHorse.OddsRatio * SHOW_MULTIPLIER;
-                                else if (placeHorse.PolePosition == data.HorseSelected)
-                                    SHOW_MULTIPLIER = placeHorse.OddsRatio * SHOW_MULTIPLIER;
-                                else
-                                    SHOW_MULTIPLIER = showHorse.OddsRatio * SHOW_MULTIPLIER;
-
-                                betResults = data.BetAmount * SHOW_MULTIPLIER + data.BetAmount;
-                            }
-                            break;
-                        case 4: //WPS
-                            if (winHorse.PolePosition == data.HorseSelected)
-                                betResults = (data.BetAmount * winHorse.OddsRatio * WIN_MULTIPLIER + data.BetAmount)
-                                    + (data.BetAmount * placeHorse.OddsRatio * PLACE_MULTIPLIER + data.BetAmount)
-                                    + (data.BetAmount * showHorse.OddsRatio * SHOW_MULTIPLIER + data.BetAmount);
-                            else if (placeHorse.PolePosition == data.HorseSelected)
-                                betResults = (data.BetAmount * placeHorse.OddsRatio * PLACE_MULTIPLIER + data.BetAmount)
-                                    + (data.BetAmount * showHorse.OddsRatio * SHOW_MULTIPLIER + data.BetAmount);
-                            else
-                                betResults = data.BetAmount * showHorse.OddsRatio * SHOW_MULTIPLIER + data.BetAmount;
-                            break;
-                        default:
-                            data.RaceResultMessage = "Error: Invalid Bet Type detected!";
-                            break;
-                    }                    
-
+                if (betResults > 0) {
                     data.AccountBalance = data.AccountBalance + betResults;
                     data.RaceResultMessage = "Congratulations! You won " + UTILITIES.CurrencyFormatter(betResults);
                 }
@@ -670,60 +679,62 @@
 
                 data.HorseSelected = 0;
             },
-            BetIsValid: function () {
+            ValidateBet: function () {
                 let data = this;
 
                 // clear error message first
                 data.ErrorMessage = "";
 
-                if (data.SelectedBetTypeId <= 0) {
-                    data.ErrorMessage = "Please choose a Bet Type";
+                if (!data.BetIsValid) {
+                    if (data.SelectedBetTypeId <= 0) {
+                        data.ErrorMessage = "Please choose a Bet Type.";
+                    }
+
+                    if (data.HorseSelected <= 0) {
+                        data.ErrorMessage = "Please choose a Horse.";
+                    }
+
+                    if (data.BetAmount > data.AccountBalance) {
+                        data.ErrorMessage = "Insufficient funds - please choose a lower amount to bet.";
+                    }
+
+                    if (data.BetAmount < MIN_BET) {
+                        data.ErrorMessage = "You must bet at least " + data.GetFormattedCurrency(MIN_BET) + ".";
+                    }
                 }
 
-                if (data.BetAmount > data.AccountBalance) {
-                    data.ErrorMessage = "Insufficient funds - please choose a lower amount to bet.";
-                }
-
-                if (data.BetAmount < MIN_BET) {
-                    data.ErrorMessage = "You must bet at least " + data.GetFormattedCurrency(MIN_BET) + ".";
-                }
-
-                if (data.ErrorMessage.length > 0) {
-                    return false;
-                }
-
-                return true;
+                return !data.ErrorMessage.length;
             },
-            SelectHorse: function (horseSelected) {
-                let data = this,
-                    totalCostOfBet = data.BetAmount;
+            PlaceBet: function () {
+                let data = this;
 
-                if (data.BetIsValid()) {
-
-                    //reset IsSelected to false for all horses:
-                    data.Races.forEach(race => {
-                        race.Horses.forEach(horse => {
-                            if (horse.Id == horseSelected.Id) {
-                                horse.IsSelected = true;
-                            }
-                            else
-                                horse.IsSelected = false;
-                        });
-                    });                                       
-
-                    //TODO: Need to get horse and race But for now, we're just getting a simple horse pole position
-                    data.HorseSelected = horseSelected.PolePosition;
-
-                    //TODO: determine if there should be a better place to calculate bet cost for WPS and later exotic bets (i.e. Exacta, etc.)
-                    if (data.SelectedBetTypeId === 4)
-                        totalCostOfBet = totalCostOfBet * 3;
+                if (data.ValidateBet()) {
+                    //deduct the amount for the bet
+                    data.AccountBalance = data.AccountBalance - data.TotalCostOfBet;
 
                     data.CurrentRace.Bet = "Bet: " + data.GetFormattedCurrency(data.BetAmount) + " to " + data.SelectedBetType.Name +
                         " on Horse #" + data.HorseSelected + " for Race " + data.CurrentRaceToRun.RaceNumber + ".  Total Cost of Bet: " +
-                        data.GetFormattedCurrency(data.TotalCostOfBet);                     
+                        data.GetFormattedCurrency(data.TotalCostOfBet);  
 
                     data.ShowRace();
                 }
+            },
+            SelectHorse: function (horseSelected) {
+                let data = this;
+
+                //reset IsSelected to false for all horses:
+                data.Races.forEach(race => {
+                    race.Horses.forEach(horse => {
+                        if (horse.Id == horseSelected.Id) {
+                            horse.IsSelected = true;
+                        }
+                        else
+                            horse.IsSelected = false;
+                    });
+                });                                       
+
+                //TODO: Need to get horse and race But for now, we're just getting a simple horse pole position
+                data.HorseSelected = horseSelected.PolePosition;
             },
             GetNumberWithEnding: function (number) {
                 return UTILITIES.getNumberWithEnding(number);
