@@ -324,8 +324,8 @@
                 data.Races.forEach((race, index) => {
                     let horseCount = UTILITIES.getRandomInt(MIN_HORSES, COMMON_MAX_HORSES);
 
-                    // only make the 5th and 8th races potentially have a lot of horses to make it a bit more realistic
-                    if (index == 4 || index == 7)
+                    // only make the 3rd, 5th, and 8th races potentially have a lot of horses to make it a bit more realistic
+                    if (index == 2 || index == 4 || index == 7)
                         horseCount = UTILITIES.getRandomInt(MIN_HORSES, MAX_HORSES);
 
                     race.Results = [];
@@ -342,7 +342,7 @@
                         allHorsesInAllRaces.push(horseName);
 
                         // only use high odds (up to 99-1) when there are more than horseOddsLimiter horses in a race
-                        if (i >= horseOddsLimiter) {
+                        if (i % 3 == 0 && i >= horseOddsLimiter) {
                             horseOddsNumerator = UTILITIES.getRandomInt(1, ODDS_LIMITER);
                             horseOddsDenominator = 1;
                         }
@@ -503,17 +503,25 @@
                                 currentHorseOddsRatio = currentHorse.OddsRatio,
                                 thirdHorseFavoriteOddsRatio = raceFavorites[2].OddsRatio,
                                 calculatedMaxIconMovement = MAX_ICON_MOVEMENT,
-                                newPosition = currentIconPosition;
+                                newPosition = currentIconPosition,
+                                speed = 1;
 
                             //if the horse is one of the top 3 favorites and x # of intervals have gone by, they have a possibility of moving a bit faster
-                            if (data.RaceTime % 100 == 0 && currentHorseOddsRatio <= thirdHorseFavoriteOddsRatio) {
+                            if (data.RaceTime % 20 == 0 && currentHorseOddsRatio <= thirdHorseFavoriteOddsRatio) {
                                 //TODO: Add a random number generator variable for horses with better odds, jockey, trainer, etc.
                                 //TODO: check if there can be a tie, we should allow for ties since this can happen in real life
-                                calculatedMaxIconMovement += 1;
+                                calculatedMaxIconMovement += 1;                               
                             }
 
-                            newPosition = currentIconPosition + UTILITIES.getRandomInt(1, calculatedMaxIconMovement);
-                            //console.log(`HorsePP: ${currentHorse.PolePosition} Odds: ${currentHorseOddsRatio} calculatedMaxIconMovement: ${calculatedMaxIconMovement} newPosition: ${newPosition}`);
+                            speed = UTILITIES.getRandomInt(1, calculatedMaxIconMovement);
+                            newPosition = currentIconPosition + speed;
+
+                            if (speed >= MAX_ICON_MOVEMENT + 1)
+                                console.log(`
+                                    HorsePP/Name: ${currentHorse.PolePosition}/${currentHorse.HorseName}) 
+                                    OddsRatio: ${currentHorseOddsRatio} thirdHorseFavoriteOddsRatio: ${thirdHorseFavoriteOddsRatio} 
+                                    calculatedMaxIconMovement: ${calculatedMaxIconMovement} newPosition: ${newPosition} 
+                                    got a boost; speed: ${speed}`);                         
 
                             icon.style.left = newPosition + "px";
 
@@ -700,7 +708,7 @@
                 }
 
                 if (data.HorseSelected <= 0) {
-                    data.ErrorMessage = "Please choose a Horse for Race # " + data.CurrentRaceToRun.RaceNumber + ".";
+                    data.ErrorMessage = "Please choose a Horse for Race #" + data.CurrentRaceToRun.RaceNumber + ".";
                 }
 
                 if (data.TotalCostOfBet > data.AccountBalance) {
