@@ -44,11 +44,14 @@
             <div class="row">
                 <div class="col text-info float-left">
                     <h4>Race: {{ CurrentRaceToRun.RaceNumber }} <span class="small-text border border-secondary">1 MTP</span></h4>
-                    
-                    <div v-if="RaceResultMessage.length">
-                        <span>{{ RaceResultMessage }}</span>
-                    </div>
+
+                    {{ CurrentRace.RaceResultMessage }}
                     <br />
+                    <button class="btn btn-warning btn-sm" type="button" value="Cancel Bet"
+                            v-if="!RaceIsStarted && PlayerHasBet"
+                            v-on:click.prevent="CancelBet">
+                        X
+                    </button>
                     {{ CurrentRace.Bet }}
                     <br />
                     <br />
@@ -94,9 +97,9 @@
                 <div class="tab-pane fade show active" id="pills-bet" role="tabpanel" aria-labelledby="pills-bet-tab">
                     <h4>Bet:</h4>
                     <p>Select a bet type, enter your bet amount and select a horse.</p>
-                        <span class="text-warning" v-if="ErrorMessage.length != 0">Error: {{ ErrorMessage }}</span>
+                        <span class="text-warning" v-if="ErrorMessage.length != 0">{{ ErrorMessage }}</span>
                           <div class="container">
-                              <div v-if="!RaceIsStarted" class="d-inline-block">
+                              <div v-if="!RaceIsStarted && !PlayerHasBet" class="d-inline-block">
                                   <select v-model="SelectedBetTypeId">
                                       <option disabled value="0" selected>Bet Type</option>
                                       <option v-for="type in BetTypes" :disabled="type.disabled" :value="type.Id">{{type.Name}}</option>
@@ -105,7 +108,10 @@
                                   <span>Amount Bet: $<input v-model="BetAmount" type="number"></span>
                                   <span class="small">&nbsp;Minimum Bet: $2</span>
                                   &nbsp;&nbsp;
-                                  <button v-if="BetIsValid" v-on:click="PlaceBet" class="btn btn-primary">
+                                  <button class="btn btn-primary"
+                                          value="Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}"
+                                          v-if="BetIsValid" 
+                                          v-on:click="PlaceBet">
                                     Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}
                                   </button>
                               </div>
@@ -195,9 +201,10 @@
                     <h4>Live Race:</h4>
                     <div class="text-center">
                         <button class="btn btn-primary" type="button"
+                                value="Start Race {{ CurrentRaceToRun.RaceNumber}}"
                                 v-on:click.prevent="Race"
                                 v-if="!RaceIsStarted">
-                            Start Race
+                            Start Race {{ CurrentRaceToRun.RaceNumber}}
                         </button>
                         <p v-if="!BetIsValid">
                             Place your bet on the "Bet" tab to start the race.

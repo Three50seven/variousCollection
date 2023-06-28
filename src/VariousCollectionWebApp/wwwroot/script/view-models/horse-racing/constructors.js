@@ -26,6 +26,7 @@ MODULES.Constructors.HorseRacing = (function () {
             this.SortBy = sortBy;
             this.SortCount = 0;
             this.Bet = ""; //TODO: temporarily hold the bet details for a race until players and bets are added (see below constructors)
+            this.RaceResultMessage = ""; //TODO: temporarily hold the bet results until players and bets are added (similar to this.Bet)
         },
         //TODO: Add multiple players and bets per player
         Player: function (id, playerName, bets, accountAmount) {
