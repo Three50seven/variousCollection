@@ -8,7 +8,7 @@
         TRACK_LENGTH = 1000, // length of track to reach finish line
         ICON_HEIGHT = 20, //height of an icon - setting here, since elements added to DOM do not have a height, this needs to match the horse-racing.css class .pole-position height property
         ICON_WIDTH = 20, //width of horse icon - used in determining if a horse if finished with a race, this needs to match the .pole-position width
-        RACE_INTERVAL_SPEED = 10, // controls how fast the divs move on the track (e.g. 1000 = horse is moved every second), lower numbers = faster movements, higher numbers = slower movements
+        RACE_INTERVAL_SPEED = 100, // controls how fast the divs move on the track (e.g. 1000 = horse is moved every second), lower numbers = faster movements, higher numbers = slower movements
         TRACK_SCROLL_SPEED = 3, // higher number makes the track scroll faster as the horse icons are moved per interval - TODO: this should be a ratio of RACE_INTERVAL_SPEED instead of just hard-coded
         WIN_MULTIPLIER = 1, //TODO: factor in a betting or facility fee, also we may want to adjust these multipliers to make them more realistic
         PLACE_MULTIPLIER = .5,
@@ -256,7 +256,8 @@
                 return this.SelectedBetTypeId
                     && this.HorseSelected
                     && this.BetAmount <= this.AccountBalance
-                    && this.BetAmount >= MIN_BET;
+                    && this.BetAmount >= MIN_BET
+                    && this.CurrentRace.Id == this.CurrentRaceToRun.Id;
             },
             FavoritesInCurrentRace: function () {
                 return this.GetSortedCurrentHorses("OddsRatio", "asc");
@@ -377,8 +378,6 @@
                         type.disabled = true;
                     else
                         type.disabled = false;
-
-                    console.log('TypeName:', type.Name + ' disabled:' + type.disabled);
                 });
 
                 //for each horse, create an icon (in this case a div) that represents the horse on the track
@@ -619,18 +618,15 @@
                     winHorse = data.CurrentRaceResults[0],
                     placeHorse = data.CurrentRaceResults[1],
                     showHorse = data.CurrentRaceResults[2],
-                    horseOddsRatio = winHorse.OddsRatio;
+                    horseOddsRatio = 0;
 
-                if (placeHorse.PolePosition == data.HorseSelected)
+                // get the odds ratio for bet calculations
+                if (winHorse.PolePosition == data.HorseSelected)
+                    horseOddsRatio = winHorse.OddsRatio;
+                else if (placeHorse.PolePosition == data.HorseSelected)
                     horseOddsRatio = placeHorse.OddsRatio;
                 else if (showHorse.PolePosition == data.HorseSelected)
-                    horseOddsRatio = showHorse.OddsRatio;;
-
-                console.log('winHorse:', winHorse);
-                console.log('placeHorse:', placeHorse);
-                console.log('showHorse:', showHorse);
-                console.log('horseOddsRatio:', horseOddsRatio);
-                console.log('HorseSelected:', data.HorseSelected);
+                    horseOddsRatio = showHorse.OddsRatio;
 
                 //TODO: Need to make sure these are right - Still showing congratulations when horse is chosen to win, but only places or shows
                 switch (data.SelectedBetTypeId) {
@@ -733,8 +729,9 @@
                     });
                 });                                       
 
-                //TODO: Need to get horse and race But for now, we're just getting a simple horse pole position
-                data.HorseSelected = horseSelected.PolePosition;
+                //TODO: Need to get horse and race But for now, we're just getting a simple horse pole position for the current race to run
+                if (data.CurrentRace.Id == data.CurrentRaceToRun.Id)
+                    data.HorseSelected = horseSelected.PolePosition;
             },
             GetNumberWithEnding: function (number) {
                 return UTILITIES.getNumberWithEnding(number);

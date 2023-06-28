@@ -2,6 +2,10 @@
     padding-left: 10px;
 }
 
+.small-text {
+    font-size: .75em;
+}
+
 .row-selected {
     background-color: #745757;
 }
