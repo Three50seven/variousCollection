@@ -58,7 +58,7 @@
                 </div>
                 <div class="col float-right font-weight-bolder">
                     <h5>Account Balance: <span class="account-balance">{{ GetFormattedCurrency(AccountBalance) }}</span></h5>
-                    Player: Anonymous
+                    Player: Anonymous (WIP)
                 </div>
             </div>
             <div class="text-center">
@@ -99,7 +99,7 @@
                     <p>Select a bet type, enter your bet amount and select a horse.</p>
                     <p>NOTE: some bet types will be disabled depending on the number of horses in the race.</p>
                     <div class="text-warning" v-if="ErrorMessage.length != 0">{{ ErrorMessage }}</div>
-                    <div class="container">
+                    <div class="container overflow-auto">
                         <div v-if="!RaceIsStarted && !PlayerHasBet" class="d-inline-block">
                             <select v-model="SelectedBetTypeId">
                                 <option disabled value="0" selected>Bet Type</option>
@@ -116,7 +116,7 @@
                                 Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}
                             </button>
                         </div>
-                        <div class="row">
+                        <div class="row flex-nowrap">
                             <div class="col">
                                 <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="PP#" column="PolePosition" v-on:sort-click="SortHorses"></sorting-column>
                             </div>
@@ -153,8 +153,8 @@
                     <div class="tab-content" id="pills-tabSubContent">
                         <div class="tab-pane fade" id="pills-result-payouts" role="tabpanel" aria-labelledby="pills-result-payouts-tab">
                             <p>Payouts: </p>
-                            <div class="container" v-if="!CurrentRaceResultsIsEmpty">
-                                <div class="row">
+                            <div class="container overflow-auto" v-if="!CurrentRaceResultsIsEmpty">
+                                <div class="row flex-nowrap">
                                     <div class="col">
                                         PP#
                                     </div>
@@ -179,8 +179,8 @@
                         </div>
                         <div class="tab-pane fade" id="pills-result-details" role="tabpanel" aria-labelledby="pills-result-details-tab">
                             <p>Result Details: </p>
-                            <div class="container" v-if="!CurrentRaceResultsIsEmpty">
-                                <div class="row">
+                            <div class="container overflow-auto" v-if="!CurrentRaceResultsIsEmpty">
+                                <div class="row flex-nowrap">
                                     <div class="col">
                                         Pos
                                     </div>
@@ -260,7 +260,7 @@
     </div>
 
     <script type="text/x-template" id="betting-row-template">
-        <div :class="['row', { 'row-selected': IsSelected }]">
+        <div :class="['row', 'flex-nowrap', { 'row-selected': IsSelected }]">
             <div class="col">
                 <div :class=[ClassList]>
                     {{ PolePosition }}
@@ -281,7 +281,7 @@
     </script>
 
     <script type="text/x-template" id="payout-row-template">
-        <div class="row">
+        <div class="row flex-nowrap">
             <div class="col">
                 <div :class=[ClassList]>
                     {{ PolePosition }}
@@ -303,7 +303,7 @@
     </script>
 
     <script type="text/x-template" id="result-row-template">
-        <div class="row">
+        <div class="row flex-nowrap">
             <div class="col">
                 {{ GetNumberWithEnding(Position) }}
             </div>
@@ -319,7 +319,7 @@
                 {{ Odds }}
             </div>
             <div class="col">
-                {{ FinishTime }}
+                {{ FinishTime/10 }}s
             </div>
             <div class="col">
                 {{ FinishLengthsBack }}
