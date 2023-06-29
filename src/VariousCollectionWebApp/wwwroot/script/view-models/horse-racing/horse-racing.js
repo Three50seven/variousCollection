@@ -434,6 +434,10 @@
                 if (currentRaceId <= data.NumberOfRaces - 1)
                     data.SelectRace(currentRaceId);
 
+                // show the betting tab if the user is going to the current race to run
+                if (data.CurrentRaceToRun.Id == currentRaceId)
+                    data.ShowBetting();
+
                 return;
             },
             PreviousRace: function () {
@@ -527,6 +531,7 @@
 
                             currentHorse.CurrentDistance = newPosition;
                             currentHorse.CurrentSpeed = newPosition - currentIconPosition;
+                            currentHorse.TotalSpeed = currentHorse.TotalSpeed + speed;
 
                             // update live race positions after a certain number of intervals has passed (instead of constantly; this is more visually appealing)
                             if (data.RaceTime % 20 === 0) {
@@ -540,7 +545,7 @@
                                     horse.RacePosition = index + 1;
                                     horse.LiveClass = "pp" + horse.PolePosition;
                                     horse.LengthsBack = 0;
-                                    horse.LengthsBack = (firstHorseDistance - horse.CurrentDistance) / ICON_WIDTH;;
+                                    horse.LengthsBack = (firstHorseDistance - horse.CurrentDistance) / ICON_WIDTH;
                                 });
                                 data.LiveRacePositions = sortedByDistance;
                             }
@@ -548,6 +553,7 @@
                             // After a icon has reached the end of the track, keep it at the end of the track and add it to the FinishOrder.
                             if (isFinished(icon)) {
                                 currentHorse.FinishTime = data.RaceTime;
+                                currentHorse.AverageSpeed = (currentHorse.TotalSpeed / currentHorse.FinishTime).toFixed(2);
                                 data.FinishOrder.push(icon.id);
                                 icon.style.left = trackFinishLine;
                             }
@@ -575,11 +581,21 @@
                 
                 clearInterval(data.RaceInterval);
             },
+            ShowBetting: function () {
+                let betTab = document.getElementById("pills-bet-tab");
+
+                //show the bet tab:
+                betTab.click();
+            },
             ShowResults: function () {
                 let resultsTab = document.getElementById("pills-results-tab");
+                let resultsDetailsTab = document.getElementById("pills-result-details-tab");
+                let resultsPayoutsTab = document.getElementById("pills-result-payouts-tab");
 
                 //show the results tab:
                 resultsTab.click();
+                resultsDetailsTab.click(); //click details first so that payouts becomes "active", otherwise grid will not display right away in DOM
+                resultsPayoutsTab.click();
             },
             ShowRace: function () {
                 let raceTab = document.getElementById("pills-race-tab");
@@ -695,7 +711,9 @@
                     data.CurrentRace.RaceResultMessage = "Sorry, your horse, #" + data.HorseSelected + ", did not " + data.SelectedBetType.Name + " in Race #" + data.CurrentRace.RaceNumber + ". You lost " + data.GetFormattedCurrency(data.TotalCostOfBet) + ".";
                 }
 
+                //reset the horse selected for the next race/bet
                 data.HorseSelected = 0;
+                data.SelectHorse(0);
             },
             ValidateBet: function () {
                 let data = this;

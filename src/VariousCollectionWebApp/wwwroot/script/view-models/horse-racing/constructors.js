@@ -14,6 +14,8 @@ MODULES.Constructors.HorseRacing = (function () {
             this.FinishTime = finishTime;
             this.FinishLengthsBack = finishLengthsBack;
             this.RacePosition = polePosition;
+            this.TotalSpeed = 0;
+            this.AverageSpeed = 0;
         },
         Race: function (id, raceNumber, horses, isStarted, isCompleted, results, sortDirection, sortBy) {
             this.Id = id;
