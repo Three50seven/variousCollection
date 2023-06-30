@@ -2,6 +2,13 @@
     getRandomInt: function (min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
     },
+    getRandomFloat: function (min, max) {        
+        let randomFloat = (Math.random() * (max - min + 1) + min).toFixed(2);
+        if (randomFloat > max)
+            return max;
+
+        return randomFloat;
+    },
     getNumberWithEnding: function (number) {
         //just return 0 if anything less than 1 is passed in
         if (number <= 0)

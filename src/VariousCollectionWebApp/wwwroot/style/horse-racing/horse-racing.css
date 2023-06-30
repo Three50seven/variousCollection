@@ -289,12 +289,28 @@
         border-bottom: 1px solid white
     }
 
+.table-parent {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    width: 100%;
+}
+
+.table-container {    
+    min-width: 800px;
+    padding: 10px;
+}
+
+.row {
+    max-width: 100%;
+}
+
 
 /*table Sorting styles:*/
 .col span.sortable {
     cursor: pointer;
     padding: 0px 2rem 0px 0px !important;
-    position: absolute;
+    position: relative;
 }
 
     .col span.sortable::after {

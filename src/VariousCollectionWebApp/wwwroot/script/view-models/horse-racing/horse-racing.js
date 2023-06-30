@@ -12,8 +12,13 @@
         TRACK_SCROLL_SPEED = 3, // higher number makes the track scroll faster as the horse icons are moved per interval - TODO: this should be a ratio of RACE_INTERVAL_SPEED instead of just hard-coded
         WIN_MULTIPLIER = 1, //TODO: factor in a betting or facility fee, also we may want to adjust these multipliers to make them more realistic
         PLACE_MULTIPLIER = .5,
-        SHOW_MULTIPLIER = .25;
-
+        SHOW_MULTIPLIER = .25,
+        SPEED_ADJUSTMENT_INTERVAL = 20, //At this interval, a horses speed will potentially get a boost or reduction, depending on ratings and odds
+        JOCKEY_RATING_BOOST = 3, //any horse with a jockey rating >= JOCKEY_RATING_BOOST will potentially get a speed boost at certain intervals
+        JOCKEY_RATING_REDUCTION = 2, //a really bad jockey rating will potentially lower the horses speed at certain intervals of the race
+        TRAINER_RATING_BOOST = 3,
+        TRAINER_RATING_REDUCTION = 2,
+        ODDS_SPEED_REDUCTION = 20; //when a horses odds ratio is >= to ODDS_SPEED_REDUCTION, they will potentially have a speed reduction
 
     let model = new Object;
 
@@ -336,7 +341,9 @@
                             horseName = UTILITIES.getUniqueHorseName(UTILITIES.getRandomHorseName(), allHorsesInAllRaces), //TODO: Need to make sure this is working - it looks like it is still adding the same horse more than once to all the races
                             horseOddsNumerator = UTILITIES.getRandomInt(1, horseCount),
                             horseOddsDenominator = UTILITIES.getRandomInt(1, horseOddsLimiter),
-                            horseOddsFraction = null;
+                            horseOddsFraction = null,
+                            jockeyRating = UTILITIES.getRandomFloat(0, 5),
+                            trainerRating = UTILITIES.getRandomFloat(0, 5);
 
                         // add the horses name to an array to check for uniqueness between all races (since we don't realistically want a horse racing more than once per day)
                         allHorsesInAllRaces.push(horseName);
@@ -353,7 +360,7 @@
                         return new MODULES.Constructors.HorseRacing.Horse(i, pp,
                             horseOddsFraction.Numerator + '-' + horseOddsFraction.Denominator,
                             horseOddsFraction.Numerator / horseOddsFraction.Denominator,
-                            horseName, false, "pole-position pp" + pp, 0, 0, 0, 0);
+                            jockeyRating, trainerRating, horseName, false, "pole-position pp" + pp, 0, 0, 0, 0);
                     });
                 });
 
@@ -510,22 +517,38 @@
                                 newPosition = currentIconPosition,
                                 speed = 1;
 
-                            //if the horse is one of the top 3 favorites and x # of intervals have gone by, they have a possibility of moving a bit faster
-                            if (data.RaceTime % 20 == 0 && currentHorseOddsRatio <= thirdHorseFavoriteOddsRatio) {
-                                //TODO: Add a random number generator variable for horses with better odds, jockey, trainer, etc.
-                                //TODO: check if there can be a tie, we should allow for ties since this can happen in real life
-                                calculatedMaxIconMovement += 1;                               
+                            //if the horse odds, jockey or trainer ratings are great and x # of intervals have gone by, the horse has a possibility of moving a bit faster
+                            //alternatively, they have a potential to move a bit slower if their odds, jockey, or trainer raining are poor
+                            if (data.RaceTime % SPEED_ADJUSTMENT_INTERVAL == 0) {
+                                if (currentHorseOddsRatio <= thirdHorseFavoriteOddsRatio)
+                                    calculatedMaxIconMovement += 1;
+
+                                if (currentHorseOddsRatio >= ODDS_SPEED_REDUCTION)
+                                    calculatedMaxIconMovement -= 1;
+
+                                if (currentHorse.JockeyRating >= JOCKEY_RATING_BOOST)
+                                    calculatedMaxIconMovement += 1;
+
+                                if (currentHorse.JockeyRating <= JOCKEY_RATING_REDUCTION)
+                                    calculatedMaxIconMovement -= 1;
+
+                                if (currentHorse.TrainerRating >= TRAINER_RATING_BOOST)
+                                    calculatedMaxIconMovement += 1;
+
+                                if (currentHorse.TrainerRating <= TRAINER_RATING_REDUCTION)
+                                    calculatedMaxIconMovement -= 1;
                             }
 
                             speed = UTILITIES.getRandomInt(1, calculatedMaxIconMovement);
                             newPosition = currentIconPosition + speed;
 
-                            if (speed >= MAX_ICON_MOVEMENT + 1)
-                                console.log(`
-                                    HorsePP/Name: ${currentHorse.PolePosition}/${currentHorse.HorseName}) 
-                                    OddsRatio: ${currentHorseOddsRatio} thirdHorseFavoriteOddsRatio: ${thirdHorseFavoriteOddsRatio} 
-                                    calculatedMaxIconMovement: ${calculatedMaxIconMovement} newPosition: ${newPosition} 
-                                    got a boost; speed: ${speed}`);                         
+                            if (calculatedMaxIconMovement != MAX_ICON_MOVEMENT)
+                                console.log(`Horse speed for #${currentHorse.PolePosition} - ${currentHorse.HorseName} was affected.  Speed:${speed}`);
+                                //console.log(`
+                                //    HorsePP/Name: ${currentHorse.PolePosition}/${currentHorse.HorseName}) 
+                                //    OddsRatio: ${currentHorseOddsRatio} thirdHorseFavoriteOddsRatio: ${thirdHorseFavoriteOddsRatio} 
+                                //    calculatedMaxIconMovement: ${calculatedMaxIconMovement} newPosition: ${newPosition} 
+                                //    got a boost; speed: ${speed}`);                         
 
                             icon.style.left = newPosition + "px";
 
@@ -534,7 +557,7 @@
                             currentHorse.TotalSpeed = currentHorse.TotalSpeed + speed;
 
                             // update live race positions after a certain number of intervals has passed (instead of constantly; this is more visually appealing)
-                            if (data.RaceTime % 20 === 0) {
+                            if (data.RaceTime % SPEED_ADJUSTMENT_INTERVAL === 0) {
                                 let sortedByDistance = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
                                 let firstHorseDistance = sortedByDistance[0].CurrentDistance;
 
@@ -551,6 +574,7 @@
                             }
 
                             // After a icon has reached the end of the track, keep it at the end of the track and add it to the FinishOrder.
+                            //TODO: check if there can be a tie, we should allow for ties since this can happen in real life
                             if (isFinished(icon)) {
                                 currentHorse.FinishTime = data.RaceTime;
                                 currentHorse.AverageSpeed = (currentHorse.TotalSpeed / currentHorse.FinishTime).toFixed(2);
