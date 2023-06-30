@@ -543,7 +543,7 @@
                             newPosition = currentIconPosition + speed;
 
                             if (calculatedMaxIconMovement != MAX_ICON_MOVEMENT)
-                                console.log(`Horse speed for #${currentHorse.PolePosition} - ${currentHorse.HorseName} was affected.  Speed:${speed}`);
+                                console.log(`Horse speed for #${currentHorse.PolePosition} - ${currentHorse.HorseName} was affected. calculatedMaxIconMovement: ${calculatedMaxIconMovement} Speed:${speed}`);
                                 //console.log(`
                                 //    HorsePP/Name: ${currentHorse.PolePosition}/${currentHorse.HorseName}) 
                                 //    OddsRatio: ${currentHorseOddsRatio} thirdHorseFavoriteOddsRatio: ${thirdHorseFavoriteOddsRatio} 
