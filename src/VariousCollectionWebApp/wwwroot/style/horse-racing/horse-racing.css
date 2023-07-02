@@ -430,14 +430,14 @@
 
 /*payout row styles*/
 .payout-pp-col {
-    max-width: 6.25%;
+    max-width: 10%;
 }
 
 .payout-runner-col {
-    max-width: 48.75%;
+    max-width: 70%;
     white-space: nowrap;
 }
 
 .payout-col {
-    max-width: 15%;
+    max-width: 20%;
 }
