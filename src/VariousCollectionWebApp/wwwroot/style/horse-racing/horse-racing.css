@@ -305,6 +305,14 @@
     max-width: 100%;
 }
 
+.text-small {
+    font-size: .75em;
+}
+
+.text-tiny {
+    font-size: .5em;
+}
+
 
 /*table Sorting styles:*/
 .col span.sortable {
@@ -418,4 +426,18 @@
 
 .nav-pills .nav-link.secondary.active, .nav-pills .show > .nav-link {
     background-color: #6c757d !important;
+}
+
+/*payout row styles*/
+.payout-pp-col {
+    max-width: 6.25%;
+}
+
+.payout-runner-col {
+    max-width: 48.75%;
+    white-space: nowrap;
+}
+
+.payout-col {
+    max-width: 15%;
 }

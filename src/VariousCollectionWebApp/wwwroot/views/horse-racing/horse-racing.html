@@ -116,35 +116,24 @@
                                 Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}
                             </button>
                         </div>
-                        <div class="table-parent">
-                            <div class="table-container">
-                                <div class="row">
-                                    <div class="col">
-                                        <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="PP#" column="PolePosition" v-on:sort-click="SortHorses"></sorting-column>
-                                    </div>
-                                    <div class="col">
-                                        <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Horse" column="HorseName" v-on:sort-click="SortHorses"></sorting-column>
-                                    </div>
-                                    <div class="col">
-                                        <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Odds" column="OddsRatio" v-on:sort-click="SortHorses"></sorting-column>
-                                    </div>
-                                    <div class="col">
-                                        <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Jockey Rt." column="JockeyRating" v-on:sort-click="SortHorses"></sorting-column>
-                                    </div>
-                                    <div class="col">
-                                        <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Trainer Rt." column="TrainerRating" v-on:sort-click="SortHorses"></sorting-column>
-                                    </div>
-                                    <div class="col">
-                                        Select
-                                    </div>
-                                </div>
-                                <betting-row v-for="(horse, index) in CurrentRace.Horses"
-                                             v-bind:key="horse.Id + '_' + RaceCounter"
-                                             v-on:row-selected="SelectHorse"
-                                             v-bind:value="horse"
-                                             v-bind:race-is-started="CurrentRace.IsStarted"></betting-row>
+                        <div class="row">
+                            <div class="col">
+                                <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Jockey Rating" column="JockeyRating" v-on:sort-click="SortHorses"></sorting-column>
+                                <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Trainer Rating" column="TrainerRating" v-on:sort-click="SortHorses"></sorting-column>
                             </div>
-                        </div>                        
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="PP#" column="PolePosition" v-on:sort-click="SortHorses"></sorting-column>
+                                <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Odds" column="OddsRatio" v-on:sort-click="SortHorses"></sorting-column>
+                                <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Horse" column="HorseName" v-on:sort-click="SortHorses"></sorting-column>
+                            </div>
+                        </div>
+                        <betting-row v-for="(horse, index) in CurrentRace.Horses"
+                                     v-bind:key="horse.Id + '_' + RaceCounter"
+                                     v-on:row-selected="SelectHorse"
+                                     v-bind:value="horse"
+                                     v-bind:race-is-started="CurrentRace.IsStarted"></betting-row>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="pills-results" role="tabpanel" aria-labelledby="pills-results-tab">
@@ -164,31 +153,27 @@
                         <div class="tab-pane fade" id="pills-result-payouts" role="tabpanel" aria-labelledby="pills-result-payouts-tab">
                             <p>Payouts: </p>
                             <div class="container" v-if="!CurrentRaceResultsIsEmpty">
-                                <div class="table-parent">
-                                    <div class="table-container">
-                                        <div class="row">
-                                            <div class="col">
-                                                PP#
-                                            </div>
-                                            <div class="col">
-                                                Runner
-                                            </div>
-                                            <div class="col">
-                                                Win
-                                            </div>
-                                            <div class="col">
-                                                Place
-                                            </div>
-                                            <div class="col">
-                                                Show
-                                            </div>
-                                        </div>
-                                        <payout-row v-for="(horse, index) in CurrentRaceResults"
-                                                    v-bind:key="horse.Id + '_' + CurrentRace.Id"
-                                                    v-bind:value="horse"
-                                                    v-bind:position="index + 1"></payout-row>
+                                <div class="row">
+                                    <div class="col text-small payout-pp-col">
+                                        PP#
+                                    </div>
+                                    <div class="col text-small payout-runner-col">
+                                        Runner
+                                    </div>
+                                    <div class="col text-small payout-col">
+                                        Win
+                                    </div>
+                                    <div class="col text-small payout-col">
+                                        Place
+                                    </div>
+                                    <div class="col text-small payout-col">
+                                        Show
                                     </div>
                                 </div>
+                                <payout-row v-for="(horse, index) in CurrentRaceResults"
+                                            v-bind:key="horse.Id + '_' + CurrentRace.Id"
+                                            v-bind:value="horse"
+                                            v-bind:position="index + 1"></payout-row>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="pills-result-details" role="tabpanel" aria-labelledby="pills-result-details-tab">
@@ -285,48 +270,42 @@
 
     <script type="text/x-template" id="betting-row-template">
         <div :class="['row', { 'row-selected': IsSelected }]" v-on:click.prevent="Select">
+            <div :class="['col', 'payout-pp-col', ClassList.replace('pole-position','')]">
+                {{ PolePosition }}
+            </div>            
             <div class="col">
-                <div :class=[ClassList]>
-                    {{ PolePosition }}
+                {{ Odds }} - {{ HorseName }}
+                <div class="text-secondary text-small">
+                    Jockey Rating: {{ JockeyRating }}
+                    <br />
+                    Trainer Rating: {{ TrainerRating }}
                 </div>
             </div>
             <div class="col">
-                {{ HorseName }}
-            </div>
-            <div class="col">
-                {{ Odds }}
-            </div>
-            <div class="col">
-                {{ JockeyRating }}
-            </div>
-            <div class="col">
-                {{ TrainerRating }}
-            </div>
-            <div class="col">
-                <a v-if="!RaceIsStarted" href="#">
-                    Select <!--placeholder for now, will change to checkboxes for boxing and radio buttons depending on bet sub-type-->
-                </a>
+                <input type="radio" :checked="IsSelected" /><!--placeholder for now, will change to checkboxes for boxing and radio buttons depending on bet sub-type-->
             </div>
         </div>
     </script>
 
     <script type="text/x-template" id="payout-row-template">
         <div class="row">
-            <div class="col">
-                <div :class=[ClassList]>
-                    {{ PolePosition }}
-                </div>
+            <div :class="['col', 'payout-pp-col', ClassList.replace('pole-position','')]">
+                {{ PolePosition }}
             </div>
-            <div class="col">
+            <div class="col payout-runner-col">
                 {{ HorseName }}
+                <br />
             </div>
-            <div class="col">
+            <div class="col payout-col">
+                <br />
                 {{ WinPayout }}
             </div>
-            <div class="col">
+            <div class="col payout-col">
+                <br />
                 {{ PlacePayout }}
             </div>
-            <div class="col">
+            <div class="col payout-col">
+                <br />
                 {{ ShowPayout }}
             </div>
         </div>
