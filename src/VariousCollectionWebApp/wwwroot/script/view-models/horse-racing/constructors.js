@@ -19,9 +19,10 @@ MODULES.Constructors.HorseRacing = (function () {
             this.TotalSpeed = 0;
             this.AverageSpeed = 0;
         },
-        Race: function (id, raceNumber, horses, isStarted, isCompleted, results, sortDirection, sortBy) {
+        Race: function (id, raceNumber, speedAdjustmentInterval, horses, isStarted, isCompleted, results, sortDirection, sortBy) {
             this.Id = id;
-            this.RaceNumber = raceNumber;            
+            this.RaceNumber = raceNumber;
+            this.SpeedAdjustmentInterval = speedAdjustmentInterval; //At this interval, a horses speed will potentially get a boost or reduction, depending on ratings and odds
             this.Horses = horses;
             this.IsStarted = isStarted;
             this.IsCompleted = isCompleted;

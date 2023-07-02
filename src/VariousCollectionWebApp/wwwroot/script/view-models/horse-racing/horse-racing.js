@@ -13,7 +13,6 @@
         WIN_MULTIPLIER = 1, //TODO: factor in a betting or facility fee, also we may want to adjust these multipliers to make them more realistic
         PLACE_MULTIPLIER = .5,
         SHOW_MULTIPLIER = .25,
-        SPEED_ADJUSTMENT_INTERVAL = 20, //At this interval, a horses speed will potentially get a boost or reduction, depending on ratings and odds
         JOCKEY_RATING_BOOST = 3, //any horse with a jockey rating >= JOCKEY_RATING_BOOST will potentially get a speed boost at certain intervals
         JOCKEY_RATING_REDUCTION = 2, //a really bad jockey rating will potentially lower the horses speed at certain intervals of the race
         TRAINER_RATING_BOOST = 3,
@@ -323,7 +322,8 @@
                 data.HorseSelected = 0;
 
                 data.Races = Array(data.NumberOfRaces).fill(null).map((_, i) => {
-                    return new MODULES.Constructors.HorseRacing.Race(i, i + 1, [], false, false, [], "asc", "", "");
+                    let speedAdjustmentInterval = UTILITIES.getRandomInt(20, 200);
+                    return new MODULES.Constructors.HorseRacing.Race(i, i + 1, speedAdjustmentInterval, [], false, false, [], "asc", "", "");
                 });
 
                 data.Races.forEach((race, index) => {
@@ -491,6 +491,8 @@
                     return parseInt(icon.style.left) >= trackFinishLine;
                 }
 
+                console.log("speedAdjustmentInterval", data.CurrentRaceToRun.SpeedAdjustmentInterval);
+
                 // Create an interval that will move the icons horizontally.
                 data.RaceInterval = setInterval(() => {
                     data.RaceTime++;
@@ -510,6 +512,7 @@
                         //keep horse moving if it's not finished yet
                         if (currentIconPosition < trackFinishLine) {
                             let currentHorse = data.CurrentRaceToRun.Horses.find(({ PolePosition }) => PolePosition === parseInt(icon.id.replace("pp", ""))),
+                                speedAdjustmentInterval = data.CurrentRaceToRun.SpeedAdjustmentInterval,
                                 //currentHorse = data.CurrentRaceToRun.Horses[i],
                                 currentHorseOddsRatio = currentHorse.OddsRatio,
                                 thirdHorseFavoriteOddsRatio = raceFavorites[2].OddsRatio,
@@ -519,7 +522,7 @@
 
                             //if the horse odds, jockey or trainer ratings are great and x # of intervals have gone by, the horse has a possibility of moving a bit faster
                             //alternatively, they have a potential to move a bit slower if their odds, jockey, or trainer raining are poor
-                            if (data.RaceTime % SPEED_ADJUSTMENT_INTERVAL == 0) {
+                            if (data.RaceTime % speedAdjustmentInterval == 0) {
                                 if (currentHorseOddsRatio <= thirdHorseFavoriteOddsRatio)
                                     calculatedMaxIconMovement += 1;
 
@@ -557,7 +560,7 @@
                             currentHorse.TotalSpeed = currentHorse.TotalSpeed + speed;
 
                             // update live race positions after a certain number of intervals has passed (instead of constantly; this is more visually appealing)
-                            if (data.RaceTime % SPEED_ADJUSTMENT_INTERVAL === 0) {
+                            if (data.RaceTime % 20 === 0) {
                                 let sortedByDistance = data.CurrentRaceToRun.Horses.toSortedArray("CurrentDistance", "desc");
                                 let firstHorseDistance = sortedByDistance[0].CurrentDistance;
 
