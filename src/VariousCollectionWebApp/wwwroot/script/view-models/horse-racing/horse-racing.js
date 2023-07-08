@@ -454,6 +454,8 @@
                 data.CurrentRace = data.Races[0];
                 data.CurrentRaceToRun = data.Races[0];
 
+                data.SelectRace(data.CurrentRace.Id);
+
                 data.SetupNextRace();
             },
             SetupNextRace: function () {
