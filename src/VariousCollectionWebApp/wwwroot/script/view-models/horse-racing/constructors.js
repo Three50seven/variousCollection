@@ -18,6 +18,7 @@ MODULES.Constructors.HorseRacing = (function () {
             this.RacePosition = polePosition;
             this.TotalSpeed = 0;
             this.AverageSpeed = 0;
+            this.Boosts = 0;
         },
         Race: function (id, raceNumber, speedAdjustmentInterval, horses, isStarted, isCompleted, results, sortDirection, sortBy) {
             this.Id = id;
@@ -30,22 +31,26 @@ MODULES.Constructors.HorseRacing = (function () {
             this.SortDirection = sortDirection;
             this.SortBy = sortBy;
             this.SortCount = 0;
-            this.Bet = ""; //TODO: temporarily hold the bet details for a race until players and bets are added (see below constructors)
-            this.RaceResultMessage = ""; //TODO: temporarily hold the bet results until players and bets are added (similar to this.Bet)
         },
         //TODO: Add multiple players and bets per player
-        Player: function (id, playerName, bets, accountAmount) {
+        Player: function (id, playerNumber, playerName, bets, accountBalance) {
             this.Id = id;
+            this.PlayerNumber = playerNumber;
             this.PlayerName = playerName;
             this.Bets = bets;
-            this.AccountAmount = accountAmount;
+            this.AccountBalance = accountBalance;
         },
-        Bet: function (id, raceNumber, betAmount, betTypeId, horseSelected) {
+        Bet: function (id, raceId, raceNumber, betAmount, totalCost, betType, horseSelected, payout) {
             this.Id = id;
+            this.RaceId = raceId;
             this.RaceNumber = raceNumber;
             this.BetAmount = betAmount;
-            this.betTypeId = betTypeId;
-            this.horseSelected = horseSelected;
+            this.TotalCost = totalCost;
+            this.BetType = betType;
+            this.HorseSelected = horseSelected;
+            this.Payout = payout;
+            this.BetDisplayText = ""; //hold the bet details, e.g.; $2.00 to WPS on Horse #1 for Race 1. Total Cost of Bet: $6.00
+            this.BetResultMessage = ""; //holds the bet results in friendly text, e.g. Congratulations! Horse #1 placed! You won $3.40 on Race #1.
         }
     };
 })();

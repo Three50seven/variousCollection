@@ -11,6 +11,10 @@
 }
 
 /*Race Menu dropdown*/
+.dropdown-menu-ctrl {
+    cursor: pointer;
+}
+
 .dropdown-hover:hover .dropdown-content {
     display: block
 }
@@ -428,6 +432,25 @@
     background-color: #6c757d !important;
 }
 
+/*Bet Row Transitions*/
+.div-list-move, /* apply transition to moving elements */
+.div-list-enter-active,
+.div-list-leave-active {
+    transition: all 0.5s ease;
+}
+
+.div-list-enter-from,
+.div-list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.div-list-leave-active {
+    position: absolute;
+}
+
 /*payout row styles*/
 .payout-pp-col {
     max-width: 10%;
@@ -440,4 +463,49 @@
 
 .payout-col {
     max-width: 20%;
+}
+
+.player-bet {
+    border: 1px solid #7d7d7d;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.player-bet-info {
+    margin-bottom: 10px;
+    float: left;
+}
+
+.player-bet-payout {
+    float: right;
+}
+
+.player-bet-type {
+    background-color: #317cf3;
+    padding: 0px 5px 0px 5px;
+    border-radius: 10px;    
+}
+
+.player-bet-total {
+    padding: 0px 5px 0px 5px;
+}
+
+.player-bet-horses {
+    padding: 0px 20px 0px 20px;
+}
+
+.player-bet-loss {
+    color: #ff0000;
+}
+
+.player-bet-win {
+    color: #39b40f;
+}
+
+.race-menu-indicator {
+    margin-left: 10px;
+    padding: 0px 5px 0px 5px;
+    background-color: #656565;
+    border-radius: 20%
 }

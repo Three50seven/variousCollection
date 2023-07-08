@@ -31,14 +31,15 @@
     model.CurrentRace.SortDirection = "";
     model.CurrentRace.SortCount = 0;
     model.CurrentRaceResults = new Object;
-    model.CurrentRaceToRun = new Object; 
+    model.CurrentRaceToRun = new Object;    
     model.AccountBalance = 1000;
 
     // Betting properties
     model.BetAmount = MIN_BET,
         model.BetTypes = MODULES.DataSets.BET_TYPES,
         model.SelectedBetTypeId = 0,
-        model.HorseSelected = 0;
+        model.HorseSelected = 0,
+        model.BetId = 1;
 
     model.ErrorMessage = "";
     model.FinishOrder = [];
@@ -47,6 +48,13 @@
     model.Races = new Object;
     model.LiveRacePositions = [];
     model.RaceCounter = 0;
+
+    //Players
+    model.Players = [];
+    model.NumberOfPlayers = 1;
+    model.CurrentPlayer = new Object;
+    model.StartingAccountBalance = 1000;
+    model.PlayerMenuIsShowing = false;
 
     // Custom Vue Components:
     let sortComponent = {
@@ -207,8 +215,8 @@
         }
     }
 
-    let raceMenuComponent = {
-        template: "#race-menu-template",
+    let playerMenuComponent = {
+        template: "#player-menu-template",
         props: ["value"],
 
         data: function () {
@@ -218,10 +226,72 @@
             Select: function () {
                 let data = this;
 
-                data.$emit("race-selected", data.Id);
+                data.$emit("player-selected", data.Id);
             }
         }
     }    
+
+    let raceMenuComponent = {
+        template: "#race-menu-template",
+        props: {
+            value: {
+                type: Object,
+                required: true
+            },
+            nextRace: {
+                type: Object,
+                required: true
+            }
+        },
+        data: function () {
+            let data = this.value;
+            data.NextRace = this.nextRace;
+
+            return data;
+        },
+        computed: {
+            RaceIndicatorText: function () {
+                if (this.IsCompleted)
+                    return "official"
+                else if (this.Id === this.nextRace.Id)
+                    return "1 MTP"
+                else
+                    return ""
+            }
+        },
+        methods: {
+            Select: function () {
+                let data = this;
+
+                data.$emit("race-selected", data.Id);
+            }
+        }
+    }
+
+    let playerBetComponent = {
+        template: "#player-bet-template",
+        props: {
+            value: {
+                type: Object,
+                required: true
+            }
+        },
+        data: function () {
+            let data = this.value;
+
+            return data;
+        },
+        methods: {
+            Cancel: function () {
+                let data = this;
+
+                data.$emit("bet-cancelled", data);
+            },
+            GetFormattedCurrency: function (number) {
+                return UTILITIES.CurrencyFormatter(number);
+            }
+        }
+    }
 
     // Vue.js Model:
     Vue.createApp({
@@ -233,8 +303,10 @@
             "payout-row": payoutRowComponent,
             "result-row": resultRowComponent,
             "live-row": liveRowComponent,
+            "player-menu": playerMenuComponent,
             "race-menu": raceMenuComponent,
-            "sorting-column": sortComponent
+            "sorting-column": sortComponent,
+            "player-bet": playerBetComponent
         },
         watch: {
             //TODO: Left here for examples for now
@@ -260,14 +332,10 @@
 
                 return this.SelectedBetTypeId
                     && this.HorseSelected
-                    && this.TotalCostOfBet <= this.AccountBalance
-                    && this.BetAmount >= MIN_BET
-                    && this.CurrentRace.Id == this.CurrentRaceToRun.Id;
-            },
-            PlayerHasBet: function () {
-                return this.CurrentRace.Id == this.CurrentRaceToRun.Id
-                    && this.CurrentRace.Bet ? this.CurrentRace.Bet.length : false;
-            },
+                    && this.CurrentPlayer.PlayerNumber
+                    && this.TotalCostOfBet <= this.CurrentPlayer.AccountBalance
+                    && this.BetAmount >= MIN_BET;
+            },            
             FavoritesInCurrentRace: function () {
                 return this.GetSortedCurrentHorses("OddsRatio", "asc");
             },
@@ -286,7 +354,7 @@
             TotalCostOfBet: function () {
                 let data = this,
                     totalCostOfBet = data.BetAmount;
-                
+
                 if (this.SelectedBetTypeId === 4)
                     totalCostOfBet = totalCostOfBet * 3;
 
@@ -297,7 +365,8 @@
             Initialize: function () {
                 let data = this;
 
-                //TODO: Setup multiple players (allow user to choose the number) so they can compete on who wins the most money after X number of races                
+                //TODO: Setup multiple players (allow user to choose the number) so they can compete on who wins the most money after X number of races  
+                data.SetupPlayers();
 
                 //setup a horse race (pick the horses etc.)
                 data.SetupRaces();
@@ -314,6 +383,23 @@
                 let data = this;
 
                 data.GetSortedCurrentHorses(sort.SortBy, sort.Direction);
+            },
+            AddPlayer: function () {
+                let data = this,
+                    playerArrayLength = data.Players.length,
+                    newPlayer = new MODULES.Constructors.HorseRacing.Player(playerArrayLength, playerArrayLength + 1, UTILITIES.getRandomAnimalWithAdjective(true), [], data.StartingAccountBalance);
+
+                data.Players.push(newPlayer);
+            },
+            SetupPlayers: function () {
+                let data = this;
+
+                data.Players = Array(data.NumberOfPlayers).fill(null).map((_, i) => {
+                    return new MODULES.Constructors.HorseRacing.Player(i, i + 1, UTILITIES.getRandomAnimalWithAdjective(true), [], data.StartingAccountBalance);
+                });
+
+                //start with the first player
+                data.CurrentPlayer = data.Players[0];
             },
             SetupRaces: function () {
                 let data = this,
@@ -366,7 +452,7 @@
 
                 //start with the first race
                 data.CurrentRace = data.Races[0];
-                data.CurrentRaceToRun = data.Races[0];                
+                data.CurrentRaceToRun = data.Races[0];
 
                 data.SetupNextRace();
             },
@@ -375,24 +461,14 @@
                     trackHeight = 0,
                     horseTrack = document.getElementById("horse-track"),
                     finishLine = document.createElement("div");
-                    //numberOfTrackMarkers = 4,
-                    //markerMargin = 0;
+                //numberOfTrackMarkers = 4,
+                //markerMargin = 0;
 
                 //remove the track after a race so the next race can be setup
                 horseTrack.innerHTML = "";
 
                 //add the finish-line marker back to the track
-                horseTrack.appendChild(finishLine);
-
-                //reset BetTypeId and disable Show and WPS betting when there are less than 4 horses:
-                data.BetTypes.forEach((type, index) => {                    
-                    if (data.CurrentRaceToRun.Horses.length < 4 && (type.Name == 'Show' || type.Name == 'WPS')) {
-                        data.SelectedBetTypeId = 0;
-                        type.disabled = true;
-                    }                        
-                    else
-                        type.disabled = false;
-                });
+                horseTrack.appendChild(finishLine);                
 
                 //for each horse, create an icon (in this case a div) that represents the horse on the track
                 data.HorseIcons = Array(data.CurrentRaceToRun.Horses.length).fill(null).map((_, i) => {
@@ -432,6 +508,38 @@
                 //    horseTrack.appendChild(trackMarker);
                 //}                
             },
+            NextPlayer: function () {
+                let data = this,
+                    currentPlayerId = data.CurrentPlayer.Id;
+
+                currentPlayerId++;
+
+                if (currentPlayerId <= data.NumberOfPlayers - 1)
+                    data.SelectPlayer(currentPlayerId);
+            },
+            PreviousPlayer: function () {
+                let data = this,
+                    currentPlayerId = data.CurrentPlayer.Id;
+
+                currentPlayerId--;
+
+                if (currentPlayerId >= 0)
+                    data.SelectPlayer(currentPlayerId);
+            },
+            ShowPlayerMenu: function () {
+                let data = this;
+
+                data.PlayerMenuIsShowing = !data.PlayerMenuIsShowing;
+            },
+            SelectPlayer: function (playerId) {
+                let data = this;
+
+                data.CurrentPlayer = data.Players[playerId];
+
+                //hide the player menu if it was used to select a player
+                if (data.PlayerMenuIsShowing)
+                    data.PlayerMenuIsShowing = false;
+            },
             NextRace: function () {
                 let data = this,
                     currentRaceId = data.CurrentRace.Id;
@@ -444,8 +552,6 @@
                 // show the betting tab if the user is going to the current race to run
                 if (data.CurrentRaceToRun.Id == currentRaceId)
                     data.ShowBetting();
-
-                return;
             },
             PreviousRace: function () {
                 let data = this,
@@ -455,8 +561,6 @@
 
                 if (currentRaceId >= 0)
                     data.SelectRace(currentRaceId);
-
-                return;
             },
             ShowRaceMenu: function () {
                 let data = this;
@@ -468,6 +572,16 @@
 
                 data.CurrentRace = data.Races[raceId];
                 data.CurrentRaceResults = data.CurrentRace.Results;
+
+                //reset BetTypeId and disable Show and WPS betting when there are less than 4 horses:
+                data.BetTypes.forEach((type) => {
+                    if (data.CurrentRace.Horses.length < 4 && (type.Name == 'Show' || type.Name == 'WPS')) {
+                        data.SelectedBetTypeId = 0;
+                        type.disabled = true;
+                    }
+                    else
+                        type.disabled = false;
+                });
 
                 //hide the race menu if it was used to select a race
                 if (data.RaceMenuIsShowing)
@@ -481,7 +595,7 @@
 
                 // flag that the race has started
                 data.RaceIsStarted = true;
-                data.CurrentRace.IsStarted = true;                    
+                data.CurrentRaceToRun.IsStarted = true;
 
                 const trackContainer = document.getElementById('track-container');
                 const trackContainerScrollWidth = trackContainer.scrollWidth;
@@ -547,11 +661,14 @@
 
                             if (calculatedMaxIconMovement != MAX_ICON_MOVEMENT)
                                 console.log(`Horse speed for #${currentHorse.PolePosition} - ${currentHorse.HorseName} was affected. calculatedMaxIconMovement: ${calculatedMaxIconMovement} Speed:${speed}`);
-                                //console.log(`
-                                //    HorsePP/Name: ${currentHorse.PolePosition}/${currentHorse.HorseName}) 
-                                //    OddsRatio: ${currentHorseOddsRatio} thirdHorseFavoriteOddsRatio: ${thirdHorseFavoriteOddsRatio} 
-                                //    calculatedMaxIconMovement: ${calculatedMaxIconMovement} newPosition: ${newPosition} 
-                                //    got a boost; speed: ${speed}`);                         
+
+                            if (speed >= MAX_ICON_MOVEMENT)
+                                currentHorse.Boosts++;
+                            //console.log(`
+                            //    HorsePP/Name: ${currentHorse.PolePosition}/${currentHorse.HorseName}) 
+                            //    OddsRatio: ${currentHorseOddsRatio} thirdHorseFavoriteOddsRatio: ${thirdHorseFavoriteOddsRatio} 
+                            //    calculatedMaxIconMovement: ${calculatedMaxIconMovement} newPosition: ${newPosition} 
+                            //    got a boost; speed: ${speed}`);                         
 
                             icon.style.left = newPosition + "px";
 
@@ -605,7 +722,7 @@
             },
             StopRace: function () {
                 let data = this;
-                
+
                 clearInterval(data.RaceInterval);
             },
             ShowBetting: function () {
@@ -616,12 +733,10 @@
             },
             ShowResults: function () {
                 let resultsTab = document.getElementById("pills-results-tab");
-                let resultsDetailsTab = document.getElementById("pills-result-details-tab");
                 let resultsPayoutsTab = document.getElementById("pills-result-payouts-tab");
 
                 //show the results tab:
                 resultsTab.click();
-                resultsDetailsTab.click(); //click details first so that payouts becomes "active", otherwise grid will not display right away in DOM
                 resultsPayoutsTab.click();
             },
             ShowRace: function () {
@@ -666,81 +781,86 @@
                     //reset finish order for next race
                     data.FinishOrder = [];
 
-                    if (data.PlayerHasBet)
-                        data.DetermineBetResults();
+                    data.DetermineBetResults();
                 }
             },
             DetermineBetResults: function () {
-                let data = this,
-                    betResults = 0,
-                    betVerb = "came in",
-                    winHorse = data.CurrentRaceResults[0],
-                    placeHorse = data.CurrentRaceResults[1],
-                    showHorse = data.CurrentRaceResults[2],
-                    horseOddsRatio = 0;
+                let data = this;                    
 
-                // get the odds ratio for bet calculations
-                if (winHorse.PolePosition == data.HorseSelected) {
-                    horseOddsRatio = winHorse.OddsRatio;
-                    betVerb = "won";
-                }
-                else if (placeHorse.PolePosition == data.HorseSelected) {
-                    horseOddsRatio = placeHorse.OddsRatio;
-                    betVerb = "placed";
-                }
-                else if (showHorse.PolePosition == data.HorseSelected) {
-                    horseOddsRatio = showHorse.OddsRatio;
-                    betVerb = "showed";
-                }                    
+                //loop through all the player bets for this race
+                data.Players.forEach(player => {
+                    let currentRaceBets = player.Bets.filter(({ RaceId }) => RaceId === data.CurrentRaceToRun.Id);
 
-                //TODO: Need to make sure these are right - Still showing congratulations when horse is chosen to win, but only places or shows
-                switch (data.SelectedBetTypeId) {
-                    case 1: //Win
-                        if (winHorse.PolePosition == data.HorseSelected) {
-                            betResults = data.BetAmount * horseOddsRatio * WIN_MULTIPLIER + data.BetAmount;
-                        }
-                        break;
-                    case 2: //Place
-                        if (winHorse.PolePosition == data.HorseSelected || placeHorse.PolePosition == data.HorseSelected) {
-                            betResults = data.BetAmount * horseOddsRatio * PLACE_MULTIPLIER + data.BetAmount;
-                        }
-                        break;
-                    case 3: //Show
-                        if (winHorse.PolePosition == data.HorseSelected
-                            || placeHorse.PolePosition == data.HorseSelected
-                            || showHorse.PolePosition == data.HorseSelected) {
-                            betResults = data.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + data.BetAmount;
-                        }
-                        break;
-                    case 4: //WPS
-                        if (winHorse.PolePosition == data.HorseSelected) {
-                            betResults = (data.BetAmount * horseOddsRatio * WIN_MULTIPLIER + data.BetAmount)
-                                + (data.BetAmount * horseOddsRatio * PLACE_MULTIPLIER + data.BetAmount)
-                                + (data.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + data.BetAmount);
-                        }
-                        else if (placeHorse.PolePosition == data.HorseSelected)
-                            betResults = (data.BetAmount * horseOddsRatio * PLACE_MULTIPLIER + data.BetAmount)
-                                + (data.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + data.BetAmount);
-                        else if (showHorse.PolePosition == data.HorseSelected)
-                            betResults = data.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + data.BetAmount;
-                        break;
-                    default:
-                        data.CurrentRace.RaceResultMessage = "Error: Invalid Bet Type detected!";
-                        break;
-                }
-                
-                //calculate the new account balance - TODO: make this seperate function
-                if (betResults > 0) {                    
-                    data.AccountBalance = data.AccountBalance + betResults;
-                    data.CurrentRace.RaceResultMessage = "Congratulations! Horse #" + data.HorseSelected + " " + betVerb + "! You won " + UTILITIES.CurrencyFormatter(betResults) + " on Race #" + data.CurrentRace.RaceNumber + ".";
-                }
-                else {
-                    data.CurrentRace.RaceResultMessage = "Sorry, your horse, #" + data.HorseSelected + ", did not " + data.SelectedBetType.Name + " in Race #" + data.CurrentRace.RaceNumber + ". You lost " + data.GetFormattedCurrency(data.TotalCostOfBet) + ".";
-                }
+                    //loop through each bet and determine the results
+                    currentRaceBets.forEach(bet => {
+                        let betResults = 0,
+                            betVerb = "came in",
+                            winHorse = data.CurrentRaceResults[0],
+                            placeHorse = data.CurrentRaceResults[1],
+                            showHorse = data.CurrentRaceResults[2],
+                            horseOddsRatio = 0;
 
-                //reset the horse selected for the next race/bet
-                data.HorseSelected = 0;
-                data.SelectHorse(0);
+                        // get the odds ratio for bet calculations
+                        if (winHorse.PolePosition == bet.HorseSelected) {
+                            horseOddsRatio = winHorse.OddsRatio;
+                            betVerb = "won";
+                        }
+                        else if (placeHorse.PolePosition == bet.HorseSelected) {
+                            horseOddsRatio = placeHorse.OddsRatio;
+                            betVerb = "placed";
+                        }
+                        else if (showHorse.PolePosition == bet.HorseSelected) {
+                            horseOddsRatio = showHorse.OddsRatio;
+                            betVerb = "showed";
+                        }      
+
+                        switch (bet.BetType.Id) {
+                            case 1: //Win
+                                if (winHorse.PolePosition == bet.HorseSelected) {
+                                    betResults = bet.BetAmount * horseOddsRatio * WIN_MULTIPLIER + bet.BetAmount;
+                                }
+                                break;
+                            case 2: //Place
+                                if (winHorse.PolePosition == bet.HorseSelected || placeHorse.PolePosition == bet.HorseSelected) {
+                                    betResults = bet.BetAmount * horseOddsRatio * PLACE_MULTIPLIER + bet.BetAmount;
+                                }
+                                break;
+                            case 3: //Show
+                                if (winHorse.PolePosition == bet.HorseSelected
+                                    || placeHorse.PolePosition == bet.HorseSelected
+                                    || showHorse.PolePosition == bet.HorseSelected) {
+                                    betResults = bet.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + bet.BetAmount;
+                                }
+                                break;
+                            case 4: //WPS
+                                if (winHorse.PolePosition == bet.HorseSelected) {
+                                    betResults = (bet.BetAmount * horseOddsRatio * WIN_MULTIPLIER + bet.BetAmount)
+                                        + (bet.BetAmount * horseOddsRatio * PLACE_MULTIPLIER + bet.BetAmount)
+                                        + (bet.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + bet.BetAmount);
+                                }
+                                else if (placeHorse.PolePosition == bet.HorseSelected)
+                                    betResults = (bet.BetAmount * horseOddsRatio * PLACE_MULTIPLIER + bet.BetAmount)
+                                        + (bet.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + bet.BetAmount);
+                                else if (showHorse.PolePosition == bet.HorseSelected)
+                                    betResults = bet.BetAmount * horseOddsRatio * SHOW_MULTIPLIER + bet.BetAmount;
+                                break;
+                            default:
+                                data.ErrorMessage = "Error: Invalid Bet Type detected!";
+                                break;
+                        }
+
+                        //calculate the new account balance - TODO: make this seperate function
+                        if (betResults > 0) {
+                            player.AccountBalance = player.AccountBalance + betResults;
+                            bet.Payout = betResults;
+                            bet.BetResultMessage = "Congratulations! Horse #" + bet.HorseSelected + " " + betVerb + "! You won " + data.GetFormattedCurrency(betResults) + " on Race #" + data.CurrentRaceToRun.RaceNumber + ".";
+                        }
+                        else {
+                            bet.Payout = bet.TotalCost * -1;
+                            bet.BetResultMessage = "Sorry, your horse, #" + bet.HorseSelected + ", did not " + bet.BetType.Name + " in Race #" + data.CurrentRaceToRun.RaceNumber + ". You lost " + data.GetFormattedCurrency(bet.Payout) + ".";
+                        }
+                    });                        
+                });                
             },
             ValidateBet: function () {
                 let data = this;
@@ -753,10 +873,10 @@
                 }
 
                 if (data.HorseSelected <= 0) {
-                    data.ErrorMessage = "Please choose a Horse for Race #" + data.CurrentRaceToRun.RaceNumber + ".";
+                    data.ErrorMessage = "Please choose a Horse for Race #" + data.CurrentRace.RaceNumber + ".";
                 }
 
-                if (data.TotalCostOfBet > data.AccountBalance) {
+                if (data.TotalCostOfBet > data.CurrentPlayer.AccountBalance) {
                     data.ErrorMessage = "Insufficient funds - please choose a lower amount to bet.";
                 }
 
@@ -770,22 +890,35 @@
                 let data = this;
 
                 if (data.BetIsValid) {
+                    let newBet = new MODULES.Constructors.HorseRacing.Bet(data.BetId++, data.CurrentRace.Id, data.CurrentRace.RaceNumber, data.BetAmount, data.TotalCostOfBet, data.SelectedBetType, data.HorseSelected, "", "");
+
                     //deduct the amount for the bet
-                    data.AccountBalance = data.AccountBalance - data.TotalCostOfBet;
+                    data.CurrentPlayer.AccountBalance = data.CurrentPlayer.AccountBalance - data.TotalCostOfBet;
+                    
+                    newBet.BetDisplayText = "Bet: " + newBet.Id + " " + data.GetFormattedCurrency(data.BetAmount) + " to " + data.SelectedBetType.Name +
+                        " on Horse #" + data.HorseSelected + " for Race " + data.CurrentRace.RaceNumber + ".  Total Cost of Bet: " +
+                        data.GetFormattedCurrency(data.TotalCostOfBet);
 
-                    data.CurrentRace.Bet = "Bet: " + data.GetFormattedCurrency(data.BetAmount) + " to " + data.SelectedBetType.Name +
-                        " on Horse #" + data.HorseSelected + " for Race " + data.CurrentRaceToRun.RaceNumber + ".  Total Cost of Bet: " +
-                        data.GetFormattedCurrency(data.TotalCostOfBet);  
+                    //Add the bet to the player's bets
+                    data.CurrentPlayer.Bets.push(newBet);
 
-                    data.ShowRace();
+                    //reset the horse selected for the next race/bet
+                    data.SelectHorse(0);
+
+                    //data.ShowRace();
                 }
             },
-            CancelBet: function () {
+            CancelBet: function (bet, index) {
                 let data = this;
 
-                if (!data.RaceIsStarted && data.PlayerHasBet) {
-                    data.AccountBalance = data.AccountBalance + data.TotalCostOfBet;
-                    data.CurrentRace.Bet = "";
+                if (!data.CurrentRaceToRun.IsStarted
+                    && !data.CurrentRaceToRun.IsCompleted
+                    && bet.RaceNumber >= data.CurrentRaceToRun.RaceNumber) {
+                    //refund bet to player account
+                    data.CurrentPlayer.AccountBalance = data.CurrentPlayer.AccountBalance + bet.TotalCost;                    
+
+                    //remove the bet from player bets
+                    data.CurrentPlayer.Bets.splice(index, 1);
                 }                    
             },
             SelectHorse: function (horseSelected) {
@@ -800,11 +933,9 @@
                         else
                             horse.IsSelected = false;
                     });
-                });                                       
+                });
 
-                //TODO: Need to get horse and race But for now, we're just getting a simple horse pole position for the current race to run
-                if (data.CurrentRace.Id == data.CurrentRaceToRun.Id)
-                    data.HorseSelected = horseSelected.PolePosition;
+                data.HorseSelected = horseSelected.PolePosition;
             },
             GetNumberWithEnding: function (number) {
                 return UTILITIES.getNumberWithEnding(number);
