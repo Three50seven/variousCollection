@@ -25,6 +25,7 @@
     model.NumberOfRaces = 10,
         model.RaceTime = 0;
 
+    model.HorseId = 0;
     model.HorseIcons = new Object;
     model.CurrentRace = new Object;
     model.CurrentRace.SortBy = "";
@@ -274,12 +275,22 @@
             value: {
                 type: Object,
                 required: true
+            },
+            nextRace: {
+                type: Object,
+                required: true
             }
         },
         data: function () {
             let data = this.value;
 
             return data;
+        },
+        computed: {
+            ShowCancelButton: function () {
+                return this.Payout == 0
+                    && !this.nextRace.IsStarted;
+            }
         },
         methods: {
             Cancel: function () {
@@ -333,6 +344,7 @@
                 return this.SelectedBetTypeId
                     && this.HorseSelected
                     && this.CurrentPlayer.PlayerNumber
+                    && this.CurrentRace.Id >= this.CurrentRaceToRun.Id
                     && this.TotalCostOfBet <= this.CurrentPlayer.AccountBalance
                     && this.BetAmount >= MIN_BET;
             },            
@@ -443,16 +455,18 @@
                         // reduce the fraction
                         horseOddsFraction = UTILITIES.reduceFraction(horseOddsNumerator, horseOddsDenominator);
 
-                        return new MODULES.Constructors.HorseRacing.Horse(i, pp,
+                        data.HorseId++;
+
+                        return new MODULES.Constructors.HorseRacing.Horse(data.HorseId, pp,
                             horseOddsFraction.Numerator + '-' + horseOddsFraction.Denominator,
                             horseOddsFraction.Numerator / horseOddsFraction.Denominator,
-                            jockeyRating, trainerRating, horseName, false, "pole-position pp" + pp, 0, 0, 0, 0);
+                            jockeyRating, trainerRating, horseName, false, "pole-position pp" + pp, 0, 0, 0, 0);                        
                     });
-                });
+                });                
 
                 //start with the first race
                 data.CurrentRace = data.Races[0];
-                data.CurrentRaceToRun = data.Races[0];
+                data.CurrentRaceToRun = data.Races[0];               
 
                 data.SelectRace(data.CurrentRace.Id);
 
@@ -664,7 +678,7 @@
                             if (calculatedMaxIconMovement != MAX_ICON_MOVEMENT)
                                 console.log(`Horse speed for #${currentHorse.PolePosition} - ${currentHorse.HorseName} was affected. calculatedMaxIconMovement: ${calculatedMaxIconMovement} Speed:${speed}`);
 
-                            if (speed >= MAX_ICON_MOVEMENT)
+                            if (speed > MAX_ICON_MOVEMENT)
                                 currentHorse.Boosts++;
                             //console.log(`
                             //    HorsePP/Name: ${currentHorse.PolePosition}/${currentHorse.HorseName}) 
@@ -729,9 +743,11 @@
             },
             ShowBetting: function () {
                 let betTab = document.getElementById("pills-bet-tab");
+                let placeBetSubTab = document.getElementById("pills-bet-placement-tab");
 
                 //show the bet tab:
                 betTab.click();
+                placeBetSubTab.click();
             },
             ShowResults: function () {
                 let resultsTab = document.getElementById("pills-results-tab");
@@ -902,7 +918,7 @@
                         data.GetFormattedCurrency(data.TotalCostOfBet);
 
                     //Add the bet to the player's bets
-                    data.CurrentPlayer.Bets.push(newBet);
+                    data.CurrentPlayer.Bets.unshift(newBet);
 
                     //reset the horse selected for the next race/bet
                     data.SelectHorse(0);

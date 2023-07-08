@@ -509,3 +509,7 @@
     background-color: #656565;
     border-radius: 20%
 }
+
+.switch-icon {
+    transform: rotate(90deg);
+}

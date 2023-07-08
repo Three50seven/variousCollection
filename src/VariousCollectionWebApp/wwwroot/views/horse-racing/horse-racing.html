@@ -43,14 +43,17 @@
         <div id="horse-racing-app-wrapper" v-cloak class="col">
             <div class="row">
                 <div class="col text-info float-left">
-                    <h4>Race: {{ CurrentRaceToRun.RaceNumber }} <span class="small-text border border-secondary">1 MTP</span></h4>                    
+                    <h4>Race: {{ CurrentRaceToRun.RaceNumber }} <span class="text-tiny border border-secondary">1 MTP</span></h4>                    
                 </div>
                 <div class="col float-right font-weight-bolder">
                     <div class="btn-group-sides">
                         <div>
                             Account Balance: <span class="account-balance">{{ GetFormattedCurrency(CurrentPlayer.AccountBalance) }}</span>
-                            <br />
-                            <span class="dropdown-menu-ctrl" v-on:click.prevent="ShowPlayerMenu">Player: {{ CurrentPlayer.PlayerNumber}}-<input v-model="CurrentPlayer.PlayerName" /></span>
+                            <br />                            
+                            <span class="dropdown-menu-ctrl" v-on:click.prevent="ShowPlayerMenu">
+                                <img class="switch-icon" src="../../images/icon/caret.svg" />
+                                Player: {{ CurrentPlayer.PlayerNumber}}-<input v-model="CurrentPlayer.PlayerName" />
+                            </span>
                             &nbsp;
                             <button class="btn btn-primary btn-sm rounded" type="button" value="Add Player"
                                     v-on:click.prevent="AddPlayer">
@@ -75,7 +78,10 @@
                             v-on:click.prevent="PreviousRace">
                         <<
                     </button>
-                    <span class="dropdown-menu-ctrl race-number" v-on:click.prevent="ShowRaceMenu">Race {{ CurrentRace.RaceNumber }}</span>
+                    <span class="dropdown-menu-ctrl race-number" v-on:click.prevent="ShowRaceMenu">
+                        <img class="switch-icon" src="../../images/icon/caret.svg" />
+                        Race {{ CurrentRace.RaceNumber }}
+                    </span>
                     <div id="raceMenuDropdown" :class="['dropdown-content', 'bar-block', 'border', 'menu', {show:RaceMenuIsShowing}]">
                         <ul class="list-group">
                             <race-menu v-for="(race, index) in Races"
@@ -163,6 +169,7 @@
                                 <player-bet v-for="(bet, index) in CurrentPlayer.Bets"
                                             v-bind:key="bet.Id + '_' + BetId"
                                             v-bind:value="bet"
+                                            v-bind:next-race="CurrentRaceToRun"
                                             v-on:bet-cancelled="CancelBet(bet, index)">
                                 </player-bet>
                             </transition-group>                          
@@ -431,7 +438,7 @@
             </div>
             <div class="player-bet-payout">
                 <button class="btn btn-warning btn-sm rounded" type="button" value="Cancel Bet"
-                        v-if="Payout == 0"
+                        v-if="ShowCancelButton"
                         v-on:click.prevent="Cancel">
                     X
                 </button>
