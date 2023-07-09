@@ -398,10 +398,18 @@
             },
             AddPlayer: function () {
                 let data = this,
+                    playerMenu = document.getElementById("player-menu"),
                     playerArrayLength = data.Players.length,
                     newPlayer = new MODULES.Constructors.HorseRacing.Player(playerArrayLength, playerArrayLength + 1, UTILITIES.getRandomAnimalWithAdjective(true), [], data.StartingAccountBalance);
 
+                playerMenu.classList.add("transform-active");                
+
                 data.Players.push(newPlayer);
+
+                //remove the transform after 1s
+                setTimeout(function () {
+                    playerMenu.classList.remove("transform-active");
+                }, 1000);                
             },
             SetupPlayers: function () {
                 let data = this;
@@ -908,7 +916,8 @@
                 let data = this;
 
                 if (data.BetIsValid) {
-                    let newBet = new MODULES.Constructors.HorseRacing.Bet(data.BetId++, data.CurrentRace.Id, data.CurrentRace.RaceNumber, data.BetAmount, data.TotalCostOfBet, data.SelectedBetType, data.HorseSelected, "", "");
+                    let newBet = new MODULES.Constructors.HorseRacing.Bet(data.BetId++, data.CurrentRace.Id, data.CurrentRace.RaceNumber, data.BetAmount, data.TotalCostOfBet, data.SelectedBetType, data.HorseSelected, "", ""),
+                        playerBetTab = document.getElementById("pills-bet-player-tab");
 
                     //deduct the amount for the bet
                     data.CurrentPlayer.AccountBalance = data.CurrentPlayer.AccountBalance - data.TotalCostOfBet;
@@ -917,8 +926,15 @@
                         " on Horse #" + data.HorseSelected + " for Race " + data.CurrentRace.RaceNumber + ".  Total Cost of Bet: " +
                         data.GetFormattedCurrency(data.TotalCostOfBet);
 
+                    playerBetTab.classList.add("transform-active");  
+
                     //Add the bet to the player's bets
                     data.CurrentPlayer.Bets.unshift(newBet);
+
+                    //remove the transform after 1s
+                    setTimeout(function () {
+                        playerBetTab.classList.remove("transform-active");
+                    }, 1000);       
 
                     //reset the horse selected for the next race/bet
                     data.SelectHorse(0);
@@ -960,6 +976,13 @@
             },
             GetFormattedCurrency: function (number) {
                 return UTILITIES.CurrencyFormatter(number);
+            },
+            FilterPlayerBets: function (filter) {
+                let data = this;
+
+                //TODO: 7/9/2023 - actually filter player bets
+                console.log("filter", filter);
+                data.CurrentPlayer.Bets.filter(({ Payout }) => Payout.length > 0);
             }
         },
         mounted: function () {

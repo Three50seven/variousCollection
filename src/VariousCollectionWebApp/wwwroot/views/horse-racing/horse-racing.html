@@ -33,7 +33,7 @@
             <h1>Horse Racing</h1>
             <ul class="nav nav-pills">
                 <li class="nav-item"><a href="/" title="Click to go back home" class="nav-link active" aria-current="page">Home</a></li>
-                <li class="nav-item"><a href="horse-racing-simple.html" title="Horse Racing (Simple)" class="nav-link">Horse Racing (Simple)</a></li>
+                <li class="nav-item margin-left"><a href="horse-racing-simple.html" title="Horse Racing (Simple)" class="nav-link border border-info rounded">Horse Racing (Simple)</a></li>
             </ul>
         </header>
     </div>
@@ -41,21 +41,22 @@
     <div class="container">
         <p>Place your bet and start the race. Click the player name to change between players.  Click the Race Number to change between races.</p>
         <div id="horse-racing-app-wrapper" v-cloak class="col">
-            <div class="row">
+            <div class="row text-center">
                 <div class="col text-info float-left">
-                    <h4>Race: {{ CurrentRaceToRun.RaceNumber }} <span class="text-tiny border border-secondary">1 MTP</span></h4>                    
+                    <h4>Race: {{ CurrentRaceToRun.RaceNumber }} <span class="text-tiny border border-secondary">1 MTP</span></h4>
                 </div>
-                <div class="col float-right font-weight-bolder">
+            </div>
+            <div class="row">               
+                <div class="col text-center">
                     <div class="btn-group-sides">
                         <div>
                             Account Balance: <span class="account-balance">{{ GetFormattedCurrency(CurrentPlayer.AccountBalance) }}</span>
                             <br />                            
-                            <span class="dropdown-menu-ctrl" v-on:click.prevent="ShowPlayerMenu">
+                            <span id="player-menu" class="dropdown-menu-ctrl transform" v-on:click.prevent="ShowPlayerMenu">
                                 <img class="switch-icon" src="../../images/icon/caret.svg" />
                                 Player: {{ CurrentPlayer.PlayerNumber}}-<input v-model="CurrentPlayer.PlayerName" />
                             </span>
-                            &nbsp;
-                            <button class="btn btn-primary btn-sm rounded" type="button" value="Add Player"
+                            <button class="btn btn-primary btn-sm rounded margin-left" type="button" value="Add Player"
                                     v-on:click.prevent="AddPlayer">
                                 Add Player
                             </button>
@@ -99,23 +100,23 @@
             </div>
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="pills-bet-tab" data-bs-toggle="pill" data-bs-target="#pills-bet" type="button" role="tab" aria-controls="pills-bet" aria-selected="true">Bet</button>
+                    <button class="nav-link active border border-info rounded" id="pills-bet-tab" data-bs-toggle="pill" data-bs-target="#pills-bet" type="button" role="tab" aria-controls="pills-bet" aria-selected="true">Bet</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pills-results-tab" data-bs-toggle="pill" data-bs-target="#pills-results" type="button" role="tab" aria-controls="pills-results" aria-selected="false">Results</button>
+                    <button class="nav-link border border-info rounded" id="pills-results-tab" data-bs-toggle="pill" data-bs-target="#pills-results" type="button" role="tab" aria-controls="pills-results" aria-selected="false">Results</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pills-race-tab" data-bs-toggle="pill" data-bs-target="#pills-race" type="button" role="tab" aria-controls="pills-race" aria-selected="false">Race</button>
+                    <button class="nav-link border border-info rounded" id="pills-race-tab" data-bs-toggle="pill" data-bs-target="#pills-race" type="button" role="tab" aria-controls="pills-race" aria-selected="false">Race</button>
                 </li>
             </ul>
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-bet" role="tabpanel" aria-labelledby="pills-bet-tab">
                     <ul class="nav nav-pills mb-3" id="pills-tab-bets" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link secondary active" id="pills-bet-placement-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-placement" type="button" role="tab" aria-controls="pills-bet-placement" aria-selected="true">Place Bets</button>
+                            <button class="nav-link secondary active border border-secondary rounded" id="pills-bet-placement-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-placement" type="button" role="tab" aria-controls="pills-bet-placement" aria-selected="true">Place Bets</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link secondary" id="pills-bet-player-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-player" type="button" role="tab" aria-controls="pills-bet-player" aria-selected="false">Player Bets ({{CurrentPlayer.Bets?.length}})</button>
+                            <button class="nav-link secondary border border-secondary rounded transform" id="pills-bet-player-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-player" type="button" role="tab" aria-controls="pills-bet-player" aria-selected="false">Player Bets ({{CurrentPlayer.Bets?.length}})</button>
                         </li>
                     </ul>
                     <h4>Betting:</h4>
@@ -164,6 +165,10 @@
                         </div>
                         <div class="tab-pane fade" id="pills-bet-player" role="tabpanel" aria-labelledby="pills-bet-player-tab">
                             <p>Player: {{CurrentPlayer.PlayerNumber}}-{{CurrentPlayer.PlayerName}}</p>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-info btn-sm" v-on:click="FilterPlayerBets('active')">Show Active Bets</button>                                
+                                <button type="button" class="btn btn-info btn-sm" v-on:click="FilterPlayerBets('all')">Show All Bets</button>
+                            </div>
                             Bets:
                             <transition-group tag="div" name="div-list">
                                 <player-bet v-for="(bet, index) in CurrentPlayer.Bets"
@@ -179,10 +184,10 @@
                 <div class="tab-pane fade" id="pills-results" role="tabpanel" aria-labelledby="pills-results-tab">
                     <ul class="nav nav-pills mb-3" id="pills-tab-race-results" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link secondary active" id="pills-result-payouts-tab" data-bs-toggle="pill" data-bs-target="#pills-result-payouts" type="button" role="tab" aria-controls="pills-result-payouts" aria-selected="true">Payouts</button>
+                            <button class="nav-link secondary active border border-secondary rounded" id="pills-result-payouts-tab" data-bs-toggle="pill" data-bs-target="#pills-result-payouts" type="button" role="tab" aria-controls="pills-result-payouts" aria-selected="true">Payouts</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link secondary" id="pills-result-details-tab" data-bs-toggle="pill" data-bs-target="#pills-result-details" type="button" role="tab" aria-controls="pills-result-details" aria-selected="false">Details</button>
+                            <button class="nav-link secondary border border-secondary rounded" id="pills-result-details-tab" data-bs-toggle="pill" data-bs-target="#pills-result-details" type="button" role="tab" aria-controls="pills-result-details" aria-selected="false">Details</button>
                         </li>
                     </ul>
                     <h4>Race Results:</h4>

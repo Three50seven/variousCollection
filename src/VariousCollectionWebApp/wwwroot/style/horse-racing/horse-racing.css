@@ -2,6 +2,14 @@
     padding-left: 10px;
 }
 
+button {
+    margin-right: .25em;
+}
+
+.margin-left {
+    margin-left: .25em;
+}
+
 .small-text {
     font-size: .75em;
 }
@@ -513,3 +521,15 @@
 .switch-icon {
     transform: rotate(90deg);
 }
+
+.transform {
+    transition: all 1s ease;
+}
+
+.transform-active {
+    font-size: 1.25em;
+    color: #4bc600;
+}
+    .transform-active::after {
+        content: "+";
+    }
