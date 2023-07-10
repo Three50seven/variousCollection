@@ -48,18 +48,14 @@
             </div>
             <div class="row">               
                 <div class="col text-center">
-                    <div class="btn-group-sides">
-                        <div>
-                            Account Balance: <span class="account-balance">{{ GetFormattedCurrency(CurrentPlayer.AccountBalance) }}</span>
-                            <br />                            
+                    <div>
+                        Account Balance: <span class="account-balance">{{ GetFormattedCurrency(CurrentPlayer.AccountBalance) }}</span>
+                        <br />
+                        <div class="btn-group-sides">
                             <span class="dropdown-menu-ctrl" v-on:click.prevent="ShowPlayerMenu">
                                 <img class="switch-icon" src="../../images/icon/caret.svg" />
                                 Player: {{ CurrentPlayer.PlayerNumber}}-<input v-model="CurrentPlayer.PlayerName" />
                             </span>
-                            <button id="add-player-btn" class="btn btn-primary btn-sm rounded margin-left transform" type="button" value="Add Player"
-                                    v-on:click.prevent="AddPlayer">
-                                Add Player ({{ Players.length }})
-                            </button>
                             <div id="playerMenuDropdown" :class="['dropdown-content', 'bar-block', 'border', 'menu', {show:PlayerMenuIsShowing}]">
                                 <ul class="list-group">
                                     <player-menu v-for="(player, index) in Players"
@@ -70,6 +66,10 @@
                             </div>
                         </div>
                     </div>
+                    <button id="add-player-btn" class="btn btn-primary btn-sm rounded margin-all transform" type="button" value="Add Player"
+                            v-on:click.prevent="AddPlayer">
+                        Add Player ({{ Players.length }})
+                    </button>
                 </div>
             </div>
             <br />

@@ -5,6 +5,13 @@
 button {
     margin-right: .25em;
 }
+button:focus {
+    outline: 2px solid #76c0ff !important;
+}
+
+.margin-all {
+    margin: .25em;
+}
 
 .margin-left {
     margin-left: .25em;
@@ -528,7 +535,7 @@ button {
 
 .transform-active {
     font-size: 1.25em;
-    color: #4bc600;
+    color: #4bc600 !important;
 }
     .transform-active::after {
         content: "+";
