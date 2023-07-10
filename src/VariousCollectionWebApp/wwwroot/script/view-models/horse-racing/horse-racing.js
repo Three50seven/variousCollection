@@ -40,7 +40,9 @@
         model.BetTypes = MODULES.DataSets.BET_TYPES,
         model.SelectedBetTypeId = 0,
         model.HorseSelected = 0,
-        model.BetId = 1;
+        model.BetId = 1,
+        model.PlayerBetsFilter = MODULES.DataSets.BET_FILTERS[0], //all
+        model.BetFilters = MODULES.DataSets.BET_FILTERS;
 
     model.ErrorMessage = "";
     model.FinishOrder = [];
@@ -371,6 +373,29 @@
                     totalCostOfBet = totalCostOfBet * 3;
 
                 return totalCostOfBet;
+            },
+            FilteredPlayerBets: function () {                
+                let data = this,
+                    filteredBets = [];
+
+                switch (data.PlayerBetsFilter.Id) {
+                    case 1: //All
+                        filteredBets = data.CurrentPlayer.Bets;
+                        break;
+                    case 2: //Active
+                        filteredBets = data.CurrentPlayer.Bets.filter(({ Payout }) => Payout === 0);
+                        break;
+                    case 3: //Completed
+                        filteredBets = data.CurrentPlayer.Bets.filter(({ Payout }) => Payout != 0);
+                        break;
+                    default:
+                        filteredBets = [];
+                        break;
+                }
+                if (!filteredBets)
+                    filteredBets = [];
+
+                return filteredBets;               
             }
         },
         methods: {
@@ -919,7 +944,7 @@
                 let data = this;
 
                 if (data.BetIsValid) {
-                    let newBet = new MODULES.Constructors.HorseRacing.Bet(data.BetId++, data.CurrentRace.Id, data.CurrentRace.RaceNumber, data.BetAmount, data.TotalCostOfBet, data.SelectedBetType, data.HorseSelected, "", ""),
+                    let newBet = new MODULES.Constructors.HorseRacing.Bet(data.BetId++, data.CurrentRace.Id, data.CurrentRace.RaceNumber, data.BetAmount, data.TotalCostOfBet, data.SelectedBetType, data.HorseSelected, 0),
                         playerBetTab = document.getElementById("pills-bet-player-tab");
 
                     //deduct the amount for the bet
@@ -975,12 +1000,10 @@
             GetFormattedCurrency: function (number) {
                 return UTILITIES.CurrencyFormatter(number);
             },
-            FilterPlayerBets: function (filter) {
+            FilterPlayerBets: function (filterId) {
                 let data = this;
 
-                //TODO: 7/9/2023 - actually filter player bets
-                console.log("filter", filter);
-                data.CurrentPlayer.Bets.filter(({ Payout }) => Payout.length > 0);
+                data.PlayerBetsFilter = data.BetFilters.find(({ Id }) => Id === parseInt(filterId));
             }
         },
         mounted: function () {

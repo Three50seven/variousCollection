@@ -81,13 +81,16 @@ MODULES.DataSets = (function () {
 
     const betTypes = [{ Id: 1, Name: "Win" }, { Id: 2, Name: "Place" }, { Id: 3, Name: "Show" }, { Id: 4, Name: "WPS" }];
 
+    const betFilters = [{ Id: 1, Name: "all" }, { Id: 2, Name: "active" }, { Id: 3, Name: "completed" }];
+
     //comma separated list of global constants
     return {
         ANIMALS: new ReadOnlyArray(animals),
         ADJECTIVES: new ReadOnlyArray(adjectives),
         US_STATES: new ReadOnlyArray(states),
         DERBY_WINNERS: new ReadOnlyArray(derbyWinners),
-        BET_TYPES: new ReadOnlyArray(betTypes)
+        BET_TYPES: new ReadOnlyArray(betTypes),
+        BET_FILTERS: new ReadOnlyArray(betFilters)
     };
 
 })();

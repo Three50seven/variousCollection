@@ -166,17 +166,19 @@
                         <div class="tab-pane fade" id="pills-bet-player" role="tabpanel" aria-labelledby="pills-bet-player-tab">
                             <p>Player: {{CurrentPlayer.PlayerNumber}}-{{CurrentPlayer.PlayerName}}</p>
                             <div class="text-center">
-                                <button type="button" class="btn btn-info btn-sm" v-on:click="FilterPlayerBets('active')">Show Active Bets</button>                                
-                                <button type="button" class="btn btn-info btn-sm" v-on:click="FilterPlayerBets('all')">Show All Bets</button>
+                                <button type="button" class="btn btn-info btn-sm" v-on:click="FilterPlayerBets(1)">All</button>
+                                <button type="button" class="btn btn-info btn-sm" v-on:click="FilterPlayerBets(2)">Active</button>
+                                <button type="button" class="btn btn-info btn-sm" v-on:click="FilterPlayerBets(3)">Completed</button>
                             </div>
                             Bets:
                             <transition-group tag="div" name="div-list">
-                                <player-bet v-for="(bet, index) in CurrentPlayer.Bets"
+                                <player-bet v-for="(bet, index) in FilteredPlayerBets"
                                             v-bind:key="bet.Id + '_' + BetId"
                                             v-bind:value="bet"
                                             v-bind:next-race="CurrentRaceToRun"
                                             v-on:bet-cancelled="CancelBet(bet, index)">
                                 </player-bet>
+                                <div v-if="!FilteredPlayerBets?.length">No Player Bets Found</div>
                             </transition-group>                          
                         </div>
                     </div>
