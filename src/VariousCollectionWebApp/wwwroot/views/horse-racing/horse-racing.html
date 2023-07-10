@@ -52,13 +52,13 @@
                         <div>
                             Account Balance: <span class="account-balance">{{ GetFormattedCurrency(CurrentPlayer.AccountBalance) }}</span>
                             <br />                            
-                            <span id="player-menu" class="dropdown-menu-ctrl transform" v-on:click.prevent="ShowPlayerMenu">
+                            <span class="dropdown-menu-ctrl" v-on:click.prevent="ShowPlayerMenu">
                                 <img class="switch-icon" src="../../images/icon/caret.svg" />
                                 Player: {{ CurrentPlayer.PlayerNumber}}-<input v-model="CurrentPlayer.PlayerName" />
                             </span>
-                            <button class="btn btn-primary btn-sm rounded margin-left" type="button" value="Add Player"
+                            <button id="add-player-btn" class="btn btn-primary btn-sm rounded margin-left transform" type="button" value="Add Player"
                                     v-on:click.prevent="AddPlayer">
-                                Add Player
+                                Add Player ({{ Players.length }})
                             </button>
                             <div id="playerMenuDropdown" :class="['dropdown-content', 'bar-block', 'border', 'menu', {show:PlayerMenuIsShowing}]">
                                 <ul class="list-group">

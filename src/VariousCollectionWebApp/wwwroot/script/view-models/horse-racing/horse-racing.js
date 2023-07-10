@@ -398,18 +398,21 @@
             },
             AddPlayer: function () {
                 let data = this,
-                    playerMenu = document.getElementById("player-menu"),
+                    addPlayerBtn = document.getElementById("add-player-btn"),
                     playerArrayLength = data.Players.length,
                     newPlayer = new MODULES.Constructors.HorseRacing.Player(playerArrayLength, playerArrayLength + 1, UTILITIES.getRandomAnimalWithAdjective(true), [], data.StartingAccountBalance);
 
-                playerMenu.classList.add("transform-active");                
+                data.AddItemTranform(addPlayerBtn);
 
                 data.Players.push(newPlayer);
+            },
+            AddItemTranform: function (element) {
+                element.classList.add("transform-active");
 
                 //remove the transform after 1s
                 setTimeout(function () {
-                    playerMenu.classList.remove("transform-active");
-                }, 1000);                
+                    element.classList.remove("transform-active");
+                }, 1000);   
             },
             SetupPlayers: function () {
                 let data = this;
@@ -926,15 +929,10 @@
                         " on Horse #" + data.HorseSelected + " for Race " + data.CurrentRace.RaceNumber + ".  Total Cost of Bet: " +
                         data.GetFormattedCurrency(data.TotalCostOfBet);
 
-                    playerBetTab.classList.add("transform-active");  
+                    data.AddItemTranform(playerBetTab);  
 
                     //Add the bet to the player's bets
                     data.CurrentPlayer.Bets.unshift(newBet);
-
-                    //remove the transform after 1s
-                    setTimeout(function () {
-                        playerBetTab.classList.remove("transform-active");
-                    }, 1000);       
 
                     //reset the horse selected for the next race/bet
                     data.SelectHorse(0);
