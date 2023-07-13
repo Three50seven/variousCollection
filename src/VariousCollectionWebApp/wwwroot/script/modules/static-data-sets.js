@@ -65,16 +65,16 @@ MODULES.DataSets = (function () {
 
     const adverbs = ['always', 'sometimes'];
 
-    const derbyWinners = ["Mage", "Rich Strike", "Mandaloun", "Authentic", "Country House", "Justify ", "Always Dreaming", "Nyquist", "American Pharoah ", "California Chrome",
+    const derbyWinners = ["Mage", "Rich Strike", "Mandaloun", "Authentic", "Country House", "Justify", "Always Dreaming", "Nyquist", "American Pharoah", "California Chrome",
         "Orb", "I'll Have Another", "Animal Kingdom", "Super Saver", "Mine That Bird", "Big Brown", "Street Sense", "Barbaro", "Giacomo", "Smarty Jones", "Funny Cide",
         "War Emblem", "Monarchos", "Fusaichi Pegasus", "Charismatic", "Real Quiet", "Silver Charm", "Grindstone", "Thunder Gulch", "Go for Gin", "Sea Hero", "Lil E. Tee",
         "Strike the Gold", "Unbridled", "Sunday Silence", "Winning Colors", "Alysheba", "Ferdinand", "Spend A Buck", "Swale", "Sunny's Halo", "Gato Del Sol", "Pleasant Colony",
-        "Genuine Risk", "Spectacular Bid", "Affirmed ", "Seattle Slew ", "Bold Forbes", "Foolish Pleasure", "Cannonade", "Secretariat ", "Riva Ridge", "Canonero II",
+        "Genuine Risk", "Spectacular Bid", "Affirmed", "Seattle Slew", "Bold Forbes", "Foolish Pleasure", "Cannonade", "Secretariat", "Riva Ridge", "Canonero II",
         "Dust Commander", "Majestic Prince", "Forward Pass", "Proud Clarion", "Kauai King", "Lucky Debonair", "Northern Dancer", "Chateaugay", "Decidedly", "Carry Back",
-        "Venetian Way", "Tomy Lee", "Tim Tam", "Iron Liege", "Needles", "Swaps", "Determine", "Dark Star", "Hill Gail", "Count Turf", "Middleground", "Ponder", "Citation ",
-        "Jet Pilot", "Assault ", "Hoop Jr.", "Pensive", "Count Fleet ", "Shut Out", "Whirlaway ", "Gallahadion", "Johnstown", "Lawrin", "War Admiral ", "Bold Venture",
-        "Omaha ", "Cavalcade", "Brokers Tip", "Burgoo King", "Twenty Grand", "Gallant Fox ", "Clyde Van Dusen", "Reigh Count", "Whiskery", "Bubbling Over", "Flying Ebony",
-        "Black Gold", "Zev", "Morvich", "Behave Yourself", "Paul Jones", "Sir Barton ", "Exterminator", "Omar Khayyam", "George Smith", "Regret", "Old Rosebud", "Donerail",
+        "Venetian Way", "Tomy Lee", "Tim Tam", "Iron Liege", "Needles", "Swaps", "Determine", "Dark Star", "Hill Gail", "Count Turf", "Middleground", "Ponder", "Citation",
+        "Jet Pilot", "Assault", "Hoop Jr.", "Pensive", "Count Fleet", "Shut Out", "Whirlaway", "Gallahadion", "Johnstown", "Lawrin", "War Admiral", "Bold Venture",
+        "Omaha", "Cavalcade", "Brokers Tip", "Burgoo King", "Twenty Grand", "Gallant Fox", "Clyde Van Dusen", "Reigh Count", "Whiskery", "Bubbling Over", "Flying Ebony",
+        "Black Gold", "Zev", "Morvich", "Behave Yourself", "Paul Jones", "Sir Barton", "Exterminator", "Omar Khayyam", "George Smith", "Regret", "Old Rosebud", "Donerail",
         "Worth", "Meridian", "Donau", "Wintergreen", "Stone Street", "Pink Star", "Sir Huon", "Agile", "Elwood", "Judge Himes", "Alan-a-Dale", "His Eminence", "Lieut. Gibson",
         "Manuel", "Plaudit", "Typhoon II", "Ben Brush", "Halma", "Chant", "Lookout", "Azra", "Kingman", "Riley", "Spokane", "Macbeth II", "Montrose", "Ben Ali", "Joe Cotton",
         "Buchanan", "Leonatus", "Apollo", "Hindoo", "Fonso", "Lord Murphy", "Day Star", "Baden-Baden", "Vagrant", "Aristides"];

@@ -472,9 +472,10 @@
                     race.Horses = Array(horseCount).fill(null).map((_, i) => {
                         let pp = i + 1,
                             horseOddsLimiter = 5,
-                            horseName = UTILITIES.getUniqueHorseName(UTILITIES.getRandomHorseName(), allHorsesInAllRaces), //TODO: Need to make sure this is working - it looks like it is still adding the same horse more than once to all the races
+                            oddsModRandomizer = UTILITIES.getRandomInt(1, horseOddsLimiter),
+                            horseName = UTILITIES.getUniqueHorseName(UTILITIES.getRandomHorseName(), allHorsesInAllRaces, MODULES.DataSets.DERBY_WINNERS.length), //TODO: Need to make this a more abstract function to get unique random elements
                             horseOddsNumerator = UTILITIES.getRandomInt(1, horseCount),
-                            horseOddsDenominator = UTILITIES.getRandomInt(1, horseOddsLimiter),
+                            horseOddsDenominator = UTILITIES.getRandomElement([1,2,5]),
                             horseOddsFraction = null,
                             jockeyRating = UTILITIES.getRandomFloat(0, 5),
                             trainerRating = UTILITIES.getRandomFloat(0, 5);
@@ -483,7 +484,8 @@
                         allHorsesInAllRaces.push(horseName);
 
                         // only use high odds (up to 99-1) when there are more than horseOddsLimiter horses in a race
-                        if (i % 3 == 0 && i >= horseOddsLimiter) {
+                        // using mod with random int to randomize which horses get better and worst odds, so it's not always the same pole position in each race
+                        if (i % oddsModRandomizer == 0 && horseCount > horseOddsLimiter) {
                             horseOddsNumerator = UTILITIES.getRandomInt(1, ODDS_LIMITER);
                             horseOddsDenominator = 1;
                         }

@@ -187,7 +187,7 @@
     if (typeof Array.prototype.toSortedArray !== 'function') {
         Array.prototype.toSortedArray = function (sortBy, sortDirection) {
             if (sortBy === undefined || sortBy === null)
-                return this;
+                return this.sort(); //just use default array.sort - default sort order is ascending, built upon converting the elements into strings 
 
             if (sortDirection === undefined || sortDirection === null) {
                 sortDirection = 'asc';

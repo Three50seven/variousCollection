@@ -26,8 +26,7 @@
             return number.toString() + 'rd';
     },
     //note, only works for minutes/seconds as of writing of function and needs at the time
-    getTimeDisplay: function (timeSeconds) {
-        console.log('timeSeconds: %s', timeSeconds);
+    getTimeDisplay: function (timeSeconds) {       
         if (timeSeconds > 0) {
             var minutes = Math.floor(timeSeconds / 60);
             var seconds = timeSeconds - minutes * 60;
@@ -93,10 +92,10 @@
         return useTitleCase ? this.titleCase(name) : name;
     },
     // keep getting a horse name until a unique one is returned
-    getUniqueHorseName: function (horseName, horseNameArray) {
-        let loopSafety = 0;
-        while (horseNameArray.includes(horseName) && loopSafety <= 10000) {
-            return UTILITIES.getRandomHorseName();
+    getUniqueHorseName: function (horseName, horseNameArray, attempts) {
+        while (horseNameArray.includes(horseName) && attempts >= 1) {
+            attempts--;
+            return this.getUniqueHorseName(this.getRandomHorseName(), horseNameArray, attempts);
         }
         return horseName;
     },
