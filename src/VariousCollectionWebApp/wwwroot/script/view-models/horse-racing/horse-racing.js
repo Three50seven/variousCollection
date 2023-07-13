@@ -374,6 +374,15 @@
 
                 return totalCostOfBet;
             },
+            ActivePlayerBets: function () {
+                let data = this,
+                    filteredBets = [];
+
+                if (data.CurrentPlayer && data.CurrentPlayer.Bets)
+                    filteredBets = data.CurrentPlayer.Bets.filter(({ Payout }) => Payout === 0);
+                
+                return filteredBets;
+            },
             FilteredPlayerBets: function () {                
                 let data = this,
                     filteredBets = [];
