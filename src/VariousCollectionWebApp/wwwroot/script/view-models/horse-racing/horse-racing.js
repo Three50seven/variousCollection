@@ -1,5 +1,6 @@
 ﻿(function () {
     const ODDS_LIMITER = 99,
+        NUMBER_OF_RACES = 10,
         MIN_HORSES = 3, //at least 3 horses are required for race, with a max of 24
         MAX_HORSES = 24,
         COMMON_MAX_HORSES = 10,
@@ -9,7 +10,7 @@
         ICON_HEIGHT = 20, //height of an icon - setting here, since elements added to DOM do not have a height, this needs to match the horse-racing.css class .pole-position height property
         ICON_WIDTH = 20, //width of horse icon - used in determining if a horse if finished with a race, this needs to match the .pole-position width
         RACE_INTERVAL_SPEED = 100, // controls how fast the divs move on the track (e.g. 1000 = horse is moved every second), lower numbers = faster movements, higher numbers = slower movements
-        TRACK_SCROLL_SPEED = 3, // higher number makes the track scroll faster as the horse icons are moved per interval - TODO: this should be a ratio of RACE_INTERVAL_SPEED instead of just hard-coded
+        TRACK_SCROLL_SPEED = 3, // higher number makes the track scroll faster as the horse icons are moved per interval - TODO: this may be more accurate as a ratio of RACE_INTERVAL_SPEED instead of just hard-coded
         WIN_MULTIPLIER = 1, //TODO: factor in a betting or facility fee, also we may want to adjust these multipliers to make them more realistic
         PLACE_MULTIPLIER = .5,
         SHOW_MULTIPLIER = .25,
@@ -22,8 +23,7 @@
     let model = new Object;
 
     model.RaceInterval = new Object;
-    model.NumberOfRaces = 10,
-        model.RaceTime = 0;
+    model.RaceTime = 0;
 
     model.HorseId = 0;
     model.HorseIcons = new Object;
@@ -255,11 +255,13 @@
         computed: {
             RaceIndicatorText: function () {
                 if (this.IsCompleted)
-                    return "official"
+                    return "official";
+                else if (this.IsStarted)
+                    return "OFF";
                 else if (this.Id === this.nextRace.Id)
-                    return "1 MTP"
+                    return "1 MTP";
                 else
-                    return ""
+                    return "";
             }
         },
         methods: {
@@ -405,13 +407,18 @@
                     filteredBets = [];
 
                 return filteredBets;               
+            },
+            RaceTimeToPost: function () {
+                if (this.RaceIsStarted)
+                    return "OFF";
+                else
+                    return "1 MTP";
             }
         },
         methods: {
             Initialize: function () {
                 let data = this;
 
-                //TODO: Setup multiple players (allow user to choose the number) so they can compete on who wins the most money after X number of races  
                 data.SetupPlayers();
 
                 //setup a horse race (pick the horses etc.)
@@ -464,7 +471,7 @@
 
                 data.HorseSelected = 0;
 
-                data.Races = Array(data.NumberOfRaces).fill(null).map((_, i) => {
+                data.Races = Array(NUMBER_OF_RACES).fill(null).map((_, i) => {
                     let speedAdjustmentInterval = UTILITIES.getRandomInt(20, 200);
                     return new MODULES.Constructors.HorseRacing.Race(i, i + 1, speedAdjustmentInterval, [], false, false, [], "asc", "", "");
                 });
@@ -482,7 +489,7 @@
                         let pp = i + 1,
                             horseOddsLimiter = 5,
                             oddsModRandomizer = UTILITIES.getRandomInt(1, horseOddsLimiter),
-                            horseName = UTILITIES.getUniqueHorseName(UTILITIES.getRandomHorseName(), allHorsesInAllRaces, MODULES.DataSets.DERBY_WINNERS.length), //TODO: Need to make this a more abstract function to get unique random elements
+                            horseName = UTILITIES.getUniqueHorseName(UTILITIES.getRandomHorseName(), allHorsesInAllRaces, MODULES.DataSets.DERBY_WINNERS.length),
                             horseOddsNumerator = UTILITIES.getRandomInt(1, horseCount),
                             horseOddsDenominator = UTILITIES.getRandomElement([1,2,5]),
                             horseOddsFraction = null,
@@ -609,7 +616,7 @@
 
                 currentRaceId++;
 
-                if (currentRaceId <= data.NumberOfRaces - 1)
+                if (currentRaceId <= NUMBER_OF_RACES - 1)
                     data.SelectRace(currentRaceId);
 
                 // show the betting tab if the user is going to the current race to run
@@ -768,13 +775,14 @@
 
                         // After all horses have crossed the finish line, end the race:
                         if (data.HorseIcons.every(isFinished)) {
-                            data.StopRace();
-                            data.RaceIsStarted = false; //indicate the race has ended
+                            data.StopRace();                            
                             data.LiveRacePositions = [];
                             data.GetRaceResults();
                             data.RaceTime = 0; //reset the race time for the next race
                             currentRaceId++;
-                            if (currentRaceId <= data.NumberOfRaces - 1) {
+                            //when there are more races, setup the next race
+                            if (currentRaceId <= NUMBER_OF_RACES - 1) {
+                                data.RaceIsStarted = false; //indicate the race has ended
                                 data.CurrentRaceToRun = data.Races[currentRaceId];
                                 data.SetupNextRace();
                                 trackContainer.scrollLeft = 0; //go back to beginning of track
@@ -914,7 +922,7 @@
                                 break;
                         }
 
-                        //calculate the new account balance - TODO: make this seperate function
+                        //calculate the new account balance, update bet payout and result-message
                         if (betResults > 0) {
                             player.AccountBalance = player.AccountBalance + betResults;
                             bet.Payout = betResults;
