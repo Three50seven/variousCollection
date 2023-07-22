@@ -166,9 +166,16 @@
                         <div class="tab-pane fade" id="pills-bet-player" role="tabpanel" aria-labelledby="pills-bet-player-tab">
                             <p>Player: {{CurrentPlayer.PlayerNumber}}-{{CurrentPlayer.PlayerName}}</p>
                             <div class="text-center">
-                                <button type="button" class="btn btn-info btn-sm" v-on:click="FilterPlayerBets(1)">All</button>
-                                <button type="button" class="btn btn-info btn-sm" v-on:click="FilterPlayerBets(2)">Active</button>
-                                <button type="button" class="btn btn-info btn-sm" v-on:click="FilterPlayerBets(3)">Completed</button>
+                                Filter Bets:
+                                <label class="margin-all" v-on:click="FilterPlayerBets(1)">
+                                    <input type="radio" name="bet-filter" value="All" checked="checked" /> All
+                                </label>
+                                <label class="margin-all" v-on:click="FilterPlayerBets(2)">
+                                    <input type="radio" name="bet-filter" value="Active" /> Active
+                                </label>
+                                <label class="margin-all" v-on:click="FilterPlayerBets(3)">
+                                    <input type="radio" name="bet-filter" value="Completed" /> Completed
+                                </label>
                             </div>
                             Bets:
                             <transition-group tag="div" name="div-list">
