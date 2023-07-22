@@ -474,6 +474,7 @@ button:focus {
 .payout-runner-col {
     max-width: 70%;
     white-space: nowrap;
+    overflow: auto;
 }
 
 .payout-col {
