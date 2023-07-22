@@ -324,10 +324,10 @@
             "player-bet": playerBetComponent
         },
         watch: {
-            //TODO: Left here for examples for now
-            //"AliasUserSearchResultModel.Filter": {
+            //TODO: Leaving here for example for now
+            //"CurrentRaceToRun.RaceNumber": {
             //    handler: function () {
-            //        this.AliasUserSearchResultModel.FilterChanged = true;
+            //        this.CurrentRaceToRun.SortCount++;
             //    },
             //    deep: true
             //},
@@ -413,6 +413,40 @@
                     return "OFF";
                 else
                     return "1 MTP";
+            },
+            PreviousRaceText: function () {
+                let previousRaceNumber = isNaN(this.CurrentRace.RaceNumber) ? 0 : this.CurrentRace.RaceNumber - 1;
+                if (previousRaceNumber > 0)
+                    return "R" + previousRaceNumber;
+                else
+                    return "";
+            },
+            NextRaceText: function () {
+                let nextRaceNumber = isNaN(this.CurrentRace.RaceNumber) ? 2 : this.CurrentRace.RaceNumber + 1;
+                if (nextRaceNumber <= NUMBER_OF_RACES)
+                    return "R" + nextRaceNumber;
+                else
+                    return "";
+            },
+            TrackCondition: function () {
+                let raceSpeedAdjInterval = this.CurrentRace.SpeedAdjustmentInterval,
+                    trackConditions = [{ Id: 1, Name: "Fast" }, { Id: 2, Name: "Wet Fast" }, { Id: 3, Name: "Good" },
+                        { Id: 4, Name: "Muddy" }, { Id: 5, Name: "Sloppy" }, { Id: 6, Name: "Slow" }, { Id: 7, Name: "Sealed" }];
+
+                if (raceSpeedAdjInterval <= 50)
+                    return trackConditions.find(({ Name }) => Name === "Fast").Name;
+                else if (raceSpeedAdjInterval > 50 && raceSpeedAdjInterval <= 80)
+                    return trackConditions.find(({ Name }) => Name === "Wet Fast").Name;
+                else if (raceSpeedAdjInterval > 80 && raceSpeedAdjInterval <= 100)
+                    return trackConditions.find(({ Name }) => Name === "Sealed").Name;
+                else if (raceSpeedAdjInterval > 100 && raceSpeedAdjInterval <= 125)
+                    return trackConditions.find(({ Name }) => Name === "Good").Name;
+                else if (raceSpeedAdjInterval > 125 && raceSpeedAdjInterval <= 150)
+                    return trackConditions.find(({ Name }) => Name === "Muddy").Name;
+                else if (raceSpeedAdjInterval > 150 && raceSpeedAdjInterval <= 175)
+                    return trackConditions.find(({ Name }) => Name === "Sloppy").Name;
+                else if (raceSpeedAdjInterval > 175 && raceSpeedAdjInterval <= 200)
+                    return trackConditions.find(({ Name }) => Name === "Slow").Name;
             }
         },
         methods: {

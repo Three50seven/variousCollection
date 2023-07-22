@@ -39,20 +39,20 @@
     </div>
 
     <div class="container">
-        <p>Place your bet and start the race. Click the player name to change between players.  Click the Race Number to change between races.</p>
+        <p>Place your bet and start the race. Click the player name to change between players or rename a player.  Click the Race Number to change between races.</p>
         <div id="horse-racing-app-wrapper" v-cloak class="col">
             <div class="row text-center">
                 <div class="col text-info float-left">
-                    <h4>Race: {{ CurrentRaceToRun.RaceNumber }} <span class="text-tiny border border-secondary">{{ RaceTimeToPost }}</span></h4>
+                    <h4>Race: {{ CurrentRaceToRun.RaceNumber }} <span class="text-tiny border border-secondary">{{ RaceTimeToPost }}</span></h4>                    
                 </div>
             </div>
-            <div class="row">               
+            <div class="row border rounded">               
                 <div class="col text-center">
                     <div>
                         Account Balance: <span class="account-balance">{{ GetFormattedCurrency(CurrentPlayer.AccountBalance) }}</span>
                         <br />
                         <div class="btn-group-sides">
-                            <span class="dropdown-menu-ctrl" v-on:click.prevent="ShowPlayerMenu">
+                            <span class="dropdown-menu-ctrl border rounded margin-left player-number" v-on:click.prevent="ShowPlayerMenu">
                                 <img class="switch-icon" src="../../images/icon/caret.svg" />
                                 Player: {{ CurrentPlayer.PlayerNumber}}-<input v-model="CurrentPlayer.PlayerName" />
                             </span>
@@ -75,11 +75,11 @@
             <br />
             <div class="text-center">
                 <div class="btn-group-sides">
-                    <button class="btn-side-left btn btn-secondary" type="button" value="Previous Race"
+                    <button class="btn-side-left btn btn-secondary margin-all" type="button" value="Previous Race"
                             v-on:click.prevent="PreviousRace">
-                        <<
+                        << {{ PreviousRaceText }}
                     </button>
-                    <span class="dropdown-menu-ctrl race-number" v-on:click.prevent="ShowRaceMenu">
+                    <span class="dropdown-menu-ctrl race-number border rounded margin-all" v-on:click.prevent="ShowRaceMenu">
                         <img class="switch-icon" src="../../images/icon/caret.svg" />
                         Race {{ CurrentRace.RaceNumber }}
                     </span>
@@ -92,232 +92,239 @@
                                        v-bind:value="race"></race-menu>
                         </ul>
                     </div>
-                    <button class="btn-side-right btn btn-secondary" type="button" value="Next Race"
+                    <button class="btn-side-right btn btn-secondary margin-all" type="button" value="Next Race"
                             v-on:click.prevent="NextRace">
-                        >>
+                        >> {{ NextRaceText }}
                     </button>
                 </div>
+                <br />
+                <span class="text-small">Track Condition: {{ TrackCondition }}</span>
             </div>
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active border border-info rounded" id="pills-bet-tab" data-bs-toggle="pill" data-bs-target="#pills-bet" type="button" role="tab" aria-controls="pills-bet" aria-selected="true">Bet</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link border border-info rounded" id="pills-results-tab" data-bs-toggle="pill" data-bs-target="#pills-results" type="button" role="tab" aria-controls="pills-results" aria-selected="false">Results</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link border border-info rounded" id="pills-race-tab" data-bs-toggle="pill" data-bs-target="#pills-race" type="button" role="tab" aria-controls="pills-race" aria-selected="false">Race</button>
-                </li>
-            </ul>
-            <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-bet" role="tabpanel" aria-labelledby="pills-bet-tab">
-                    <ul class="nav nav-pills mb-3" id="pills-tab-bets" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link secondary active border border-secondary rounded" id="pills-bet-placement-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-placement" type="button" role="tab" aria-controls="pills-bet-placement" aria-selected="true">Place Bets</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link secondary border border-secondary rounded transform" id="pills-bet-player-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-player" type="button" role="tab" aria-controls="pills-bet-player" aria-selected="false">Player Bets ({{ ActivePlayerBets.length }})</button>
-                        </li>
-                    </ul>
-                    <h4>Betting:</h4>
-                    <div class="tab-content" id="pills-tabBettingSubContent">
-                        <div class="tab-pane fade show active" id="pills-bet-placement" role="tabpanel" aria-labelledby="pills-bet-placement-tab">
-                            <p>Select a bet type, enter your bet amount and select a horse.</p>
-                            <p>NOTE: some bet types will be disabled depending on the number of horses in the race.</p>
-                            <div class="text-warning" v-if="ErrorMessage.length != 0">{{ ErrorMessage }}</div>
-                            <div class="container">
-                                <div v-if="!RaceIsStarted && !PlayerHasBet" class="d-inline-block">
-                                    <select v-model="SelectedBetTypeId">
-                                        <option disabled value="0" selected>Bet Type</option>
-                                        <option v-for="type in BetTypes" :disabled="type.disabled" :value="type.Id">{{type.Name}}</option>
-                                    </select>
-                                    &nbsp;&nbsp;
-                                    <span>Amount Bet: $<input v-model="BetAmount" type="number"></span>
-                                    <span class="small">&nbsp;Minimum Bet: $2</span>
-                                    &nbsp;&nbsp;
-                                    <button class="btn btn-primary"
-                                            value="Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}"
-                                            v-if="BetIsValid"
-                                            v-on:click="PlaceBet">
-                                        Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}
-                                    </button>
-                                    <br />
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Jockey Rating" column="JockeyRating" v-on:sort-click="SortHorses"></sorting-column>
-                                        <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Trainer Rating" column="TrainerRating" v-on:sort-click="SortHorses"></sorting-column>
+            <div class="row border rounded padding-all">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active border border-info rounded" id="pills-bet-tab" data-bs-toggle="pill" data-bs-target="#pills-bet" type="button" role="tab" aria-controls="pills-bet" aria-selected="true">Bet</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link border border-info rounded" id="pills-results-tab" data-bs-toggle="pill" data-bs-target="#pills-results" type="button" role="tab" aria-controls="pills-results" aria-selected="false">Results</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link border border-info rounded" id="pills-race-tab" data-bs-toggle="pill" data-bs-target="#pills-race" type="button" role="tab" aria-controls="pills-race" aria-selected="false">Race</button>
+                    </li>
+                </ul>
+                <hr />
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-bet" role="tabpanel" aria-labelledby="pills-bet-tab">
+                        <ul class="nav nav-pills mb-3" id="pills-tab-bets" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link secondary active border border-secondary rounded" id="pills-bet-placement-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-placement" type="button" role="tab" aria-controls="pills-bet-placement" aria-selected="true">Place Bets</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link secondary border border-secondary rounded transform" id="pills-bet-player-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-player" type="button" role="tab" aria-controls="pills-bet-player" aria-selected="false">Player Bets ({{ ActivePlayerBets.length }})</button>
+                            </li>
+                        </ul>
+                        <h4>Betting:</h4>
+                        <hr />
+                        <div class="tab-content" id="pills-tabBettingSubContent">
+                            <div class="tab-pane fade show active" id="pills-bet-placement" role="tabpanel" aria-labelledby="pills-bet-placement-tab">
+                                <p>Select a bet type, enter your bet amount and select a horse.</p>
+                                <p>NOTE: some bet types will be disabled depending on the number of horses in the race.</p>
+                                <div class="text-warning" v-if="ErrorMessage.length != 0">{{ ErrorMessage }}</div>
+                                <div class="container">
+                                    <div v-if="!RaceIsStarted && !PlayerHasBet" class="d-inline-block">
+                                        <select v-model="SelectedBetTypeId">
+                                            <option disabled value="0" selected>Bet Type</option>
+                                            <option v-for="type in BetTypes" :disabled="type.disabled" :value="type.Id">{{type.Name}}</option>
+                                        </select>
+                                        &nbsp;&nbsp;
+                                        <span>Amount Bet: $<input v-model="BetAmount" type="number"></span>
+                                        <span class="small">&nbsp;Minimum Bet: $2</span>
+                                        &nbsp;&nbsp;
+                                        <button class="btn btn-primary"
+                                                value="Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}"
+                                                v-if="BetIsValid"
+                                                v-on:click="PlaceBet">
+                                            Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}
+                                        </button>
+                                        <br />
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="PP#" column="PolePosition" v-on:sort-click="SortHorses"></sorting-column>
-                                        <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Odds" column="OddsRatio" v-on:sort-click="SortHorses"></sorting-column>
-                                        <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Horse" column="HorseName" v-on:sort-click="SortHorses"></sorting-column>
-                                    </div>
-                                </div>
-                                <betting-row v-for="(horse, index) in CurrentRace.Horses"
-                                             v-bind:key="horse.Id + '_' + RaceCounter"
-                                             v-on:row-selected="SelectHorse"
-                                             v-bind:value="horse"
-                                             v-bind:race-is-started="CurrentRace.IsStarted"></betting-row>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="pills-bet-player" role="tabpanel" aria-labelledby="pills-bet-player-tab">
-                            <p>Player: {{CurrentPlayer.PlayerNumber}}-{{CurrentPlayer.PlayerName}}</p>
-                            <div class="text-center">
-                                Filter Bets:
-                                <label class="margin-all" v-on:click="FilterPlayerBets(1)">
-                                    <input type="radio" name="bet-filter" value="All" checked="checked" /> All
-                                </label>
-                                <label class="margin-all" v-on:click="FilterPlayerBets(2)">
-                                    <input type="radio" name="bet-filter" value="Active" /> Active
-                                </label>
-                                <label class="margin-all" v-on:click="FilterPlayerBets(3)">
-                                    <input type="radio" name="bet-filter" value="Completed" /> Completed
-                                </label>
-                            </div>
-                            Bets:
-                            <transition-group tag="div" name="div-list">
-                                <player-bet v-for="(bet, index) in FilteredPlayerBets"
-                                            v-bind:key="bet.Id + '_' + BetId"
-                                            v-bind:value="bet"
-                                            v-bind:next-race="CurrentRaceToRun"
-                                            v-on:bet-cancelled="CancelBet(bet, index)">
-                                </player-bet>
-                                <div v-if="!FilteredPlayerBets?.length">No Player Bets Found</div>
-                            </transition-group>                          
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="pills-results" role="tabpanel" aria-labelledby="pills-results-tab">
-                    <ul class="nav nav-pills mb-3" id="pills-tab-race-results" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link secondary active border border-secondary rounded" id="pills-result-payouts-tab" data-bs-toggle="pill" data-bs-target="#pills-result-payouts" type="button" role="tab" aria-controls="pills-result-payouts" aria-selected="true">Payouts</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link secondary border border-secondary rounded" id="pills-result-details-tab" data-bs-toggle="pill" data-bs-target="#pills-result-details" type="button" role="tab" aria-controls="pills-result-details" aria-selected="false">Details</button>
-                        </li>
-                    </ul>
-                    <h4>Race Results:</h4>
-                    <div class="text-info" v-if="CurrentRaceResultsIsEmpty">
-                        Race #{{ CurrentRace.RaceNumber }}'s results are pending...
-                    </div>
-                    <div class="tab-content" id="pills-tabSubContent">
-                        <div class="tab-pane fade show active" id="pills-result-payouts" role="tabpanel" aria-labelledby="pills-result-payouts-tab">
-                            <p>Payouts: </p>
-                            <div class="container" v-if="!CurrentRaceResultsIsEmpty">
-                                <div class="row">
-                                    <div class="col text-small payout-pp-col">
-                                        PP#
-                                    </div>
-                                    <div class="col text-small payout-runner-col">
-                                        Runner
-                                    </div>
-                                    <div class="col text-small payout-col">
-                                        Win
-                                    </div>
-                                    <div class="col text-small payout-col">
-                                        Place
-                                    </div>
-                                    <div class="col text-small payout-col">
-                                        Show
-                                    </div>
-                                </div>
-                                <payout-row v-for="(horse, index) in CurrentRaceResults"
-                                            v-bind:key="horse.Id + '_' + CurrentRace.Id"
-                                            v-bind:value="horse"
-                                            v-bind:position="index + 1"></payout-row>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="pills-result-details" role="tabpanel" aria-labelledby="pills-result-details-tab">
-                            <p>Result Details: </p>
-                            <div class="container" v-if="!CurrentRaceResultsIsEmpty">
-                                <div class="table-parent">
-                                    <div class="table-container">
-                                        <div class="row">
-                                            <div class="col">
-                                                Pos
-                                            </div>
-                                            <div class="col">
-                                                PP#
-                                            </div>
-                                            <div class="col">
-                                                Horse
-                                            </div>
-                                            <div class="col">
-                                                Odds
-                                            </div>
-                                            <div class="col">
-                                                Jockey Rt.
-                                            </div>
-                                            <div class="col">
-                                                Trainer Rt.
-                                            </div>
-                                            <div class="col">
-                                                Time
-                                            </div>
-                                            <div class="col">
-                                                Lengths
-                                            </div>
-                                            <div class="col">
-                                                Total Speed
-                                            </div>
-                                            <div class="col">
-                                                Avg. Speed
-                                            </div>
-                                            <div class="col">
-                                                Spd. Boosts
-                                            </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Jockey Rating" column="JockeyRating" v-on:sort-click="SortHorses"></sorting-column>
+                                            <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Trainer Rating" column="TrainerRating" v-on:sort-click="SortHorses"></sorting-column>
                                         </div>
-                                        <result-row v-for="(horse, index) in CurrentRaceResults"
-                                                    v-bind:key="horse.Id + '_' + CurrentRace.Id"
-                                                    v-bind:value="horse"
-                                                    v-bind:position="index + 1"></result-row>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="PP#" column="PolePosition" v-on:sort-click="SortHorses"></sorting-column>
+                                            <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Odds" column="OddsRatio" v-on:sort-click="SortHorses"></sorting-column>
+                                            <sorting-column :sort-by="CurrentRace.SortBy" :direction="CurrentRace.SortDirection" text="Horse" column="HorseName" v-on:sort-click="SortHorses"></sorting-column>
+                                        </div>
+                                    </div>
+                                    <betting-row v-for="(horse, index) in CurrentRace.Horses"
+                                                 v-bind:key="horse.Id + '_' + RaceCounter"
+                                                 v-on:row-selected="SelectHorse"
+                                                 v-bind:value="horse"
+                                                 v-bind:race-is-started="CurrentRace.IsStarted"></betting-row>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="pills-bet-player" role="tabpanel" aria-labelledby="pills-bet-player-tab">
+                                <p>Player: {{CurrentPlayer.PlayerNumber}}-{{CurrentPlayer.PlayerName}}</p>
+                                <div class="text-center">
+                                    Filter Bets:
+                                    <label class="margin-all" v-on:click="FilterPlayerBets(1)">
+                                        <input type="radio" name="bet-filter" value="All" checked="checked" /> All
+                                    </label>
+                                    <label class="margin-all" v-on:click="FilterPlayerBets(2)">
+                                        <input type="radio" name="bet-filter" value="Active" /> Active
+                                    </label>
+                                    <label class="margin-all" v-on:click="FilterPlayerBets(3)">
+                                        <input type="radio" name="bet-filter" value="Completed" /> Completed
+                                    </label>
+                                </div>
+                                Bets:
+                                <transition-group tag="div" name="div-list">
+                                    <player-bet v-for="(bet, index) in FilteredPlayerBets"
+                                                v-bind:key="bet.Id + '_' + BetId"
+                                                v-bind:value="bet"
+                                                v-bind:next-race="CurrentRaceToRun"
+                                                v-on:bet-cancelled="CancelBet(bet, index)">
+                                    </player-bet>
+                                    <div v-if="!FilteredPlayerBets?.length">No Player Bets Found</div>
+                                </transition-group>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-results" role="tabpanel" aria-labelledby="pills-results-tab">
+                        <ul class="nav nav-pills mb-3" id="pills-tab-race-results" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link secondary active border border-secondary rounded" id="pills-result-payouts-tab" data-bs-toggle="pill" data-bs-target="#pills-result-payouts" type="button" role="tab" aria-controls="pills-result-payouts" aria-selected="true">Payouts</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link secondary border border-secondary rounded" id="pills-result-details-tab" data-bs-toggle="pill" data-bs-target="#pills-result-details" type="button" role="tab" aria-controls="pills-result-details" aria-selected="false">Details</button>
+                            </li>
+                        </ul>
+                        <h4>Race Results:</h4>
+                        <hr />
+                        <div class="text-info" v-if="CurrentRaceResultsIsEmpty">
+                            Race #{{ CurrentRace.RaceNumber }}'s results are pending...
+                        </div>
+                        <div class="tab-content" id="pills-tabSubContent">
+                            <div class="tab-pane fade show active" id="pills-result-payouts" role="tabpanel" aria-labelledby="pills-result-payouts-tab">
+                                <p>Payouts: </p>
+                                <div class="container" v-if="!CurrentRaceResultsIsEmpty">
+                                    <div class="row">
+                                        <div class="col text-small payout-pp-col">
+                                            PP#
+                                        </div>
+                                        <div class="col text-small payout-runner-col">
+                                            Runner
+                                        </div>
+                                        <div class="col text-small payout-col">
+                                            Win
+                                        </div>
+                                        <div class="col text-small payout-col">
+                                            Place
+                                        </div>
+                                        <div class="col text-small payout-col">
+                                            Show
+                                        </div>
+                                    </div>
+                                    <payout-row v-for="(horse, index) in CurrentRaceResults"
+                                                v-bind:key="horse.Id + '_' + CurrentRace.Id"
+                                                v-bind:value="horse"
+                                                v-bind:position="index + 1"></payout-row>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="pills-result-details" role="tabpanel" aria-labelledby="pills-result-details-tab">
+                                <p>Result Details: </p>
+                                <div class="container" v-if="!CurrentRaceResultsIsEmpty">
+                                    <div class="table-parent">
+                                        <div class="table-container">
+                                            <div class="row">
+                                                <div class="col">
+                                                    Pos
+                                                </div>
+                                                <div class="col">
+                                                    PP#
+                                                </div>
+                                                <div class="col">
+                                                    Horse
+                                                </div>
+                                                <div class="col">
+                                                    Odds
+                                                </div>
+                                                <div class="col">
+                                                    Jockey Rt.
+                                                </div>
+                                                <div class="col">
+                                                    Trainer Rt.
+                                                </div>
+                                                <div class="col">
+                                                    Time
+                                                </div>
+                                                <div class="col">
+                                                    Lengths
+                                                </div>
+                                                <div class="col">
+                                                    Total Speed
+                                                </div>
+                                                <div class="col">
+                                                    Avg. Speed
+                                                </div>
+                                                <div class="col">
+                                                    Spd. Boosts
+                                                </div>
+                                            </div>
+                                            <result-row v-for="(horse, index) in CurrentRaceResults"
+                                                        v-bind:key="horse.Id + '_' + CurrentRace.Id"
+                                                        v-bind:value="horse"
+                                                        v-bind:position="index + 1"></result-row>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="pills-race" role="tabpanel" aria-labelledby="pills-race-tab">
-                    <h4>Live Race:</h4>
-                    <div class="text-center">
-                        <button class="btn btn-primary" type="button"
-                                value="Start Race {{ CurrentRaceToRun.RaceNumber}}"
-                                v-on:click.prevent="Race"
-                                v-if="!RaceIsStarted">
-                            Start Race {{ CurrentRaceToRun.RaceNumber}}
-                        </button>
-                        <p v-if="!BetIsValid">
-                            Place your bet on the "Bet" tab or just watch the next race by clicking "Start Race".
-                        </p>
-                    </div>
-                    <br />
-                    <div id="track-container" class="container">
-                        <div id="horse-track">
-                            <div id="finish-line"></div>
+                    <div class="tab-pane fade" id="pills-race" role="tabpanel" aria-labelledby="pills-race-tab">
+                        <h4>Live Race:</h4>
+                        <div class="text-center">
+                            <button class="btn btn-primary" type="button"
+                                    value="Start Race {{ CurrentRaceToRun.RaceNumber}}"
+                                    v-on:click.prevent="Race"
+                                    v-if="!RaceIsStarted">
+                                Start Race {{ CurrentRaceToRun.RaceNumber}}
+                            </button>
+                            <p v-if="!BetIsValid">
+                                Place your bet on the "Bet" tab or just watch the next race by clicking "Start Race".
+                            </p>
                         </div>
-                    </div>
-                    <div v-if="LiveRacePositions.length">
-                        <span>Live Results:</span>
-                        <div>
-                            <div class="row list-styling">
-                                <div class="col">
-                                    <div>
-                                        Pos - PP# - Horse (Odds) - Distance - Lengths Back - Speed - Boosts
+                        <br />
+                        <div id="track-container" class="container">
+                            <div id="horse-track">
+                                <div id="finish-line"></div>
+                            </div>
+                        </div>
+                        <div v-if="LiveRacePositions.length">
+                            <span>Live Results:</span>
+                            <div>
+                                <div class="row list-styling">
+                                    <div class="col">
+                                        <div>
+                                            Pos - PP# - Horse (Odds) - Distance - Lengths Back - Speed - Boosts
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <transition-group tag="div" style="list-style-type: none" name="list">
+                                <live-row v-for="(horse, index) in LiveRacePositions"
+                                          v-bind:key="horse.Id + '_' + RaceCounter"
+                                          v-bind:value="horse"></live-row>
+                            </transition-group>
                         </div>
-                        <transition-group tag="div" style="list-style-type: none" name="list">
-                            <live-row v-for="(horse, index) in LiveRacePositions"
-                                      v-bind:key="horse.Id + '_' + RaceCounter"
-                                      v-bind:value="horse"></live-row>
-                        </transition-group>
                     </div>
                 </div>
-            </div>
+            </div>            
         </div><!--END OF VUE JS APP CONTAINER-->
     </div>
     <div class="container">
