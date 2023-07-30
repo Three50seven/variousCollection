@@ -144,11 +144,16 @@
             position: {
                 type: Number,
                 required: true
+            },
+            horseCount: {
+                type: Number,
+                required: true
             }
         },
         data: function () {
             let data = this.value;
             data.Position = this.position;
+            data.HorseCount = this.horseCount;
 
             return data;
         },
@@ -166,7 +171,7 @@
                     return "";
             },
             ShowPayout: function () {
-                if (this.Position === 1 || this.Position === 2 || this.Position === 3)
+                if  (this.HorseCount > 3 && (this.Position === 1 || this.Position === 2 || this.Position === 3))
                     return UTILITIES.CurrencyFormatter(MIN_BET * this.OddsRatio * SHOW_MULTIPLIER + MIN_BET);
                 else
                     return "";
@@ -445,7 +450,7 @@
                     return trackConditions.find(({ Name }) => Name === "Muddy").Name;
                 else if (raceSpeedAdjInterval > 150 && raceSpeedAdjInterval <= 175)
                     return trackConditions.find(({ Name }) => Name === "Sloppy").Name;
-                else if (raceSpeedAdjInterval > 175 && raceSpeedAdjInterval <= 200)
+                else if (raceSpeedAdjInterval > 175)
                     return trackConditions.find(({ Name }) => Name === "Slow").Name;
             }
         },
@@ -902,10 +907,59 @@
                     currentRaceBets.forEach(bet => {
                         let betResults = 0,
                             betVerb = "came in",
-                            winHorse = data.CurrentRaceResults[0],
-                            placeHorse = data.CurrentRaceResults[1],
-                            showHorse = data.CurrentRaceResults[2],
+                            betTie = "",
+                            //winHorses = [],
+                            //placeHorses = [],
+                            //showHorses = [],
+                            //firstHorse = data.CurrentRaceResults[0],
+                            //secondHorse = data.CurrentRaceResults[1],
+                            //thirdHorse = data.CurrentRaceResults[2],                            
+                            //fourthHorse = data.CurrentRaceResults[3],
+                            //fifthHorse = data.CurrentRaceResults[4],
                             horseOddsRatio = 0;
+
+                        //TODO: Continue working on tie breaker
+                        //winHorses.push(firstHorse);
+                        //placeHorses.push(secondHorse);
+                        //showHorses.push(thirdHorse);
+
+                        //// check if there were any ties between win/place/show:
+                        //if (firstHorse.FinishTime == secondHorse.FinishTime) {
+                        //    winHorses.push(secondHorse);
+                        //    showHorses = []; //reset show, since there will not be one during a tie
+                        //    betTie = " (tied for 1st)";
+
+                        //    if (firstHorse.FinishTime == thirdHorse.FinishTime) { //3-way ties are unlikely, but accounted for nonetheless
+                        //        winHorses.push(thirdHorse);
+                        //        placeHorses = []; //reset place, since there will not be one during a tie
+                        //        betTie = " (tied for 1st)";
+                        //    }
+                        //}
+                        //if (secondHorse.FinishTime == thirdHorse.FinishTime) {
+                        //    placeHorses.push(thirdHorse);
+                        //    showHorses = []; //reset show, since there will not be one during a tie
+                        //    betTie = " (tied for 2nd)";
+
+                        //    if (secondHorse.FinishTime == fourthHorse.FinishTime) { //3-way ties are unlikely, but accounted for nonetheless
+                        //        placeHorses.push(fourthHorse);
+                        //        betTie = " (tied for 2nd)";
+                        //    }
+                        //}
+                        //if (thirdHorse.FinishTime == fourthHorse.FinishTime) {
+                        //    showHorses.push(fourthHorse);
+                        //    betTie = " (tied for 3rd)";
+
+                        //    if (thirdHorse.FinishTime == fifthHorse.FinishTime) { //3-way ties are unlikely, but accounted for nonetheless
+                        //        placeHorses.push(fifthHorse);
+                        //        betTie = " (tied for 3rd)";
+                        //    }
+                        //}
+
+                        // now set win/place/show after factoring in any ties:
+                        let winHorse = data.CurrentRaceResults[0], //winHorses.find(({ PolePosition }) => PolePosition === bet.HorseSelected),
+                            placeHorse = data.CurrentRaceResults[1], //placeHorses.find(({ PolePosition }) => PolePosition === bet.HorseSelected),
+                            showHorse = data.CurrentRaceResults[2]; //showHorses.find(({ PolePosition }) => PolePosition === bet.HorseSelected);
+
 
                         // get the odds ratio for bet calculations
                         if (winHorse.PolePosition == bet.HorseSelected) {
@@ -960,7 +1014,7 @@
                         if (betResults > 0) {
                             player.AccountBalance = player.AccountBalance + betResults;
                             bet.Payout = betResults;
-                            bet.BetResultMessage = "Congratulations! Horse #" + bet.HorseSelected + " " + betVerb + "! You won " + data.GetFormattedCurrency(betResults) + " on Race #" + data.CurrentRaceToRun.RaceNumber + ".";
+                            bet.BetResultMessage = "Congratulations! Horse #" + bet.HorseSelected + " " + betVerb + betTie + "! You won " + data.GetFormattedCurrency(betResults) + " on Race #" + data.CurrentRaceToRun.RaceNumber + ".";
                         }
                         else {
                             bet.Payout = bet.TotalCost * -1;

@@ -233,6 +233,7 @@
                                     <payout-row v-for="(horse, index) in CurrentRaceResults"
                                                 v-bind:key="horse.Id + '_' + CurrentRace.Id"
                                                 v-bind:value="horse"
+                                                v-bind:horse-count="CurrentRace.Horses.length"
                                                 v-bind:position="index + 1"></payout-row>
                                 </div>
                             </div>
