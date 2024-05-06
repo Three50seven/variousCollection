@@ -65,7 +65,7 @@ MODULES.DataSets = (function () {
 
     const adverbs = ['always', 'sometimes'];
 
-    const derbyWinners = ["Mage", "Rich Strike", "Mandaloun", "Authentic", "Country House", "Justify", "Always Dreaming", "Nyquist", "American Pharoah", "California Chrome",
+    const derbyWinners = ["Mystik Dan", "Mage", "Rich Strike", "Mandaloun", "Authentic", "Country House", "Justify", "Always Dreaming", "Nyquist", "American Pharoah", "California Chrome",
         "Orb", "I'll Have Another", "Animal Kingdom", "Super Saver", "Mine That Bird", "Big Brown", "Street Sense", "Barbaro", "Giacomo", "Smarty Jones", "Funny Cide",
         "War Emblem", "Monarchos", "Fusaichi Pegasus", "Charismatic", "Real Quiet", "Silver Charm", "Grindstone", "Thunder Gulch", "Go for Gin", "Sea Hero", "Lil E. Tee",
         "Strike the Gold", "Unbridled", "Sunday Silence", "Winning Colors", "Alysheba", "Ferdinand", "Spend A Buck", "Swale", "Sunny's Halo", "Gato Del Sol", "Pleasant Colony",
