@@ -700,7 +700,8 @@
                 let data = this,
                     currentRaceId = data.CurrentRaceToRun.Id,
                     raceFavorites = data.CurrentRaceToRun.Horses.toSortedArray("OddsRatio", "asc"),
-                    trackFinishLine = TRACK_LENGTH - ICON_WIDTH;
+                    trackFinishLine = TRACK_LENGTH - ICON_WIDTH,
+                    progressIndicator = document.getElementById('race-range-progress');
 
                 // flag that the race has started
                 data.RaceIsStarted = true;
@@ -725,6 +726,10 @@
                         trackContainer.scrollTo(trackContainer.scrollLeft + TRACK_SCROLL_SPEED, 0);
                     }
 
+                    // move the progress indicator - WIP - just using a range indicator for now - wish to change over to pill-shaped track SVG with dot indicator or something similar
+                    progressIndicator.value = data.RaceTime / TRACK_SCROLL_SPEED; // the percentage as the input type range value
+                    //console.log("progress indicator: " + data.RaceTime / TRACK_SCROLL_SPEED)
+
                     // Move each icon by a different random amount between 1 and 5.
                     data.HorseIcons.forEach((icon, i) => {
                         let currentIconPosition = parseInt(icon.style.left)
@@ -744,7 +749,7 @@
                                 speed = 1;
 
                             //if the horse odds, jockey or trainer ratings are great and x # of intervals have gone by, the horse has a possibility of moving a bit faster
-                            //alternatively, they have a potential to move a bit slower if their odds, jockey, or trainer raining are poor
+                            //alternatively, they have a potential to move a bit slower if their odds, jockey, or trainer rating are poor
                             if (data.RaceTime % speedAdjustmentInterval == 0) {
                                 if (currentHorseOddsRatio <= thirdHorseFavoriteOddsRatio)
                                     calculatedMaxIconMovement += 1;
@@ -818,6 +823,7 @@
                             data.LiveRacePositions = [];
                             data.GetRaceResults();
                             data.RaceTime = 0; //reset the race time for the next race
+                            progressIndicator.value = 0;
                             currentRaceId++;
                             //when there are more races, setup the next race
                             if (currentRaceId <= NUMBER_OF_RACES - 1) {
