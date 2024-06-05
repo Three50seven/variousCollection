@@ -11,7 +11,7 @@
         ICON_WIDTH = 20, // width of horse icon - used in determining if a horse if finished with a race, this needs to match the .pole-position width
         TRACK_FINISH_LINE = TRACK_LENGTH - ICON_WIDTH, // distance a horse needs to run in order to complete a race
         RACE_INTERVAL_SPEED = 100, // controls how fast the horses move on the track (e.g. 1000 = horse is moved every second), lower numbers = faster movements, higher numbers = slower movements
-        TRACK_SCROLL_SPEED = 2.8, // higher number makes the track scroll faster as the horse icons are moved per interval
+        TRACK_SCROLL_SPEED = 2.9, // higher number makes the track scroll faster as the horse icons are moved per interval
         WIN_MULTIPLIER = 1, // TODO: factor in a betting or facility fee, also we may want to adjust these multipliers to make them more realistic
         PLACE_MULTIPLIER = .5,
         SHOW_MULTIPLIER = .25,
