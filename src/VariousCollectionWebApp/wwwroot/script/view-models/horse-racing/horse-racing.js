@@ -1,24 +1,25 @@
 ﻿(function () {
     const ODDS_LIMITER = 99,
         NUMBER_OF_RACES = 10,
-        MIN_HORSES = 3, //at least 3 horses are required for race, with a max of 24
+        MIN_HORSES = 3, // at least 3 horses are required for race, with a max of 24
         MAX_HORSES = 24,
         COMMON_MAX_HORSES = 10,
         MAX_ICON_MOVEMENT = 5,
         MIN_BET = 2,
         TRACK_LENGTH = 1000, // length of track to reach finish line
-        ICON_HEIGHT = 20, //height of an icon - setting here, since elements added to DOM do not have a height, this needs to match the horse-racing.css class .pole-position height property
-        ICON_WIDTH = 20, //width of horse icon - used in determining if a horse if finished with a race, this needs to match the .pole-position width
-        RACE_INTERVAL_SPEED = 100, // controls how fast the divs move on the track (e.g. 1000 = horse is moved every second), lower numbers = faster movements, higher numbers = slower movements
-        TRACK_SCROLL_SPEED = 3, // higher number makes the track scroll faster as the horse icons are moved per interval - TODO: this may be more accurate as a ratio of RACE_INTERVAL_SPEED instead of just hard-coded
-        WIN_MULTIPLIER = 1, //TODO: factor in a betting or facility fee, also we may want to adjust these multipliers to make them more realistic
+        ICON_HEIGHT = 20, // height of an icon - setting here, since elements added to DOM do not have a height, this needs to match the horse-racing.css class .pole-position height property
+        ICON_WIDTH = 20, // width of horse icon - used in determining if a horse if finished with a race, this needs to match the .pole-position width
+        TRACK_FINISH_LINE = TRACK_LENGTH - ICON_WIDTH, // distance a horse needs to run in order to complete a race
+        RACE_INTERVAL_SPEED = 100, // controls how fast the horses move on the track (e.g. 1000 = horse is moved every second), lower numbers = faster movements, higher numbers = slower movements
+        TRACK_SCROLL_SPEED = 2.8, // higher number makes the track scroll faster as the horse icons are moved per interval
+        WIN_MULTIPLIER = 1, // TODO: factor in a betting or facility fee, also we may want to adjust these multipliers to make them more realistic
         PLACE_MULTIPLIER = .5,
         SHOW_MULTIPLIER = .25,
-        JOCKEY_RATING_BOOST = 3, //any horse with a jockey rating >= JOCKEY_RATING_BOOST will potentially get a speed boost at certain intervals
-        JOCKEY_RATING_REDUCTION = 2, //a really bad jockey rating will potentially lower the horses speed at certain intervals of the race
+        JOCKEY_RATING_BOOST = 3, // any horse with a jockey rating >= JOCKEY_RATING_BOOST will potentially get a speed boost at certain intervals
+        JOCKEY_RATING_REDUCTION = 2, // a really bad jockey rating will potentially lower the horses speed at certain intervals of the race
         TRAINER_RATING_BOOST = 3,
         TRAINER_RATING_REDUCTION = 2,
-        ODDS_SPEED_REDUCTION = 20; //when a horses odds ratio is >= to ODDS_SPEED_REDUCTION, they will potentially have a speed reduction
+        ODDS_SPEED_REDUCTION = 20; // when a horses odds ratio is >= to ODDS_SPEED_REDUCTION, they will potentially have a speed reduction
 
     let model = new Object;
 
@@ -700,19 +701,16 @@
                 let data = this,
                     currentRaceId = data.CurrentRaceToRun.Id,
                     raceFavorites = data.CurrentRaceToRun.Horses.toSortedArray("OddsRatio", "asc"),
-                    trackFinishLine = TRACK_LENGTH - ICON_WIDTH,
+                    trackContainer = document.getElementById('track-container'),
                     progressIndicator = document.getElementById('race-range-progress');
 
                 // flag that the race has started
                 data.RaceIsStarted = true;
-                data.CurrentRaceToRun.IsStarted = true;
-
-                const trackContainer = document.getElementById('track-container');
-                const trackContainerScrollWidth = trackContainer.scrollWidth;
+                data.CurrentRaceToRun.IsStarted = true;                
 
                 // check if a horse is finished
                 function isFinished(icon) {
-                    return parseInt(icon.style.left) >= trackFinishLine;
+                    return parseInt(icon.style.left) >= TRACK_FINISH_LINE;
                 }
 
                 console.log("speedAdjustmentInterval", data.CurrentRaceToRun.SpeedAdjustmentInterval);
@@ -721,14 +719,8 @@
                 data.RaceInterval = setInterval(() => {
                     data.RaceTime++;
 
-                    //scroll to end of track as horses move
-                    if (trackContainer.scrollLeft !== trackContainerScrollWidth) {
-                        trackContainer.scrollTo(trackContainer.scrollLeft + TRACK_SCROLL_SPEED, 0);
-                    }
-
-                    // move the progress indicator - WIP - just using a range indicator for now - wish to change over to pill-shaped track SVG with dot indicator or something similar
-                    progressIndicator.value = data.RaceTime / TRACK_SCROLL_SPEED; // the percentage as the input type range value
-                    //console.log("progress indicator: " + data.RaceTime / TRACK_SCROLL_SPEED)
+                    data.UpdateTrackScroller(trackContainer);
+                    data.UpdateRaceProgress(progressIndicator);
 
                     // Move each icon by a different random amount between 1 and 5.
                     data.HorseIcons.forEach((icon, i) => {
@@ -738,10 +730,9 @@
                         icon.classList.add("horse-racing-icon-moving");
 
                         //keep horse moving if it's not finished yet
-                        if (currentIconPosition < trackFinishLine) {
+                        if (currentIconPosition < TRACK_FINISH_LINE) {
                             let currentHorse = data.CurrentRaceToRun.Horses.find(({ PolePosition }) => PolePosition === parseInt(icon.id.replace("pp", ""))),
                                 speedAdjustmentInterval = data.CurrentRaceToRun.SpeedAdjustmentInterval,
-                                //currentHorse = data.CurrentRaceToRun.Horses[i],
                                 currentHorseOddsRatio = currentHorse.OddsRatio,
                                 thirdHorseFavoriteOddsRatio = raceFavorites[2].OddsRatio,
                                 calculatedMaxIconMovement = MAX_ICON_MOVEMENT,
@@ -813,7 +804,7 @@
                                 currentHorse.FinishTime = data.RaceTime;
                                 currentHorse.AverageSpeed = (currentHorse.TotalSpeed / currentHorse.FinishTime).toFixed(2);
                                 data.FinishOrder.push(icon.id);
-                                icon.style.left = trackFinishLine;
+                                icon.style.left = TRACK_FINISH_LINE;
                             }
                         }
 
@@ -822,8 +813,7 @@
                             data.StopRace();                            
                             data.LiveRacePositions = [];
                             data.GetRaceResults();
-                            data.RaceTime = 0; //reset the race time for the next race
-                            progressIndicator.value = 0;
+                            data.RaceTime = 0; //reset the race time for the next race                            
                             currentRaceId++;
                             //when there are more races, setup the next race
                             if (currentRaceId <= NUMBER_OF_RACES - 1) {
@@ -831,10 +821,37 @@
                                 data.CurrentRaceToRun = data.Races[currentRaceId];
                                 data.SetupNextRace();
                                 trackContainer.scrollLeft = 0; //go back to beginning of track
+                                progressIndicator.value = 0; //reset progress indicator
                             }
                         }
                     });
                 }, RACE_INTERVAL_SPEED);
+            },
+            UpdateTrackScroller: function (trackContainer) {
+                const trackContainerScrollWidth = trackContainer.scrollWidth;
+
+                //scroll to end of track as horses move
+                if (trackContainer.scrollLeft !== trackContainerScrollWidth) {
+                    trackContainer.scrollTo(trackContainer.scrollLeft + TRACK_SCROLL_SPEED, 0);
+                }
+            },
+            UpdateRaceProgress: function (progressIndicator) {
+                let data = this,                    
+                    progressValue = 0;
+
+                const property = "CurrentDistance";
+
+                // move the progress indicator - WIP - just using a range indicator for now - wish to change over to pill-shaped track SVG with dot indicator or something similar                
+                let leadingHorse = data.CurrentRaceToRun.Horses.reduce((max, obj) => {
+                    return obj[property] > max[property] ? obj : max;
+                });
+
+                //console.log("leadingHorseDist: " + leadingHorse.CurrentDistance);
+
+                progressValue = (leadingHorse.CurrentDistance / TRACK_FINISH_LINE) * 100;
+                progressIndicator.value = progressValue; // the current value of the lead horse
+
+                //console.log("progress indicator: " + progressValue);
             },
             StopRace: function () {
                 let data = this;
