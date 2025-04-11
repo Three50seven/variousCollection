@@ -1,33 +1,24 @@
-﻿/// <binding AfterBuild='local-build' ProjectOpened='project-open' />
-//START_HERE => Fix Gulpfile errors SyntaxError: Unexpected token: name (first)
+/// <binding AfterBuild='local-build' ProjectOpened='project-open' />
+const gulp = require('gulp');
+const uglify = require('gulp-uglify');
+const concat = require('gulp-concat');
+const newer = require('gulp-newer');
+const del = require('del');
+const sourcemaps = require('gulp-sourcemaps');
+const path = require('path');
+const fs = require('fs');
+const cleanCSS = require('gulp-clean-css');
 
-"use strict";
-
-var settings = {
+const settings = {
     paths: {
         scriptsDestDirectory: "./wwwroot/assets/js/",
         stylesDestDirectory: "./wwwroot/assets/css/"
-        //,htmlBasePath: "./partials/" //IF USING THIS, ADD "gulp-html-partial": "1.0.1" TO THE package.json file
     },
     basePath: "./wwwroot/" // appended to filepaths defined in bundle.Files
-    //,htmlSource: "./working-files/*.html"
 };
 
-var gulp = require("gulp"),
-    concat = require("gulp-concat"),
-    cssmin = require("gulp-cssmin"),
-    uglify = require("gulp-uglify-es").default,
-    newer = require("gulp-newer"),
-    clean = require('gulp-clean'),
-    del = require("del"),
-    vinyl = require('vinyl'),
-    //sass = require('gulp-sass'),
-    sourcemaps = require('gulp-sourcemaps'),
-    autoprefixer = require('gulp-autoprefixer');
-    //htmlPartial = require('gulp-html-partial');
+const bundles = require('./assetbundles.json');
 
-// get bundle definitions from json config file
-var bundles = require("./assetbundles.json");
 
 // build out script bundles based on explicitly defined "type" or check file extension of first file in list
 var scriptBundles = bundles.filter(function (item) {
@@ -199,9 +190,9 @@ function BundleJS(newerOnly) {
                     })
                     .pipe(concat(dest))
                     .pipe(uglify()) //COMMENT OUT pipe(uglify()) SECTION TO PREVENT MINIFYING OF JAVASCRIPT FILES (MIGHT HAVE TO DELETE MIN FILE IN wwwroot\js\ SUB-DIRECTORIES
-                        .on('error', function (e) {
-                            console.log(e);
-                        })
+                    .on('error', function (e) {
+                        console.log(e);
+                    })
                     .pipe(gulp.dest("."))
                     .on("end", function () {
                         completedCount++;
@@ -256,7 +247,7 @@ gulp.task("bundle-css", async function () {
 
             gulp.src(files, { base: "." })
                 .pipe(concat(dest))
-                .pipe(cssmin())
+                .pipe(cleanCSS())
                 .pipe(gulp.dest("."));
         }
     }
@@ -335,9 +326,9 @@ gulp.task("json:transform", async function () {
     }
 });
 
-gulp.task("local-build", gulp.series("bundle-js", "bundle-css")); //, "bundle-html"]);
+gulp.task("local-build", gulp.series("bundle-js", "bundle-css"));
 
-gulp.task("build", gulp.series("bundle-js-full", "bundle-css")); //, "bundle-html"]);
+gulp.task("build", gulp.series("bundle-js-full", "bundle-css"));
 
 gulp.task("local-web-proj-clean", async function () {
 
@@ -354,14 +345,6 @@ gulp.task("copy-local-content-to-wwwroot", async function () {
 });
 
 gulp.task("project-open", gulp.series("copy-local-content-to-wwwroot"));
-
-// CSS Autoprefixer
-// adds custom cutting-edge styles for specific browsers
-gulp.task('autoprefixer', async function () {
-    gulp.src('./wwwroot/css/styles.css', { base: "./" })
-        .pipe(autoprefixer())
-        .pipe(gulp.dest('.'));
-});
 
 gulp.task('print-node-version', async function () {
     console.log("Node Version: " + process.version);
