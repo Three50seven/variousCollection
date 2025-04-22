@@ -1,6 +1,21 @@
-﻿//TODO: 1/31/2019 - THIS IS NOT CUSTOMIZED FOR THIS PROJECT
-MODULES.Environment = (function () {
+﻿MODULES.Environment = (function () {
+    const themeButton = document.getElementById('theme-switch-button');
+    const themeIcon = document.getElementById('switch-theme-icon');
+    const body = document.body;
 
+    themeButton.addEventListener('click', () => {
+        const currentTheme = body.getAttribute('data-bs-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        body.setAttribute('data-bs-theme', newTheme);
+
+        // Update the icon based on the new theme
+        themeIcon.setAttribute('src', newTheme === 'dark'
+            ? '../../images/icon/moon.svg'
+            : '../../images/icon/sun.svg');
+    });
+
+    //TODO: 1/31/2019 - MOST OF THIS IS NOT CUSTOMIZED FOR THIS PROJECT - other than the theme switcher above
     function IsDebug() {
         return $.toBool($("#isDebugMode").val());
     }
@@ -29,7 +44,7 @@ MODULES.Environment = (function () {
 
         // other browser
         return false;
-    }
+    }    
 
     return {
         IsIE: function () {
