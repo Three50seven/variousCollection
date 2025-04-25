@@ -1,4 +1,33 @@
-﻿p {
+﻿:root {
+    --selected-bg-light: #d6cfcf; /* A lighter color for light theme */
+    --selected-bg-dark: #745757; /* Your original color for dark theme */
+    --active-bg-light: #e9ecef; /* Light theme color */
+    --active-bg-dark: #745757; /* Dark theme color */
+    --active-text-light: #000; /* Text color for light theme */
+    --active-text-dark: #fff; /* Text color for dark theme */
+    --btn-bg-light: #f8f9fa; /* Light theme button background */
+    --btn-bg-dark: #343a40; /* Dark theme button background */
+    --btn-border-light: #ced4da; /* Light theme border color */
+    --btn-border-dark: #495057; /* Dark theme border color */
+    --btn-text-light: #000; /* Light theme text */
+    --btn-text-dark: #fff; /* Dark theme text */
+}
+
+.btn-theme-aware {
+    background-color: var(--btn-bg-light); /* Default to light theme */
+    color: var(--btn-text-light);
+    border-color: var(--btn-border-light);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Smooth transitions */
+}
+
+[data-bs-theme="dark"] .btn-theme-aware {
+    background-color: var(--btn-bg-dark); /* Adjust for dark theme */
+    color: var(--btn-text-dark);
+    border-color: var(--btn-border-dark);
+}
+
+
+p {
     padding-left: 10px;
 }
 
@@ -26,7 +55,13 @@ button:focus {
 }
 
 .row-selected {
-    background-color: #745757;
+    background-color: var(--selected-bg-light); /* Default to light theme */
+    color: var(--bs-dark); /* Ensure text is dark on light background */
+}
+
+[data-bs-theme="dark"] .row-selected {
+    background-color: var(--selected-bg-dark); /* Adjust for dark theme */
+    color: var(--bs-light); /* Ensure text is light on dark background */
 }
 
 /*Race Menu dropdown*/
@@ -453,9 +488,16 @@ button:focus {
     position: absolute;
 }
 
-.nav-pills .nav-link.secondary.active, .nav-pills .show > .nav-link {
-    background-color: #6c757d !important;
+.nav-pills .nav-link.active {
+    background-color: var(--active-bg-light); /* Default to light theme */
+    color: var(--active-text-light);
 }
+
+[data-bs-theme="dark"] .nav-pills .nav-link.active {
+    background-color: var(--active-bg-dark); /* Adjust for dark theme */
+    color: var(--active-text-dark);
+}
+
 
 /*Bet Row Transitions*/
 .div-list-move, /* apply transition to moving elements */

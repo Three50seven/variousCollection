@@ -51,7 +51,7 @@
                     <h4>Race: {{ CurrentRaceToRun.RaceNumber }} <span class="text-tiny border border-secondary">{{ RaceTimeToPost }}</span></h4>                    
                 </div>
             </div>
-            <div class="row border rounded">               
+            <div class="card row bg-light-subtle p-3">
                 <div class="col text-center">
                     <div>
                         Account Balance: <span class="account-balance">{{ GetFormattedCurrency(CurrentPlayer.AccountBalance) }}</span>
@@ -80,7 +80,8 @@
             <br />
             <div class="text-center">
                 <div class="btn-group-sides">
-                    <button class="btn-side-left btn btn-secondary margin-all" type="button" value="Previous Race"
+                    <button class="btn-side-left btn btn-theme-aware margin-all"
+                            type="button" value="Previous Race"
                             v-on:click.prevent="PreviousRace">
                         << {{ PreviousRaceText }}
                     </button>
@@ -97,7 +98,8 @@
                                        v-bind:value="race"></race-menu>
                         </ul>
                     </div>
-                    <button class="btn-side-right btn btn-secondary margin-all" type="button" value="Next Race"
+                    <button class="btn-side-right btn btn-theme-aware margin-all" 
+                            type="button" value="Next Race"
                             v-on:click.prevent="NextRace">
                         >> {{ NextRaceText }}
                     </button>
@@ -105,16 +107,28 @@
                 <br />
                 <span class="text-small">Track Condition: {{ TrackCondition }}</span>
             </div>
-            <div class="row border rounded padding-all">
+            <div class="card row bg-light-subtle p-3">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active border border-info rounded" id="pills-bet-tab" data-bs-toggle="pill" data-bs-target="#pills-bet" type="button" role="tab" aria-controls="pills-bet" aria-selected="true">Bet</button>
+                        <button class="nav-link active border rounded" id="pills-bet-tab"
+                                data-bs-toggle="pill" data-bs-target="#pills-bet"
+                                type="button" role="tab" aria-controls="pills-bet" aria-selected="true">
+                            Bet
+                        </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link border border-info rounded" id="pills-results-tab" data-bs-toggle="pill" data-bs-target="#pills-results" type="button" role="tab" aria-controls="pills-results" aria-selected="false">Results</button>
+                        <button class="nav-link border rounded" id="pills-results-tab"
+                                data-bs-toggle="pill" data-bs-target="#pills-results"
+                                type="button" role="tab" aria-controls="pills-results" aria-selected="false">
+                            Results
+                        </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link border border-info rounded" id="pills-race-tab" data-bs-toggle="pill" data-bs-target="#pills-race" type="button" role="tab" aria-controls="pills-race" aria-selected="false">Race</button>
+                        <button class="nav-link border rounded" id="pills-race-tab"
+                                data-bs-toggle="pill" data-bs-target="#pills-race"
+                                type="button" role="tab" aria-controls="pills-race" aria-selected="false">
+                            Race
+                        </button>
                     </li>
                 </ul>
                 <hr />
@@ -122,10 +136,14 @@
                     <div class="tab-pane fade show active" id="pills-bet" role="tabpanel" aria-labelledby="pills-bet-tab">
                         <ul class="nav nav-pills mb-3" id="pills-tab-bets" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link secondary active border border-secondary rounded" id="pills-bet-placement-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-placement" type="button" role="tab" aria-controls="pills-bet-placement" aria-selected="true">Place Bets</button>
+                                <button class="nav-link active border border-secondary rounded" id="pills-bet-placement-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-placement" type="button" role="tab" aria-controls="pills-bet-placement" aria-selected="true">
+                                    Place Bets
+                                </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link secondary border border-secondary rounded transform" id="pills-bet-player-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-player" type="button" role="tab" aria-controls="pills-bet-player" aria-selected="false">Player Bets ({{ ActivePlayerBets.length }})</button>
+                                <button class="nav-link border border-secondary rounded" id="pills-bet-player-tab" data-bs-toggle="pill" data-bs-target="#pills-bet-player" type="button" role="tab" aria-controls="pills-bet-player" aria-selected="false">
+                                    Player Bets ({{ ActivePlayerBets.length }})
+                                </button>
                             </li>
                         </ul>
                         <h4>Betting:</h4>
@@ -136,22 +154,46 @@
                                 <p>NOTE: some bet types will be disabled depending on the number of horses in the race.</p>
                                 <div class="text-warning" v-if="ErrorMessage.length != 0">{{ ErrorMessage }}</div>
                                 <div class="container">
-                                    <div v-if="!RaceIsStarted && !PlayerHasBet" class="d-inline-block">
-                                        <select v-model="SelectedBetTypeId">
-                                            <option disabled value="0" selected>Bet Type</option>
-                                            <option v-for="type in BetTypes" :disabled="type.disabled" :value="type.Id">{{type.Name}}</option>
-                                        </select>
-                                        &nbsp;&nbsp;
-                                        <span>Amount Bet: $<input v-model="BetAmount" type="number"></span>
-                                        <span class="small">&nbsp;Minimum Bet: $2</span>
-                                        &nbsp;&nbsp;
-                                        <button class="btn btn-primary"
-                                                value="Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}"
-                                                v-if="BetIsValid"
-                                                v-on:click="PlaceBet">
-                                            Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}
-                                        </button>
-                                        <br />
+                                    <div v-if="!RaceIsStarted && !PlayerHasBet" class="container">
+                                        <!-- Row for the select and input fields -->
+                                        <div class="row align-items-center mb-3">
+                                            <!-- Select dropdown with label -->
+                                            <div class="col-md-6 d-flex align-items-center">
+                                                <label for="bet-type" class="form-label me-2">Bet Type:</label>
+                                                <select id="bet-type" class="form-select" v-model="SelectedBetTypeId">
+                                                    <option disabled value="0" selected>Bet Type</option>
+                                                    <option v-for="type in BetTypes" :disabled="type.disabled" :value="type.Id">{{type.Name}}</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Input field with dollar symbol -->
+                                            <div class="col-md-6 d-flex align-items-center">
+                                                <label for="bet-amount" class="form-label">Bet Amount:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input id="bet-amount" class="form-control" v-model="BetAmount" type="number" min="0">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Minimum bet text -->
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <span class="small">&nbsp;Minimum Bet: $2</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Button -->
+                                        <div class="row">
+                                            <div class="col">
+                                                <button class="btn btn-primary w-100"
+                                                        value="Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}"
+                                                        v-if="BetIsValid"
+                                                        v-on:click="PlaceBet">
+                                                    Place Bet: {{ GetFormattedCurrency(TotalCostOfBet) }}
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col">
