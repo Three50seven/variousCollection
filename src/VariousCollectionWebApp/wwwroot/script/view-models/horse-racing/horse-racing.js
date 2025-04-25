@@ -19,7 +19,8 @@
         JOCKEY_RATING_REDUCTION = 2, // a really bad jockey rating will potentially lower the horses speed at certain intervals of the race
         TRAINER_RATING_BOOST = 3,
         TRAINER_RATING_REDUCTION = 2,
-        ODDS_SPEED_REDUCTION = 20; // when a horses odds ratio is >= to ODDS_SPEED_REDUCTION, they will potentially have a speed reduction
+        ODDS_SPEED_REDUCTION = 20, // when a horses odds ratio is >= to ODDS_SPEED_REDUCTION, they will potentially have a speed reduction
+        MAX_NUMBER_OF_PLAYERS = 100; // cap players at this amount
 
     let model = new Object;
 
@@ -46,6 +47,7 @@
         model.BetFilters = MODULES.DataSets.BET_FILTERS;
 
     model.ErrorMessage = "";
+    model.PlayerErrorMessage = "";
     model.FinishOrder = [];
     model.RaceMenuIsShowing = false;
     model.RaceIsStarted = false;
@@ -480,10 +482,22 @@
             AddPlayer: function () {
                 let data = this,
                     addPlayerBtn = document.getElementById("add-player-btn"),
-                    playerArrayLength = data.Players.length,
-                    newPlayer = new MODULES.Constructors.HorseRacing.Player(playerArrayLength, playerArrayLength + 1, UTILITIES.getRandomAnimalWithAdjective(true), [], data.StartingAccountBalance);
+                    playerArrayLength = data.Players.length;
+                                    
+                if (playerArrayLength >= MAX_NUMBER_OF_PLAYERS) {
+                    data.PlayerErrorMessage = "Maximum number of players reached!";
+                    return;
+                }
 
-                data.AddItemTranform(addPlayerBtn);
+                let newPlayer = new MODULES.Constructors.HorseRacing.Player(
+                    playerArrayLength,
+                    playerArrayLength + 1,
+                    UTILITIES.getRandomAnimalWithAdjective(true),
+                    [],
+                    data.StartingAccountBalance
+                );
+
+                data.AddItemTranform(addPlayerBtn);                
 
                 data.Players.push(newPlayer);
             },

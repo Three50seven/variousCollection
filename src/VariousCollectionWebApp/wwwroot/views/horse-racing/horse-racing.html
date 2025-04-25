@@ -75,6 +75,7 @@
                             v-on:click.prevent="AddPlayer">
                         Add Player ({{ Players.length }})
                     </button>
+                    <div class="text-warning" v-if="PlayerErrorMessage.length != 0">{{ PlayerErrorMessage }}</div>
                 </div>
             </div>
             <br />
