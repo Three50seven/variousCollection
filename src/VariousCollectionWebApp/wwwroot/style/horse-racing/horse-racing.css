@@ -26,7 +26,6 @@
     border-color: var(--btn-border-dark);
 }
 
-
 p {
     padding-left: 10px;
 }
@@ -592,6 +591,26 @@ button:focus {
 }
     .transform-active::after {
         content: "+";
+    }
+
+#race-range-progress {
+    -webkit-appearance: none; /* Remove default styling */
+    width: 300px; /* Adjust width of the range */
+    height: 30px; /* Height of the oval */
+    border-radius: 15px; /* Makes it an oval */
+    background: linear-gradient(to right, #4CAF50, #81C784); /* Gradient color for the track */
+    outline: none; /* Removes the outline */
+    cursor: pointer;
+}
+
+    #race-range-progress::-webkit-slider-thumb, #race-range-progress::-moz-range-thumb {
+        -webkit-appearance: none; /* Remove default styling for the thumb */
+        width: 30px; /* Width of the thumb */
+        height: 30px; /* Height of the thumb */
+        border-radius: 50%; /* Makes the thumb circular */
+        background: #FFFFFF; /* Thumb color */
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); /* Adds shadow to thumb */
+        cursor: pointer;
     }
 
 /* Style for Vue.js "cloak" functionality that basically hides the html
