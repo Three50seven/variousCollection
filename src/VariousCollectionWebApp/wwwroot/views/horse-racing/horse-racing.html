@@ -347,7 +347,50 @@
                             <p v-if="!BetIsValid">
                                 Place your bet on the "Bet" tab or just watch the next race by clicking "Start Race".
                             </p>
-                            <p><input id="race-range-progress" type="range" value="0" readonly /></p>
+                            <div class="race-progress-svg-container">
+                                <svg id="race-track-svg"
+                                     viewBox="0 0 300 120"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     width="100%"
+                                     height="auto"
+                                     preserveAspectRatio="xMidYMid meet">
+                                    <!-- Define Gradient -->
+                                    <defs>
+                                        <linearGradient id="track-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="#8B4513" />
+                                            <stop offset="100%" stop-color="#D2B48C" />
+                                        </linearGradient>
+                                    </defs>
+
+                                    <!-- Pill-Shaped Track -->
+                                    <path id="pill-track"
+                                          d="M 50,60
+                                           a 50,50 0 0,1 50,-50
+                                           h 100
+                                           a 50,50 0 0,1 50,50
+                                           a 50,50 0 0,1 -50,50
+                                           h -100
+                                           a 50,50 0 0,1 -50,-50"
+                                          fill="none"
+                                          stroke="url(#track-gradient)"
+                                          stroke-width="3"></path>
+
+                                    <!-- Start/Finish Line -->
+                                    <line x1="45"
+                                          y1="60"
+                                          x2="55"
+                                          y2="60"
+                                          stroke="#FFFFFF"
+                                          stroke-width="2"></line>
+
+                                    <!-- Moving Circle -->
+                                    <circle id="progress-circle"
+                                            r="5"
+                                            cx="50"
+                                            cy="60"
+                                            fill="#FFFFFF"></circle>
+                                </svg>
+                            </div>
                         </div>
                         <br />
                         <div id="track-container" class="container">
@@ -371,6 +414,9 @@
                                           v-bind:key="horse.Id + '_' + RaceCounter"
                                           v-bind:value="horse"></live-row>
                             </transition-group>
+                        </div>
+                        <div class="race-progress-container">
+                            <input id="race-range-progress" type="range" value="0" readonly />
                         </div>
                     </div>
                 </div>

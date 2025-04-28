@@ -849,6 +849,22 @@
                     trackContainer.scrollTo(trackContainer.scrollLeft + TRACK_SCROLL_SPEED, 0);
                 }
             },
+            UpdateCirclePosition: function (progressValue) {
+                let progressCircle = document.getElementById("progress-circle"),
+                    pillTrack = document.getElementById("pill-track"),
+                    pathLength = pillTrack.getTotalLength(); // Calculate total length of the path
+                    reversedValue = 100 - progressValue; // move circle counter clockwise around track                
+
+                // Convert percentage completion into path length
+                const pointOnPath = (reversedValue / 100) * pathLength;
+
+                // Get the coordinates of the point on the path
+                const { x, y } = pillTrack.getPointAtLength(pointOnPath);
+
+                // Move the circle to the calculated position
+                progressCircle.setAttribute("cx", x);
+                progressCircle.setAttribute("cy", y);
+            },
             UpdateRaceProgress: function (progressIndicator) {
                 let data = this,                    
                     progressValue = 0;
@@ -860,12 +876,9 @@
                     return obj[property] > max[property] ? obj : max;
                 });
 
-                //console.log("leadingHorseDist: " + leadingHorse.CurrentDistance);
-
                 progressValue = (leadingHorse.CurrentDistance / TRACK_FINISH_LINE) * 100;
                 progressIndicator.value = progressValue; // the current value of the lead horse
-
-                //console.log("progress indicator: " + progressValue);
+                data.UpdateCirclePosition(progressValue); // update pill shape track progress
             },
             StopRace: function () {
                 let data = this;

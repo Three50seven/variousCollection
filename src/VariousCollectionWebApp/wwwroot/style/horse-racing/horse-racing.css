@@ -1,4 +1,5 @@
 ﻿:root {
+    --track-max-width-shared: 1020px;
     --selected-bg-light: #d6cfcf; /* A lighter color for light theme */
     --selected-bg-dark: #745757; /* Your original color for dark theme */
     --active-bg-light: #e9ecef; /* Light theme color */
@@ -174,17 +175,16 @@ button:focus {
 }
 
 #horse-track {
-    width: 1020px;
-    background-color: #964B00;
-    background-image: url("../../images/horse-racing/dirt-track.jpg");
+    width: var(--track-max-width-shared);
+    background: linear-gradient(to right, #8B4513, #D2B48C); /*brown-dirt gradient*/
+    /*background: linear-gradient(to right, #388e3c, #4caf50); /*green-grass gradient*/
     background-repeat: repeat;
     position: relative;
 }
 
 #finish-line {
     width: 20px;
-    background-color: #964B00;
-    background-image: url("../../images/horse-racing/dirt-track.jpg");
+    background-color: #D2B48C;
     border-left: solid;
     border-color: #ffffff;
     float: right;
@@ -196,6 +196,7 @@ button:focus {
 */
 .pole-position {
     text-align: center;
+    white-space: nowrap;
     width: 20px;
     height: 20px;
     position: relative;
@@ -376,6 +377,9 @@ button:focus {
     font-size: .5em;
 }
 
+.container .row > * {
+    padding-left: 0px;
+}
 
 /*table Sorting styles:*/
 .col span.sortable {
@@ -520,6 +524,7 @@ button:focus {
 /*payout row styles*/
 .payout-pp-col {
     max-width: 10%;
+    white-space: nowrap;
 }
 
 .payout-runner-col {
@@ -530,6 +535,7 @@ button:focus {
 
 .payout-col {
     max-width: 20%;
+    white-space: nowrap;
 }
 
 .player-bet {
@@ -593,24 +599,45 @@ button:focus {
         content: "+";
     }
 
+.race-progress-container {
+    max-width: var(--track-max-width-shared);
+    margin: 0 auto; /* Centers the div horizontally */
+    text-align: center; /* Aligns the SVG inside the div */
+}
+
+.race-progress-svg-container {
+    max-width: 50%;
+    margin: 0 auto; /* Centers the div horizontally */
+    text-align: center; /* Aligns the SVG inside the div */
+}
+
 #race-range-progress {
     -webkit-appearance: none; /* Remove default styling */
-    width: 300px; /* Adjust width of the range */
+    width: 100%; /* Adjust width of the range */
     height: 30px; /* Height of the oval */
     border-radius: 15px; /* Makes it an oval */
-    background: linear-gradient(to right, #4CAF50, #81C784); /* Gradient color for the track */
+    background: linear-gradient(to right, #388e3c, #4caf50); /* Gradient color for the track */
     outline: none; /* Removes the outline */
     cursor: pointer;
 }
 
-    #race-range-progress::-webkit-slider-thumb, #race-range-progress::-moz-range-thumb {
-        -webkit-appearance: none; /* Remove default styling for the thumb */
+    #race-range-progress::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Remove default styling for Chrome, Safari */
         width: 30px; /* Width of the thumb */
         height: 30px; /* Height of the thumb */
         border-radius: 50%; /* Makes the thumb circular */
         background: #FFFFFF; /* Thumb color */
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); /* Adds shadow to thumb */
-        cursor: pointer;
+        cursor: pointer; /* Makes the thumb draggable */
+    }
+
+    #race-range-progress::-moz-range-thumb {
+        width: 30px; /* Width of the thumb */
+        height: 30px; /* Height of the thumb */
+        border-radius: 50%; /* Makes the thumb circular */
+        background: #FFFFFF; /* Thumb color */
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); /* Adds shadow to thumb */
+        cursor: pointer; /* Makes the thumb draggable */
     }
 
 /* Style for Vue.js "cloak" functionality that basically hides the html
