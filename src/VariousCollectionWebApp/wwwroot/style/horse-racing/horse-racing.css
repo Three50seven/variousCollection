@@ -27,6 +27,16 @@
     border-color: var(--btn-border-dark);
 }
 
+/* Default (Light Theme) */
+body[data-bs-theme="light"] #progress-circle {
+    fill: #333333; /* Dark gray for visibility on light backgrounds */
+}
+
+/* Dark Theme */
+body[data-bs-theme="dark"] #progress-circle {
+    fill: #FFFFFF; /* White for visibility on dark backgrounds */
+}
+
 p {
     padding-left: 10px;
 }
