@@ -162,7 +162,6 @@
                                             <div class="col-md-6 d-flex align-items-center">
                                                 <label for="bet-type" class="form-label me-2">Bet Type:</label>
                                                 <select id="bet-type" class="form-select" v-model="SelectedBetTypeId">
-                                                    <option disabled value="0" selected>Bet Type</option>
                                                     <option v-for="type in BetTypes" :disabled="type.disabled" :value="type.Id">{{type.Name}}</option>
                                                 </select>
                                             </div>
@@ -351,8 +350,7 @@
                                 <svg id="race-track-svg"
                                      viewBox="0 0 300 120"
                                      xmlns="http://www.w3.org/2000/svg"
-                                     width="100%"
-                                     height="auto"
+                                     width="100%"                                     
                                      preserveAspectRatio="xMidYMid meet">
                                     <!-- Define Gradient -->
                                     <defs>

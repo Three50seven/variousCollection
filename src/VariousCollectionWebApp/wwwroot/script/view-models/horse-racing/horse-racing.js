@@ -40,7 +40,7 @@
     // Betting properties
     model.BetAmount = MIN_BET,
         model.BetTypes = MODULES.DataSets.BET_TYPES,
-        model.SelectedBetTypeId = 0,
+        model.SelectedBetTypeId = 1,
         model.HorseSelected = 0,
         model.BetId = 1,
         model.PlayerBetsFilter = MODULES.DataSets.BET_FILTERS[0], //all
