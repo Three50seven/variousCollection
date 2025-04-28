@@ -398,6 +398,9 @@
                                 <div id="finish-line"></div>
                             </div>
                         </div>
+                        <div class="race-progress-container">
+                            <input id="race-range-progress" type="range" value="0" readonly />
+                        </div>
                         <div v-if="LiveRacePositions.length">
                             <span>Live Results:</span>
                             <div>
@@ -414,9 +417,6 @@
                                           v-bind:key="horse.Id + '_' + RaceCounter"
                                           v-bind:value="horse"></live-row>
                             </transition-group>
-                        </div>
-                        <div class="race-progress-container">
-                            <input id="race-range-progress" type="range" value="0" readonly />
                         </div>
                     </div>
                 </div>
