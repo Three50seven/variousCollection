@@ -20,6 +20,10 @@
     border-color: var(--btn-border-light);
     transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Smooth transitions */
 }
+    .btn-theme-aware:hover {
+        border-color: var(--btn-border-dark); /* Darker hover border */
+    }
+
 
 [data-bs-theme="dark"] .btn-theme-aware {
     background-color: var(--btn-bg-dark); /* Adjust for dark theme */

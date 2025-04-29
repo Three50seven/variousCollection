@@ -240,18 +240,28 @@ gulp.task('bundle-styles-and-css', async function () {
             const files = BuildFiles(styleBundle, styleBundles); // Files for the bundle
             const sassFiles = `${settings.paths.stylesSrcDirectory}/**/*.scss`; // Sass files
 
-            let allFiles = files.concat([sassFiles]); // Combine Sass and bundle files
+            // hold off on SASS for now - too many breaking changes
+            let allFiles = files; //files.concat([sassFiles]); // Combine Sass and bundle files
 
-            const dest = path.join(settings.paths.stylesDestDirectory, styleBundle.subpath || "");
+            let destDir = path.join(settings.paths.stylesDestDirectory, styleBundle.subpath || "");
+            let destFile = styleBundle.filename || `${styleBundle.name}.min.css`;
+
+            // Ensure destDir ends with a trailing slash
+            if (destDir.slice(-1) !== path.sep) {
+                destDir += path.sep; // Use path.sep for cross-platform compatibility
+            }
+
+            // Construct the full path
+            let destFullPath = path.join(destDir, destFile);
 
             gulp.src(allFiles, { base: "." })
-                .pipe(newer(dest)) // Process only newer files
+                .pipe(newer(destFullPath)) // Process only newer files
                 .pipe(sourcemaps.init()) // Initialize sourcemaps
                 .pipe(sass().on('error', sass.logError)) // Compile Sass
                 .pipe(concat(styleBundle.filename || `${styleBundle.name}.min.css`)) // Concatenate
                 .pipe(cleanCSS({ compatibility: 'ie8' })) // Minify
                 .pipe(sourcemaps.write('./')) // Write sourcemaps
-                .pipe(gulp.dest(".")); // Output files
+                .pipe(gulp.dest(destDir)); // Output files
         }
     } else {
         console.log("No CSS bundles found.");
