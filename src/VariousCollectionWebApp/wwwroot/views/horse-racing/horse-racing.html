@@ -32,7 +32,7 @@
         <header class="flex-wrap justify-content-center py-3 mb-4 border-bottom">
             <h1>
                 Horse Racing
-                <button id="theme-switch-button" class="btn btn-primary btn-sm rounded margin-all transform">
+                <button id="theme-switch-button" class="btn btn-sm btn-theme-aware rounded margin-all transform">
                     <img id="switch-theme-icon" src="../../images/icon/moon.svg" />
                 </button>
             </h1>            
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                     </div>
-                    <button id="add-player-btn" class="btn btn-primary btn-sm rounded margin-all transform" type="button" value="Add Player"
+                    <button id="add-player-btn" class="btn btn-theme-aware btn-sm rounded margin-all transform" type="button" value="Add Player"
                             v-on:click.prevent="AddPlayer">
                         Add Player ({{ Players.length }})
                     </button>
