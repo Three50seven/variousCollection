@@ -18,53 +18,88 @@
 <body data-bs-theme="light">
     <div id="jsconfig" style="display:none;visibility:hidden">
         <input type="hidden" value="Production" id="app-environment" />
-    </div>    
-    <div class="header">
+    </div>
+    <div class="text-start p-3">
         <h1>
             Liturgical Calendar
             <button id="theme-switch-button" class="btn btn-outline-secondary">
                 <img id="switch-theme-icon" src="../../images/icon/sun.svg" />
             </button>
         </h1>
-        <div class="home-div">
-            <a class="btn btn-light btn-link" href="/" title="Click to go back home">
+        <div>
+            <a class="btn btn-outline-secondary" href="/" title="Click to go back home">
                 Home
             </a>
         </div>
     </div>
-    <form name="liturgical-form" defaultbutton="calculate-dates">
-        <p>Enter Year: <input data-bind="value: yearToCalculate" type="number" /></p>
-        <button data-bind="click: prevYear" class="btn btn-outline-secondary"> << </button>&nbsp;&nbsp;<span data-bind="text: yearToCalculate"></span>&nbsp;&nbsp;
-        <button data-bind="click: nextYear" class="btn btn-outline-secondary"""> >> </button>
-        <p>Enter the year above to calculate the Liturgical Year.</p>
 
-        <button id="calculate-dates" class="btn btn-primary" data-bind="click: getLiturgicalYear" autofocus>Calculate</button>
-        <button data-bind="click: resetCalendar" class="btn btn-outline-secondary"">Reset</button>
+    <div class="container">
+        <form name="liturgical-form" defaultbutton="calculate-dates">
+            <div class="container-fluid">
+                <div class="row gy-3">
+                    <!-- Input for Year -->
+                    <div class="col-12 col-sm-auto">
+                        <p class="mb-0">
+                            Enter Year:
+                            <input data-bind="value: yearToCalculate" type="number" class="form-control" placeholder="Year" />
+                        </p>
+                    </div>
 
+                    <!-- Display Year -->
+                    <div class="d-flex">
+                        <button data-bind="click: prevYear" class="btn btn-outline-secondary btn-lg w-25">
+                            &lt;&lt;
+                        </button>
+                        <span class="fs-3 p-2" data-bind="text: yearToCalculate"></span>
+                        <button data-bind="click: nextYear" class="btn btn-outline-secondary btn-lg w-25">
+                            &gt;&gt;
+                        </button>
+                    </div>
 
-        <!-- ko if: errors -->
-        <p class="error">Errors: <strong data-bind="text: errors"></strong></p>
-        <!-- /ko -->
-        <!-- ko if: liturgicalDates().length > 0-->
+                    <!-- Description Text -->
+                    <div class="col-12">
+                        <p>Enter the year above to calculate the Liturgical Year.</p>
+                    </div>
 
-        <div class="table-container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="col-offlevel">Event Name</th>
-                        <th class="col-offtype">Value</th>
-                    </tr>
-                </thead>
-                <tbody data-bind="foreach: liturgicalDates">
-                    <tr>
-                        <td><span data-bind="text: eventName"></span></td>
-                        <td><span data-bind="text: eventDate"></span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- /ko -->
-    </form>
+                    <!-- Action Buttons -->
+                    <div class="col-6 col-sm-auto">
+                        <button id="calculate-dates" class="btn btn-primary btn-lg w-100" data-bind="click: getLiturgicalYear" autofocus>
+                            Calculate
+                        </button>
+                    </div>
+                    <div class="col-6 col-sm-auto">
+                        <button data-bind="click: resetCalendar" class="btn btn-outline-secondary btn-lg w-100">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Messages -->
+            <!-- ko if: errors -->
+            <p class="error text-danger mt-3">Errors: <strong data-bind="text: errors"></strong></p>
+            <!-- /ko -->
+            <!-- Liturgical Dates Table -->
+            <!-- ko if: liturgicalDates().length > 0 -->
+            <div class="table-responsive mt-4">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: liturgicalDates">
+                        <tr>
+                            <td><span data-bind="text: eventName"></span></td>
+                            <td><span data-bind="text: eventDate"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /ko -->
+        </form>
+    </div>
 
 
     <script src="/assets/js/viewmodels/liturgical-calendar-bundle.min.js"></script>
