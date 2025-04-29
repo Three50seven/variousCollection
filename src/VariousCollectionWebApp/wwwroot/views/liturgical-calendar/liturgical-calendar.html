@@ -22,24 +22,24 @@
     <div class="header">
         <h1>
             Liturgical Calendar
-            <button id="theme-switch-button" class="btn btn-primary btn-sm rounded margin-all transform">
+            <button id="theme-switch-button" class="btn btn-light btn-sm rounded margin-all transform">
                 <img id="switch-theme-icon" src="../../images/icon/sun.svg" />
             </button>
         </h1>
         <div class="home-div">
-            <a class="btn" href="/" title="Click to go back home">
+            <a class="btn btn-light btn-link" href="/" title="Click to go back home">
                 Home
             </a>
         </div>
     </div>
     <form name="liturgical-form" defaultbutton="calculate-dates">
         <p>Enter Year: <input data-bind="value: yearToCalculate" type="number" /></p>
-        <button data-bind="click: prevYear"> << </button>&nbsp;&nbsp;<span data-bind="text: yearToCalculate"></span>&nbsp;&nbsp;
-        <button data-bind="click: nextYear"> >> </button>
+        <button data-bind="click: prevYear" class="btn btn-outline-secondary"> << </button>&nbsp;&nbsp;<span data-bind="text: yearToCalculate"></span>&nbsp;&nbsp;
+        <button data-bind="click: nextYear" class="btn btn-outline-secondary"""> >> </button>
         <p>Enter the year above to calculate the Liturgical Year.</p>
 
-        <button id="calculate-dates" data-bind="click: getLiturgicalYear" autofocus>Calculate</button>
-        <button data-bind="click: resetCalendar">Reset</button>
+        <button id="calculate-dates" class="btn btn-primary" data-bind="click: getLiturgicalYear" autofocus>Calculate</button>
+        <button data-bind="click: resetCalendar" class="btn btn-outline-secondary"">Reset</button>
 
 
         <!-- ko if: errors -->
@@ -47,20 +47,22 @@
         <!-- /ko -->
         <!-- ko if: liturgicalDates().length > 0-->
 
-        <table>
-            <thead>
-                <tr>
-                    <th class="col-offlevel">Event Name</th>
-                    <th class="col-offtype">Value</th>
-                </tr>
-            </thead>
-            <tbody data-bind="foreach: liturgicalDates">
-                <tr>
-                    <td><span data-bind="text: eventName"></span></td>
-                    <td><span data-bind="text: eventDate"></span></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="col-offlevel">Event Name</th>
+                        <th class="col-offtype">Value</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: liturgicalDates">
+                    <tr>
+                        <td><span data-bind="text: eventName"></span></td>
+                        <td><span data-bind="text: eventDate"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <!-- /ko -->
     </form>
 
