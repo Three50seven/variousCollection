@@ -19,7 +19,7 @@
     <div id="jsconfig" style="display:none;visibility:hidden">
         <input type="hidden" value="Production" id="app-environment" />
     </div>
-    <div class="container p-3">
+    <div class="p-3">
         <h1>
             Liturgical Calendar
             <button id="theme-switch-button" class="btn btn-outline-secondary">
@@ -33,41 +33,33 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="p-3">
         <form name="liturgical-form" defaultbutton="calculate-dates">
-            <div class="container-fluid">
-                <div class="row gy-3">
-                    <!-- Input for Year -->
-                    <div class="col-12 col-sm-auto">
-                        <p class="mb-0">
-                            Enter Year:
-                            <input data-bind="value: yearToCalculate" type="number" class="form-control" placeholder="Year" />
-                        </p>
-                    </div>
-
+            <div class="d-flex flex-column align-items-center justify-content-center">
+                <div>
                     <!-- Display Year -->
-                    <div class="d-flex">
+                    <div class="d-flex justify-content-center">
                         <button data-bind="click: prevYear" class="btn btn-outline-secondary btn-lg w-25">
                             &lt;&lt;
-                        </button>
-                        <span class="fs-3 p-2" data-bind="text: yearToCalculate"></span>
+                        </button>                        
+                        <input data-bind="value: yearToCalculate" class="fs-3 p-2 w-25" type="number" placeholder="Year" />
                         <button data-bind="click: nextYear" class="btn btn-outline-secondary btn-lg w-25">
                             &gt;&gt;
                         </button>
                     </div>
 
                     <!-- Description Text -->
-                    <div class="col-12 fs-5">
+                    <div class="fs-5">
                         <p>Enter the year above to calculate the Liturgical Year.</p>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="col-6 col-sm-auto">
+                    <div class="p-2">
                         <button id="calculate-dates" class="btn btn-primary btn-lg w-100" data-bind="click: getLiturgicalYear" autofocus>
                             Calculate
                         </button>
                     </div>
-                    <div class="col-6 col-sm-auto">
+                    <div class="p-2">
                         <button data-bind="click: resetCalendar" class="btn btn-outline-secondary btn-lg w-100">
                             Reset
                         </button>
