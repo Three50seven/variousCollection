@@ -1,0 +1,29 @@
+@use '../abstracts' as *;
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--solid);
+    padding: 0 2rem;
+    min-width: 100% !important;
+    $height: 74px;
+    height: $height; // same height as quick-nav/title so they're both centered vertically
+    min-height: $height;
+    @extend %transition;
+
+    svg {
+        $size: 48px;
+        height: $size;
+        width: $size;
+        min-height: $size;
+        min-width: $size;
+    }
+
+    &:hover {
+        color: $orange;
+    }
+} 

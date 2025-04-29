@@ -1,0 +1,50 @@
+/////Colors
+$orange: #E74525;
+$green: #51a351;
+$purple: #ED5DFA;
+$yellow: #FFDE21;
+$blue: #2A5FB6;
+$white: #FFF;
+$black: #000;
+
+// Dark Theme
+$dark-hover: #292c31;
+$dark-border: #3e454d;
+$dark-light: #2f3237;
+$dark-text: #b5bfcc;
+$dark: #1e2023;
+
+// Light Theme
+$light-hover: #eaeaea;
+$light-border: #ddd;
+$light-light: #ddd;
+$light-text: #888;
+$light: #f4f4f4;
+
+$shadow: rgba(0,0,0,0.1);
+
+.orange {
+    color: $orange;
+}
+
+/* https://css-tricks.com/almanac/functions/l/light-dark/ */
+
+:root {
+    /* this has to be set to switch between light or dark */
+    --bg: light-dark(#E0E3EB, #14141c);
+    --text: light-dark(#454a52, #99a9bb);
+    --base-color: light-dark( #FFF, #1d1d2a);
+    --lighter-color: light-dark(#F0F2F6, #242434);
+    --border: light-dark(#a4acbb, #353545);
+    --solid: light-dark(#454a52, #d5d5e4);
+}
+
+/* Light Mode */
+[data-theme="light"] {
+    color-scheme: light;
+}
+
+/* Dark Mode - forcing this for the example, not advised to do this normally except you want to give your users the option to do so */
+[data-theme="dark"] {
+    color-scheme: dark;
+}

@@ -1,0 +1,10 @@
+@use '../abstracts' as *;
+
+.filter {
+  > * {
+    &.active {
+      background: $orange;
+      border-color: $orange;
+    }
+  }
+} 

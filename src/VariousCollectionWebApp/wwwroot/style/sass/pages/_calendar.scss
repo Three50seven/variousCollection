@@ -1,0 +1,195 @@
+@use '../abstracts' as *;
+
+#calendar-current {
+    width: fit-content !important;
+    max-width: fit-content !important;
+    padding: 1rem 2rem;
+}
+
+#calendar {
+
+    .fc-row div:not(.cal-weekday) .fc-date {
+        color: var(--text);
+    }
+
+    .cal-weekday {
+        cursor: pointer;
+        position: relative;
+        @extend %transition;
+
+        &:hover {
+            background: radial-gradient( var(--lighter-color), transparent ) !important;
+            .fc-date {
+                color: var(--solid);
+            }
+        }
+    }
+
+    .fc-head {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        height: 60px;
+        background: var(--lighter-color);
+        border-left: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+        border-top: 1px solid var(--border);
+        align-items: center;
+
+        div {
+            width: calc(100% / 7);
+            text-align: center;
+            @include h6;
+        }
+    }
+
+    .fc-body {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        @extend %border;
+
+        .fc-today {
+            background: $orange !important;
+            .fc-date {
+                color: $white;
+            }
+        }
+
+        .fc-row {
+            min-height: 200px;
+            height: fit-content;
+            width: 100%;
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            > div {
+                width: calc(100% / 7);
+                position: relative;
+                border-right: 1px solid var(--border);
+                padding: clamp(.5rem, 1vw, 1rem);
+                gap: 1rem;
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+
+                &:not(.cal-weekday) {
+                    background: var(--lighter-color);
+                }
+
+                &:last-child {
+                    border-right: none;
+                }
+            }
+        }
+
+        .fc-weekday {
+            display: none;
+        }
+
+        .fc-date {
+            font-size: 20px;
+            line-height: 20px;
+            font-weight: 700;
+            color: var(--text);
+            @extend %transition;
+        }
+
+        .fc-content > div {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            overflow-y: auto;
+            gap: .5rem;
+            z-index: 1;
+            position: relative;
+
+            br {
+                display: none;
+            }
+
+            .cal {
+                border-radius: .5rem;
+                display: inline-flex;
+                flex-direction: column;
+                font-size: clamp(12px, 1vw, 14px);
+                font-weight: 400;
+                padding: clamp(.5rem, 1vw, 1rem);
+                width: fit-content;
+                overflow: hidden;
+                background-color: var(--lighter-color);
+                position: relative;
+                @extend %border;
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    height: 100%;
+                    width: 2px;
+                }
+
+                small {
+                    color: var(--text);
+                    font-size: clamp(12px, 1vw, 14px);
+                }
+
+                b {
+                    color: var(--solid);
+                }
+            }
+
+            .cal-workfromhome {
+                color: var(--text);
+                background: rgba(var(--text), .1);
+            }
+
+            .cal-pto:after {
+                background: $orange;
+            }
+
+            .cal-birthday:after {
+                background: $blue;
+            }
+
+            .cal-anniversary:after {
+                background: $purple;
+            }
+
+            .cal-ptopending:after {
+                background: var(--text);
+            }
+
+            .cal-ptospecial:after {
+                background: $yellow;
+            }
+
+            .cal-holiday {
+                font-size: clamp(12px, 1vw, 18px);
+                color: var(--solid);
+                font-weight: 700;
+                border: none;
+                padding: 0;
+                background-color: transparent;
+
+                small {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.cal-holiday-wrap {
+  background: $orange;
+  pointer-events: none;
+  * {
+      color: $white !important;
+  }
+}

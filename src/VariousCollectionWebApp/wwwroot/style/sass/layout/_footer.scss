@@ -1,0 +1,11 @@
+@use '../abstracts' as *;
+
+footer {
+	margin: 24px 80px 80px 330px;
+	@include breakpoint(1500px) {
+		margin: 24px 40px 80px 300px;
+	}
+	span {
+		color: var(--border);
+	}
+}

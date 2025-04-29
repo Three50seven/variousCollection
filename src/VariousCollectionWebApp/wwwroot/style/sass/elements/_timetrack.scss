@@ -1,0 +1,129 @@
+@use '../abstracts' as *;
+
+#hourmeterval {
+    color: var(--solid);
+    font-weight: 500 !important;
+    cursor: pointer;
+
+    &:hover {
+        color: $orange;
+        text-decoration: underline;
+    }
+}
+
+#timeTrackForm {
+    .form--group {
+        margin-top: 0 !important;
+    }
+}
+
+.timetrack {
+    &--progress {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 8px solid var(--border);
+        margin: 0 auto;
+        position: relative;
+    }
+
+    &--overlay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 8px solid $orange;
+        margin: 0 auto;
+    }
+
+    &--numbers {
+        font-size: 32px;
+        text-align: center;
+
+        span {
+            color: var(--text);
+            font-weight: 100;
+
+            &:first-child {
+                color: $orange;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+.timetrack-dash {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    justify-content: space-between;
+    padding: 40px;
+
+    .button--group {
+        gap: .5rem;
+    }
+
+    > .button--group {
+        justify-content: center;
+    }
+
+    .filter {
+        flex-wrap: nowrap;
+    }
+
+    h2 {
+        font-weight: 100; 
+        color: var(--text);
+    }
+}
+
+.card--timetrack {
+  align-items: center;
+}
+
+/*===== Timetrack Progress Bar =====*/
+.progress {
+  width: 75%;
+  height: 75%;
+  max-height: 250px;
+
+  .value, .text {
+    font-size: 12px;
+    text-anchor: middle;
+  }
+
+  .value {
+    font-weight: 700;
+    fill: $orange;
+  }
+
+  .text {
+    fill: var(--text);
+    
+  }
+
+  .track, .fill {
+    fill: rgba(0, 0, 0, 0);
+    stroke-width: 4;
+    transform: rotate(90deg)translate(0px, -80px);
+  }
+
+  .track {
+    stroke: var(--lighter-color);
+  }
+
+  .fill {
+    stroke: $orange;
+    stroke-dasharray: 219.99078369140625;
+    stroke-dashoffset: -219.99078369140625;
+    transition: stroke-dashoffset 1s;
+  }
+}

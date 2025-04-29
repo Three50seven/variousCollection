@@ -1,0 +1,21 @@
+@use '../abstracts' as *;
+
+.edit-task-invoicing {
+display: flex;
+flex-direction: column;
+gap: 1.5rem;
+width: 100%;
+align-items: flex-start;
+}
+
+.overhours-wrap {
+    width: fit-content;
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+}
+
+td.tdpastdue span, .tdoverhours .overhours-wrap a {
+    @extend %pill;
+}
+

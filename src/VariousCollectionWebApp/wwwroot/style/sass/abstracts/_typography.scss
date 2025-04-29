@@ -1,0 +1,73 @@
+@use 'mixins' as *;
+@use 'colors' as *;
+
+$font: 'Poppins', sans-serif;
+$font__line-height-body: 1.5;
+
+// Text Highlight Color
+::selection {
+    background: $orange; /* WebKit/Blink Browsers */
+    color: $white;
+}
+
+.word-break {
+    word-break: break-all;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text);
+    font-weight: 400;
+    @extend %transition;
+}
+
+dfn, cite, em, i {
+  font-style: italic;
+}
+
+address {
+  margin: 0 0 1.5em;
+}
+
+small {
+    display: block;
+    font-size: 14px;
+    margin-top: .25rem;
+    @extend %transition;
+}
+
+pre {
+  background: $orange;
+  font-family: $font;
+  @include font-size(0.9375);
+  line-height: $font__line-height-body;
+  margin-bottom: 1.6em;
+  max-width: 100%;
+  overflow: auto;
+  padding: 1.6em;
+}
+
+code, kbd, tt, var {
+  font-family: $font;
+  @include font-size(0.9375);
+}
+
+abbr, acronym {
+  border-bottom: 1px dotted $light-border;
+  cursor: help;
+}
+
+mark, ins {
+  background: $orange;
+  text-decoration: none;
+}
+b,
+strong {
+    font-weight: 500;
+    color: var(--solid);
+    @extend %transition;
+}
+span {
+    @extend %transition;
+}

@@ -1,0 +1,6 @@
+@use '../abstracts' as *;
+
+.error {
+  border-color: $orange !important;
+  color: $orange !important;
+}

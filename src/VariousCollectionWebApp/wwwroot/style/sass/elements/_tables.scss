@@ -1,0 +1,256 @@
+@use '../abstracts' as *;
+
+table {
+    width: 100% !important;
+    border-spacing: 0;
+    border-collapse: collapse;
+    display: table;
+    font-size: 14px;
+
+    @include breakpoint(1400px) {
+        border: none;
+    }
+
+    + table {
+        margin-top: 1rem;
+    }
+
+    .button--group {
+        flex-wrap: nowrap;
+        gap: .5rem;
+
+        + .button--group {
+            margin-top: .5rem;
+        }
+    }
+
+    td:last-child {
+        .button--group {
+            justify-content: flex-end !important;
+        }
+    }
+
+    tbody tr {
+        @extend %transition;
+
+        &:nth-child(even), &.altbg {
+            background-color: var(--lighter-color) !important;
+        }
+
+        &:nth-child(odd) {
+            background-color: transparent;
+
+            th {
+                background-color: transparent;
+            }
+        }
+
+        &.highlighted {
+            background: $orange !important;
+
+            .checkbox--custom {
+                border: 1px solid $white !important;
+                background-color: transparent;
+            }
+
+
+            td {
+                color: $white !important;
+
+                * {
+                    color: $white !important;
+                }
+            }
+        }
+    }
+
+    th, td {
+        text-align: left;
+        position: relative;
+        padding: 1rem;
+        @extend %transition;
+
+        @media only screen and (max-width: 1300px) {
+            padding: .5rem;
+        }
+    }
+
+    th {
+        background: var(--lighter-color) !important;
+        height: 60px;
+        @include h6;
+
+        &.action {
+            position: relative;
+
+            &:hover {
+                &:after {
+                    opacity: 1;
+                }
+            }
+
+            &:after {
+                content: '';
+                background-image: url('../../img/icon/caret.svg');
+                background-size: contain;
+                background-repeat: no-repeat;
+                width: 12px;
+                height: 12px;
+                position: absolute;
+                right: .5rem;
+                top: 39%;
+                bottom: 0;
+                vertical-align: middle;
+                opacity: .2;
+                transform: translateY(50%);
+                @extend %transition;
+            }
+        }
+    }
+
+    td {
+        color: var(--text);
+        font-size: 14px;
+        text-align: left;
+
+        @include breakpoint(1500px) {
+            font-size: 14px;
+        }
+    }
+
+    .button--icon {
+        margin: 0 !important;
+    }
+
+    .bt-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    input[type="image"] {
+        border: 1px solid $light-border;
+        border-radius: 3px;
+
+        &:hover {
+            border-color: $orange;
+        }
+    }
+
+    select {
+        width: fit-content;
+    }
+
+    input, select, textarea {
+        font-size: 14px;
+    }
+
+    input[type="image"] {
+        min-width: 50px;
+    }
+
+    &.two-col {
+        tr td:first-child {
+            color: var(--solid);
+            width: 1px;
+            white-space: nowrap;
+            text-align: right;
+        }
+    }
+}
+
+.tbltask_client {
+  color: var(--solid);
+  font-weight: 500;
+}
+
+.table {
+
+    &--child {
+        @extend %border;
+    }
+    &--scroll {
+        max-height: 50vh;
+        overflow: hidden;
+        overflow-y: auto;
+    }
+
+    &--container {
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    &--max-width {
+        width: 200px;
+        min-width: 200px;
+    }
+
+    &--profile {
+        .bt-content {
+            display: flex;
+            flex-direction: row;
+        }
+
+        img {
+            margin: auto 2rem auto 0;
+            height: 44px;
+            width: 44px;
+        }
+    }
+
+    &--invoices {
+        th, td {
+            @include breakpoint(1850px) {
+                padding: 0 8px;
+            }
+        }
+    }
+}
+
+td.edit-delete {
+  display: flex;
+  flex-direction: row;
+
+  &.employees {
+    justify-content: flex-end;
+  }
+}
+
+tbody {
+  tr {
+    td {
+      vertical-align: middle;
+
+      &.td-edit {
+
+        &.icon-actions {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+
+          & a {
+            margin: 5px !important;
+            border-radius: 48px;
+            width: 50px;
+            height: 50px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+
+        &.bim {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          height: 100px;
+        }
+      }
+    }
+  }
+}
+
+tbody.client-attributes td {
+  vertical-align: initial;
+}

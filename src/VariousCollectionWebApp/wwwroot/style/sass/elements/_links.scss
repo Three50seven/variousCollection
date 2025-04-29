@@ -1,0 +1,13 @@
+@use '../abstracts' as *;
+
+main a {
+  color: $orange;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: none;
+  @extend %transition;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

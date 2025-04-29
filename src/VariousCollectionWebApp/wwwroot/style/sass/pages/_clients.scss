@@ -1,0 +1,12 @@
+.clients {
+
+    .form {
+        &:nth-child(2n) {
+            order: 3;
+        }
+
+        &:last-child {
+            order: 2;
+        }
+    }
+}

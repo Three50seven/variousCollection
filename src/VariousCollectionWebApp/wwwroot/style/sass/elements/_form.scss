@@ -1,0 +1,170 @@
+@use '../abstracts' as *;
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1.5rem;
+  > .dropdown {
+      margin-top: 0 !important;
+  }
+}
+
+.form {
+  padding: 40px;
+  gap: 1rem;
+  width: 100%;
+
+  .form {
+    padding: 1.5rem;
+  }
+
+  > *:not(.button, .button--solid) {
+    width: 100%;
+  }
+
+  &--33, &--50, &--25, &--group {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    .button, .button--solid {
+      flex: 0 !important;
+    }
+  }
+
+  &--33 {
+    > * {
+      flex: calc(100% / 3);
+    }
+  }
+
+  &--25 {
+    > * {
+      flex: calc(100% / 4);
+    }
+  }
+
+  &--50 {
+    > * {
+      flex: 50%;
+    }
+  }
+
+  &--100 {
+    width: 100%;
+
+    > * {
+      flex: 100%;
+    }
+  }
+
+  &--contact {
+    width: calc(100% - 390px);
+
+    @include breakpoint(1200px) {
+      width: 100%;
+      margin-top: 2rem;
+    }
+  }
+
+  &--group, &--group--checkbox {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  &--group {
+    justify-content: space-between;
+
+    + .form--group {
+      margin-top: 1rem;
+    }
+
+    > * {
+      flex: 20%;
+    }
+
+    > label {
+      margin-bottom: 0;
+    }
+
+    .checkbox--label {
+      width: auto;
+      white-space: nowrap;
+    }
+  }
+
+  &--group--checkbox {
+    justify-content: flex-start;
+
+    label + label {
+      margin-left: 2rem !important;
+    }
+  }
+
+  &--body {
+    align-items: flex-start;
+  }
+
+  > a {
+    margin-top: 1rem;
+  }
+}
+
+fieldset {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border: none;
+  .form--group + .form--group {
+    margin-top: 0;
+  }
+}
+
+legend {
+  @include h4;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.form label.requiredlabel {
+  color: #1c6dc3;
+}
+
+.form label.requiredlabel:before {
+  content: "* ";
+}
+
+.form label a img, a.helpclose img {
+  border: 0;
+}
+
+.formbuttonwrap {
+  margin-top: 24px;
+}
+
+.form input[disabled=disabled] {
+  color: #bbb;
+}
+
+hr { 
+  height: 1px;
+  width: 100%;
+  background: var(--border);
+  border: none;
+}
+
+.required {
+  color: #1c6dc3;
+  font-weight: 700 !important;
+}
+
+.requiredasterisk {
+  color: #cc0000;
+}

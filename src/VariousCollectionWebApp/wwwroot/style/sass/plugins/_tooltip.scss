@@ -1,0 +1,122 @@
+@use '../abstracts' as *;
+
+.tt-wrapper {
+    width: 48px;
+
+    a {
+        overflow: visible !important;
+
+        &:hover {
+            .task-group-popup-wrap {
+                opacity: 1;
+                @extend %transition;
+                bottom: calc(100% + 1rem);
+            }
+        }
+
+        .task-group-popup-wrap {
+            width: auto;
+            height: auto;
+            padding: 1.5rem;
+            right: 0;
+            border-radius: 1rem;
+            position: absolute;
+            pointer-events: none;
+            bottom: 100px;
+            opacity: 0;
+            background-color: var(--base-color);
+            z-index: 100;
+            max-width: 800px;
+            @extend %border;
+            @include shadow-lg;
+            @extend %transition;
+
+            p {
+                width: max-content;
+                max-width: 100%;
+                white-space: pre-line;
+                text-align: left;
+                font-size: 14px;
+            }
+
+            *:not(p) {
+                white-space: nowrap !important;
+            }
+
+            h4, h5 {
+                text-align: left;
+                font-size: 18px !important;
+            }
+
+            .task-group-popup {
+                margin-top: .5rem !important;
+
+                th, td {
+                    &:nth-child(2n) {
+                        text-align: right;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// apply to tool tip boxes that go offscreen at right edge of page
+.tt-wrapper-right {
+
+  a span {
+    left: auto;
+    right: -50px;
+  }
+
+  a span:before,
+  a span:after {
+    left: 89%;
+  }
+}
+
+// apply to tool tip boxes that go offscreen at top of page
+.tt-wrapper-top {
+
+  a span {
+    top: 80px;
+    bottom: auto !important;
+  }
+
+  a:hover span {
+    bottom: auto !important;
+    top: 40px;
+  }
+
+  a span:before,
+  a span:after {
+    top: -15px;
+    border-bottom: 10px solid rgba(0,0,0,0.4);
+    border-top: none;
+    bottom: auto !important;
+  }
+
+  a span:after {
+    top: -14px;
+    bottom: initial;
+    border-bottom: 10px solid var(--solid);
+    border-top: none;
+    bottom: auto !important;
+  }
+}
+
+.wy-tooltip {
+  @extend %border;
+  color: #444;
+  background: var(--base-color);
+  @include shadow-sm;
+  position: absolute;
+  padding: 8px 1rem;
+  text-align: center;
+  border-radius: 5px;
+  color: var(--solid);
+}
+
+.wy-hide {
+  display: none;
+}

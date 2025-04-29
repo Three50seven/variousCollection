@@ -1,0 +1,98 @@
+@use '../abstracts' as *;
+
+/** Basic Table **/
+
+table.bt {
+  thead, tbody th {
+    display: none;
+  }
+
+  tr {
+    margin-top: 1rem;
+
+    &:not(:first-child) {
+      margin-top: 1rem;
+      display: block;
+    } 
+  }
+
+  tr:nth-child(2n) {
+    background: transparent;
+  }
+
+  tfoot th, tfoot td, tbody td {
+    border: none;
+    border-bottom: 1px solid var(--border);
+    display: block;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 0 !important;
+    vertical-align: top;
+    /* IE 9 */
+    float: left\9;
+    width: 100%\9;
+
+    &:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .table--button {
+      padding: 0 !important;
+    }
+  }
+
+  tfoot th::before,
+  tfoot td::before,
+  tbody td::before {
+    content: attr(data-th) "";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 1rem;
+    background: var(--lighter-color);
+    flex-shrink: 0;
+    font-weight: bold;
+    width: 150px;
+    text-align: center;
+    @include h6;
+  }
+
+  tfoot th.bt-hide,
+  tfoot td.bt-hide,
+  tbody td.bt-hide {
+    display: none;
+  }
+
+  tfoot th .bt-content,
+  tfoot td .bt-content,
+  tbody td .bt-content {
+    vertical-align: top;
+    padding: 1rem 2rem;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: row;
+
+    a {
+      margin: 0;
+
+      + a {
+        margin-left: 8px;
+      }
+    }
+  }
+
+  .bt-wrapper.active {
+    max-height: 310px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .bt--no-header tfoot td::before,
+  .bt--no-header tbody td::before {
+    display: none;
+  }
+}

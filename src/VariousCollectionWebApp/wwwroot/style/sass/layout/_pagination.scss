@@ -1,0 +1,45 @@
+@use '../abstracts' as *;
+
+.pagination {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+
+        li {
+            display: flex;
+            padding: 0;
+            &.active {
+                button {
+                    @include button-solid;
+                }
+            }
+        }
+
+        .prev {
+            svg {
+                transform: rotate(180deg);
+            }
+        }
+
+        button {
+            @include button-icon;
+            $size: 2.5rem !important;
+            height: $size;
+            width: $size;
+            min-width: $size;
+            max-width: $size;
+            border-radius: .5rem !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    }
+}

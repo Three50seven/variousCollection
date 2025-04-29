@@ -1,0 +1,109 @@
+@use '../abstracts' as *;
+
+#quick-nav-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+
+    .button--group {
+        margin: 0;
+
+        .button--icon {
+            height: 48px;
+            width: 48px;
+        }
+
+        a + a {
+            margin-left: 1rem;
+        }
+    }
+
+    .actions {
+        display: flex;
+        border-radius: 1rem;
+        flex: 100%;
+        gap: 1rem;
+        @extend %transition;
+
+        &--links {
+            display: flex;
+            gap: .5rem;
+            padding: .75rem;
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+        }
+    }
+
+    a:not(.nav--profile) {
+        color: var(--text);
+        text-decoration: none;
+        @extend %transition;
+        padding: .75rem 1rem;
+        border-radius: 1rem;
+
+        &:hover {
+            background-color: $orange;
+            color: $white;
+        }
+    }
+
+    select {
+        background-color: var(--bg);
+        flex: 100%;
+        padding: 1rem 1.5rem;
+        border-radius: 1rem;
+        min-width: 150px;
+        color: var(--text);
+        background-position: center right 1.5rem;
+
+        &:hover {
+            color: var(--solid);
+        }
+    }
+
+    span {
+        white-space: nowrap;
+        color: var(--solid);
+    }
+
+    .button--search {
+
+        .autocomplete-suggestions {
+            height: auto;
+            z-index: 100;
+            width: 400px;
+            max-height: 70vh;
+            position: absolute;
+            overflow-y: scroll;
+            top: 60px;
+            @include shadow-lg;
+
+            .list--links {
+                overflow: visible;
+            }
+        }
+    }
+}
+
+
+span.queue-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  * {
+    align-items: center;
+  }
+
+  & a {
+    margin-top: 15px !important;
+  }
+}
+
+.user-index-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

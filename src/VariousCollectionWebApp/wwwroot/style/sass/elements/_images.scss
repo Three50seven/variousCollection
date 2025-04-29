@@ -1,0 +1,29 @@
+@use '../abstracts' as *;
+
+img {
+    image-rendering: -webkit-optimize-contrast;
+    margin: auto;
+    display: flex;
+}
+
+/* Safari 10.1+ */
+@media not all and (min-resolution:.001dpcm) {
+    @supports (-webkit-appearance:none) {
+        img {
+            image-rendering: auto;
+        }
+    }
+}
+
+svg {
+    object-fit: contain;
+    @extend %transition;
+}
+
+img.employee-profile-image {
+    width: 2.5rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    margin: 0;
+}

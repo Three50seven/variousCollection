@@ -1,0 +1,80 @@
+@use '../abstracts' as *;
+
+.radio {
+  position: relative;
+  width: fit-content;
+  display: inline-flex;
+  
+  &:hover {
+    label:before {
+      border-color: $orange !important;
+    }
+  }
+
+  + .radio {
+  margin-left: 1.5rem;
+  }
+}
+
+[type="radio"]:checked,
+[type="radio"]:not(:checked) {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+
+    + label {
+        position: relative;
+        padding-left: 2.25rem;
+        cursor: pointer;
+        display: inline-block;
+        color: var(--solid);
+        font-size: 1rem;
+        margin: 0;
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 100%;
+            @extend %border;
+            @extend %transition;
+        }
+
+        &:after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: $orange;
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            border-radius: 100%;
+            @extend %transition;
+        }
+    }
+}
+
+[type="radio"]:not(:checked) + label {
+  &:after {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+[type="radio"]:checked + label {
+  &:after {
+    opacity: 1;
+    transform: scale(1);
+  }
+  &:before {
+    border-color: $orange !important;
+  }
+}

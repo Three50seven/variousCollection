@@ -1,0 +1,190 @@
+@use '../abstracts' as *;
+
+body.closed {
+    .nav {
+        width: calc(66px + 3rem);
+
+        a span, label span {
+            width: 0;
+            opacity: 0;
+        }
+
+        .nav--toggle {
+            svg {
+                transform: rotate(0);
+            }
+        }
+    }
+
+
+    main {
+        margin: 0 0 0 113px;
+    }
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    margin: auto;
+    width: 300px;
+    height: 100%;
+    border-right: 1px solid var(--border);
+    padding-top: 3rem;
+    @extend %transition;
+    // Added for smoother transition:
+    a span, label span {
+        @extend %transition;
+    }
+
+    span {
+        height: 24px;
+        max-height: 24px;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+    }
+    // ---
+
+
+
+    .bottom {
+        display: flex;
+        width: 100%;
+        gap: 1rem;
+        flex-direction: column;
+        margin-top: auto;
+        padding: 0 1.5rem 2rem 1.5rem;
+        @extend %transition;
+
+        .button--group {
+            margin: 0;
+            gap: clamp(.5rem, 1.15vh, 1rem);
+        }
+
+        .button {
+            $size: clamp(3rem, 7vh, 4rem) !important;
+            height: $size;
+            background-color: transparent;
+            border-radius: 1rem;
+            padding: 0 !important;
+
+            &:hover {
+                background-color: $orange;
+            }
+        }
+    }
+
+    &--toggle {
+        @include button-lg-icon;
+
+        svg {
+            transform: rotate(180deg);
+            @extend %transition;
+        }
+    }
+
+
+
+    &--profile {
+        margin: 0;
+        justify-content: start;
+        border-radius: 1rem;
+        padding: 1.25rem 1.5rem;
+        background-color: transparent;
+
+        &:hover, &:active, &:focus {
+            span {
+                color: $white;
+            }
+        }
+
+        .employee-profile-image {
+            width: 2rem;
+            min-width: 2rem;
+            height: 2rem;
+        }
+    }
+
+    &--menu {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: clamp(.25rem,.5vh,.5rem);
+        @extend %transition;
+
+        > a {
+            padding: clamp(.5rem,1.65vh,1rem) 21.5px;
+            border-radius: 1rem;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            color: var(--text);
+            position: relative;
+            text-decoration: none;
+            border: 1px solid transparent;
+            overflow: hidden;
+            @extend %transition;
+
+            svg {
+                height: 1.25rem;
+                width: 1.25rem;
+                min-width: 1.25rem;
+            }
+
+            svg {
+                stroke: var(--text);
+            }
+
+            &.active {
+                color: $white;
+                background: $orange;
+                border-color: $orange;
+                pointer-events: none;
+
+                svg {
+                    stroke: $white;
+                }
+            }
+
+            &:hover, &:focus {
+                background: var(--base-color);
+                border-color: var(--border);
+                color: var(--solid);
+
+                svg {
+                    stroke: var(--solid);
+                }
+            }
+        }
+    }
+    /*&--secondary {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        border-top: 1px solid var(--border);
+
+        > a {
+            padding: 1rem;
+            border-radius: 1rem;
+            font-size: 14px;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            color: var(--text);
+            position: relative;
+            text-decoration: none;
+            @extend %transition;
+
+            &:hover, &.active {
+                background-color: $orange;
+                color: $white;
+            }
+        }
+    }*/
+}

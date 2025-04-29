@@ -1,0 +1,152 @@
+@use '../abstracts' as *;
+
+label {
+  font-size: 14px;
+  display: flex;
+  width: fit-content;
+  
+  flex-direction: row;
+  justify-content: center;
+  gap: .5rem;
+  margin-bottom: .5rem;
+  color: var(--text);
+}
+
+input:not([type="radio"], [type="checkbox"], [type="file"], [type="submit"]), textarea, select {
+  color: var(--solid);
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  padding: 1rem;
+  background: var(--lighter-color);
+  resize: none !important;
+  margin: 0;
+  outline: 0;
+  @extend %border;
+  @extend %transition;
+
+  &:hover, &:active, &:focus, &:focus-within, &:focus-visible {
+    color: var(--solid);
+    border: 1px solid $orange !important;
+  }
+}
+
+.date-picker {
+display: flex;
+color: var(--text);
+align-items: center;
+gap: 1rem;
+width: 100%;
+}
+
+.error {
+  border-color: $orange !important;
+  color: $orange !important;
+}
+
+select {
+    appearance: none;
+    background-repeat: no-repeat;
+    background-size: 1.5rem;
+    background-position: center right 1rem;
+    padding: 1rem 3rem 1rem 1rem;
+}
+
+/* Light Mode */
+[data-theme="light"] {
+    select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%235e6674' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-chevron-down'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    }
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+    select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2399a9bb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-chevron-down'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    }
+}
+
+option {
+    appearance: none;
+
+    &:checked, &:focus, &:active, &:hover {
+        background: $orange !important;
+        color: $white !important;
+        box-shadow: 0 0 10px 100px $orange inset;
+    }
+}
+
+
+.radio-togglebox {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--solid);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+
+  a {
+    display: inline;
+    padding-right: 0.1em;
+    text-align: left;
+    vertical-align: initial;
+  }
+}
+
+textarea {
+  height: 100px;
+}
+
+input[type="file"] {
+  opacity: 0;
+  position: absolute;
+}
+
+::placeholder {
+  color: var(--text);
+  opacity: 1;
+}
+
+.date {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+
+  hr {
+    width: 1rem;
+    min-width: 1rem;
+    height: 1.1px;
+    background: var(--border);
+    margin: 0 1rem;
+  }
+}
+
+.required {
+  &:after {
+    content: "*";
+    color: $orange;
+    font-size: 24px;
+    line-height: 12px;
+    display: inline-flex;
+    position: relative;
+    left: 6px;
+    top: 4px;
+  }
+}
+
+/*#startDate, #endDate {
+	margin: 25px!important;
+}*/
+
+.revenue-report {
+  background: var(--lighter-color);
+  background-image: none !important;
+  width: 100%;
+  @extend %border;
+}
+
+#timeTrackHours, #timeTrackHoursForBill {
+  border-radius: 8px;
+}

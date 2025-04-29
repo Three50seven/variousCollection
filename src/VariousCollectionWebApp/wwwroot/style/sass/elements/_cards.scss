@@ -1,0 +1,84 @@
+@use '../abstracts' as *;
+
+.card, .modal, .form {
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    align-items: flex-start;
+    position: relative;
+    background-color: var(--base-color);
+    @extend %border;
+    @extend %transition;
+
+    &.active {
+        background-color: $orange !important;
+        border-color: $orange;
+        color: $white;
+
+        * {
+            color: $white;
+        }
+    }
+
+    &--row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+
+        > * {
+            margin: 0;
+        }
+    }
+
+    &--center {
+        .card--body {
+            align-items: center;
+        }
+    }
+
+    &--header {
+        @include card-header;
+    }
+
+    &--buttons {
+        display: flex;
+        flex-direction: row;
+        gap: .5rem;
+
+        a, button {
+            @include button-lg-icon;
+        }
+    }
+
+    &--timetrack {
+        .card--body {
+            align-items: flex-start;
+        }
+    }
+
+    &--body {
+        padding: 2rem !important;
+        width: 100% !important;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: none !important;
+        height: fit-content !important;
+        align-items: flex-start;
+        flex-basis: 100%;
+
+        @include breakpoint(1500px) {
+            padding: 24px;
+        }
+
+        > *:not(.button, .button--solid) {
+            width: 100%;
+        }
+
+        h5 + table {
+            margin-top: 1rem;
+        }
+    }
+}

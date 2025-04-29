@@ -1,5 +1,6 @@
 /// <binding AfterBuild='local-build' ProjectOpened='project-open' />
 const gulp = require('gulp');
+const sass = require('gulp-sass')(require('sass'));
 const uglify = require('gulp-uglify');
 const concat = require('gulp-concat');
 const newer = require('gulp-newer');
@@ -12,13 +13,13 @@ const cleanCSS = require('gulp-clean-css');
 const settings = {
     paths: {
         scriptsDestDirectory: "./wwwroot/assets/js/",
-        stylesDestDirectory: "./wwwroot/assets/css/"
+        stylesDestDirectory: "./wwwroot/assets/css/",
+        stylesSrcDirectory: "./wwwroot/style/"
     },
     basePath: "./wwwroot/" // appended to filepaths defined in bundle.Files
 };
 
 const bundles = require('./assetbundles.json');
-
 
 // build out script bundles based on explicitly defined "type" or check file extension of first file in list
 var scriptBundles = bundles.filter(function (item) {
@@ -224,38 +225,39 @@ gulp.task("bundle-js-full", gulp.series(["clean-js"], async function () {
     BundleJS(false);
 }));
 
-gulp.task("bundle-css", async function () {
-
+// Combined task for Sass processing and CSS bundling
+gulp.task('bundle-styles-and-css', async function () {
     if (styleBundles && styleBundles.length) {
-        for (var i = 0; i < styleBundles.length; i++) {
-            var styleBundle = styleBundles[i];
+        for (let i = 0; i < styleBundles.length; i++) {
+            const styleBundle = styleBundles[i];
             if (ToBool(styleBundle.referenceOnly)) {
-                console.log("Bundle for " + styleBundle.name + " is set to only be referenced. No bundling for this bundle.");
+                console.log(`Bundle for ${styleBundle.name} is set to only be referenced. No bundling for this bundle.`);
                 continue;
             }
 
-            console.log("Bundling " + styleBundle.name + " ... ");
+            console.log(`Processing and bundling ${styleBundle.name} ...`);
 
-            var files = BuildFiles(styleBundle, styleBundles); //get list of files for this bundle
+            const files = BuildFiles(styleBundle, styleBundles); // Files for the bundle
+            const sassFiles = `${settings.paths.stylesSrcDirectory}/**/*.scss`; // Sass files
 
-            var dest = settings.paths.stylesDestDirectory;
-            dest += styleBundle.subpath || "";
+            let allFiles = files.concat([sassFiles]); // Combine Sass and bundle files
 
-            if (dest.slice(-1) !== "/") { dest += "/"; }
+            const dest = path.join(settings.paths.stylesDestDirectory, styleBundle.subpath || "");
 
-            dest += styleBundle.filename || (styleBundle.name + ".min.css");
-
-            gulp.src(files, { base: "." })
-                .pipe(concat(dest))
-                .pipe(cleanCSS())
-                .pipe(gulp.dest("."));
+            gulp.src(allFiles, { base: "." })
+                .pipe(newer(dest)) // Process only newer files
+                .pipe(sourcemaps.init()) // Initialize sourcemaps
+                .pipe(sass().on('error', sass.logError)) // Compile Sass
+                .pipe(concat(styleBundle.filename || `${styleBundle.name}.min.css`)) // Concatenate
+                .pipe(cleanCSS({ compatibility: 'ie8' })) // Minify
+                .pipe(sourcemaps.write('./')) // Write sourcemaps
+                .pipe(gulp.dest(".")); // Output files
         }
-    }
-    else {
+    } else {
         console.log("No CSS bundles found.");
     }
 
-    console.log("Bundling CSS process complete.");
+    console.log("Sass processing and CSS bundling complete.");
 });
 
 function NewFile(name, contents) {
@@ -326,9 +328,15 @@ gulp.task("json:transform", async function () {
     }
 });
 
-gulp.task("local-build", gulp.series("bundle-js", "bundle-css"));
+gulp.task("who-watches-the-watchers", async function () {
+    console.log("Watch that Sass and shut your script when you're talking to me!")
+    gulp.watch(`${settings.paths.stylesSrcDirectory}/**/*.{scss,css}`, gulp.series('bundle-styles-and-css')); // Watch styles directory for changes
+    gulp.watch(`${settings.paths.scriptsSrcDirectory}/**/*.js`, gulp.series('bundle-js'));
+});
 
-gulp.task("build", gulp.series("bundle-js-full", "bundle-css"));
+gulp.task("local-build", gulp.series("bundle-js", "bundle-styles-and-css"));
+
+gulp.task("build", gulp.series("bundle-js-full", "bundle-styles-and-css"));
 
 gulp.task("local-web-proj-clean", async function () {
 

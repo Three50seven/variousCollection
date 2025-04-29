@@ -1,0 +1,23 @@
+@use '../abstracts' as *;
+
+div, label {
+    &:has( > [data-required] ) {
+        label {
+            position: relative;
+            display: inline-flex;
+
+            &:after {
+                $size: .75rem;
+                content: '';
+                position: relative;
+                display: inline-flex;
+                background-image: url('/Content/img/icon/asterisk.svg');
+                background-size: contain;
+                background-repeat: no-repeat;
+                height: $size;
+                width: $size;
+                min-width: $size;
+            }
+        }
+    }
+}

@@ -1,0 +1,23 @@
+@use '../abstracts' as *;
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+	background: rgba(var(--solid), .2);
+  animation: ripple-animation 2s;
+  &--item {
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+@keyframes ripple-animation {
+  from {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(100);
+    opacity: 0;
+  }
+}

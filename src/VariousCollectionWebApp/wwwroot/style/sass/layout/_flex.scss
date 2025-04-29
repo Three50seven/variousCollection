@@ -1,0 +1,18 @@
+@use '../abstracts' as *;
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.gap {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}

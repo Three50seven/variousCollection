@@ -1,0 +1,197 @@
+@use 'colors' as *;
+
+// Transitions
+%transition {
+	transition: .1s all ease-in-out !important;
+}
+
+%pill {
+	background: $orange;
+	padding: .25rem .5rem;
+	border-radius: .5rem;
+	color: $white;
+	font-weight: 500;
+}
+
+@mixin button {
+	font-family: 'Poppins', sans-serif;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: max-content;
+	border-radius: 48px;
+	width: max-content !important;
+	min-width: min-content;
+	box-sizing: border-box;
+	position: relative;
+	cursor: pointer !important;
+	padding: 1.25rem 2rem;
+	font-size: 16px !important;
+	font-weight: 500;
+	color: var(--solid);
+	outline: 0;
+	text-align: center;
+	overflow: hidden;
+	text-decoration: none !important;
+	gap: 12px;
+	margin-top: 1.5rem;
+	appearance: none !important;
+	outline: 0 !important;
+	white-space: nowrap;
+	background-color: var(--lighter-color);
+	@extend %border;
+	user-select: none;
+	@extend %transition;
+
+	svg {
+		height: 1.25rem;
+		width: 1.25rem;
+		stroke: var(--solid);
+	}
+
+	&.active, &:hover {
+		background-color: $orange !important;
+		color: $white;
+		border-color: $orange;
+
+		svg {
+			stroke: $white;
+		}
+	}
+}
+
+@mixin button-solid {
+	@include button;
+	background-color: $orange !important;
+	border: none !important;
+	color: $white;
+
+	svg {
+		stroke: $white;
+	}
+}
+
+@mixin button-group {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	margin-top: 1.5rem;
+	gap: 1rem;
+	flex-wrap: wrap;
+
+	&:first-child {
+		margin-top: 0;
+	}
+
+	> label {
+		+ button, + [class*='button'] {
+			margin-left: 1rem !important;
+		}
+	}
+
+	> button, > [class*='button'] {
+		+ label {
+			margin-left: 1rem !important;
+		}
+	}
+
+	* {
+		margin: 0 !important;
+	}
+}
+
+@mixin button-icon {
+	$size: 3rem !important;
+	@include button;
+	color: var(--solid);
+	min-width: $size;
+	max-width: $size;
+	width: $size;
+	height: $size;
+	border-radius: 1rem;
+	padding: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 0 !important;
+}
+
+@mixin button-lg-icon {
+	@include button-icon;
+	min-width: 4rem !important;
+	max-width: 4rem !important;
+	width: 4rem !important;
+	height: 4rem !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+// Rem output with px fallback
+@mixin font-size($sizeValue: 1) {
+	font-size: ($sizeValue * 16) * 1px;
+	font-size: $sizeValue * 1rem;
+}
+
+%overlay {
+	background-color: rgba(0,0,0,0.25);
+	backdrop-filter: blur(1rem);
+	@extend %transition;
+}
+
+%border {
+  border: 1px solid var(--border);
+}
+
+
+// Center block
+@mixin center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+// Clearfix
+@mixin clearfix {
+	content: "";
+	display: table;
+	table-layout: fixed;
+}
+
+@mixin card-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
+	align-items: center;
+	padding: 2rem;
+	padding-bottom: 0;
+	min-height: 80px;
+	gap: 1rem;
+	cursor: default !important;
+
+	.button--group {
+		margin-top: 0;
+	}
+
+	span {
+		color: var(--solid);
+		font-weight: 400;
+	}
+}
+
+// Breakpoint
+@mixin breakpoint($value, $width : max-width) {
+  @media only screen and ($width : $value) {
+    @content;
+  }
+}
+
+// Shadows
+@mixin shadow-sm {
+  box-shadow: 0 8px 24px $shadow;
+}
+
+@mixin shadow-lg {
+  box-shadow: 0 40px 80px $shadow;
+}

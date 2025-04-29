@@ -1,0 +1,224 @@
+﻿@use '../abstracts' as *;
+
+.sweet-overlay {
+    @extend %overlay;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: none;
+    z-index: 50;
+}
+
+.sweet-alert {
+  background: var(--base-color);
+  border-radius: 1.5rem;
+  width: fit-content;
+  height: fit-content;
+  padding: 40px;
+  position: fixed;
+  left: 250px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto !important;
+  overflow: hidden;
+  display: none;
+  z-index: 99;
+  @extend %border;
+  button {
+    display: inline-flex !important;
+    + button {
+      margin-left: 1rem;
+    }
+  }
+  a {
+  color: $orange;
+  }
+}
+
+.sweet-alert .icon {
+    width: 80px;
+    height: 80px;
+    border: 4px solid gray;
+    border-radius: 50%;
+    margin: 20px auto;
+    position: relative;
+    box-sizing: content-box;
+}
+
+.sweet-alert .icon.error {
+    border-color: #f27474;
+}
+
+.sweet-alert .icon.error .x-mark {
+    position: relative;
+    display: block;
+}
+
+.sweet-alert .icon.error .line {
+    position: absolute;
+    height: 5px;
+    width: 47px;
+    background-color: #f27474;
+    display: block;
+    top: 37px;
+    border-radius: 2px;
+}
+
+.sweet-alert .icon.error .line.left {
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    left: 17px;
+}
+
+.sweet-alert .icon.error .line.right {
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    right: 16px;
+}
+
+.sweet-alert .icon.warning {
+    border-color: #f8bb86;
+}
+
+.sweet-alert .icon.warning .body {
+    position: absolute;
+    width: 5px;
+    height: 47px;
+    left: 50%;
+    top: 10px;
+    border-radius: 2px;
+    margin-left: -2px;
+    background-color: #f8bb86;
+}
+
+.sweet-alert .icon.warning .dot {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-left: -3px;
+    left: 50%;
+    bottom: 10px;
+    background-color: #f8bb86;
+}
+
+.sweet-alert .icon.info {
+    border-color: #c9dae1;
+}
+
+.sweet-alert .icon.info::before {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 29px;
+    left: 50%;
+    bottom: 17px;
+    border-radius: 2px;
+    margin-left: -2px;
+    background-color: #c9dae1;
+}
+
+.sweet-alert .icon.info::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-left: -3px;
+    top: 19px;
+    background-color: #c9dae1;
+}
+
+.sweet-alert .icon.success {
+    border-color: #a5dc86;
+}
+
+.sweet-alert .icon.success::after,
+.sweet-alert .icon.success::before {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 120px;
+    background: var(--solid);
+    transform: rotate(45deg);
+}
+
+.sweet-alert .icon.success::before {
+    border-radius: 120px 0 0 120px;
+    top: -7px;
+    left: -33px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-transform-origin: 60px 60px;
+    transform-origin: 60px 60px;
+}
+
+.sweet-alert .icon.success::after {
+    border-radius: 0 120px 120px 0;
+    top: -11px;
+    left: 30px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-transform-origin: 0 60px;
+    transform-origin: 0 60px;
+}
+
+.sweet-alert .icon.success .placeholder {
+    width: 80px;
+    height: 80px;
+    border: 4px solid rgba(165, 220, 134, 0.2);
+    border-radius: 50%;
+    box-sizing: content-box;
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    z-index: 2;
+}
+
+.sweet-alert .icon.success .fix {
+    width: 5px;
+    height: 90px;
+    background-color: var(--solid);
+    position: absolute;
+    left: 28px;
+    top: 8px;
+    z-index: 1;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.sweet-alert .icon.success .line {
+    height: 5px;
+    background-color: #a5dc86;
+    display: block;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 2;
+}
+
+.sweet-alert .icon.success .line.tip {
+    width: 25px;
+    left: 14px;
+    top: 46px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.sweet-alert .icon.success .line.long {
+    width: 47px;
+    right: 8px;
+    top: 38px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.sweet-alert .icon.custom {
+    background-size: contain;
+    border-radius: 0;
+    border: none;
+    background-position: center center;
+    background-repeat: no-repeat;
+}

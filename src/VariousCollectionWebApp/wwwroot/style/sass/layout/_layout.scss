@@ -1,0 +1,71 @@
+@use '../abstracts' as *;
+
+/* main layout
+----------------------------------------------------------*/
+
+.row {
+width: 100%;
+min-width: 1330px;
+max-width: 1680px;
+margin: 0 auto;
+//background: #434343;
+overflow:hidden;
+}
+
+.leftbar {
+    /*width: 12.03007518796992%;*/
+    width:160px;
+    background:#434343;
+    float:left;
+    padding-bottom: 2000px;
+    margin-bottom: -2000px;
+
+}
+
+.maincol {
+    /*width:87.96992481203008%;*/
+    /*background:#d7d7d7;*/
+    background: #F9F6F2;
+    overflow:hidden; /* http://stackoverflow.com/questions/6809079/two-divs-side-by-side-one-100-width-others-width-depended-on-content */
+    padding-bottom: 2000px;
+    margin-bottom: -2000px;
+    padding-top:0!important;
+}
+
+
+.rowheader {
+    height:73px;
+}
+
+.leftbarheader {
+    background:var(--solid);
+}
+
+.leftbarheader img {
+    margin-top:22px;
+    margin-left:22px;
+}
+
+.maincolheader {
+    background:#ED4E35;
+    padding-top:0;
+}
+
+
+
+.row .twelvecol { 
+width: 100%;
+float: left;
+margin-top: 20px;
+}
+
+.row .sixcol {
+width: 50%;
+float: left;
+margin-top: 20px;
+}
+
+.last {
+margin-right: 0px; 
+} 
+ 

@@ -1,0 +1,84 @@
+@use '../abstracts' as *;
+
+.ui-resizable-handle {
+display: none !important;
+}
+
+.ui-dialog-buttonset {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-top: 1.5rem;
+  gap: 1rem;
+
+  * {
+    margin-top: 0 !important;
+  }
+}
+
+.ui-widget-content {
+  background: var(--lighter-color);
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default {
+  background: transparent !important;
+  @extend %border;
+  color: var(--solid);
+}
+
+.ui-widget-header {
+    @include card-header;
+}
+
+.ui-dialog {
+    padding: 0 !important;
+    max-width: 75vw !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 250px !important;
+    right: 0 !important;
+    margin: auto;
+    height: fit-content !important;
+    border-radius: 1.5rem !important;
+    position: fixed !important;
+    max-height: 90vh;
+    overflow-y: auto !important;
+    @extend %border;
+
+    .ui-button {
+        @include button-icon;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        margin: 0;
+
+        &:hover {
+            span {
+                filter: invert(37%) sepia(44%) saturate(3315%) hue-rotate(346deg) brightness(92%) contrast(98%);
+            }
+        }
+    }
+
+    .ui-dialog-buttonpane {
+        margin: 0 0 40px 40px;
+
+        * {
+            margin-top: 0 !important;
+        }
+    }
+
+    .ui-dialog-titlebar-close {
+        background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%2224px%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224px%22%20fill%3D%22%238e939b%22%3E%3Cpath%20d%3D%22M0%200h24v24H0V0z%22%20fill%3D%22none%22%2F%3E%3Cpath%20d%3D%22M19%206.41L17.59%205%2012%2010.59%206.41%205%205%206.41%2010.59%2012%205%2017.59%206.41%2019%2012%2013.41%2017.59%2019%2019%2017.59%2013.41%2012%2019%206.41z%22%2F%3E%3C%2Fsvg%3E") !important;
+
+        &:hover {
+            background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%2224px%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224px%22%20fill%3D%22%23FFF%22%3E%3Cpath%20d%3D%22M0%200h24v24H0V0z%22%20fill%3D%22none%22%2F%3E%3Cpath%20d%3D%22M19%206.41L17.59%205%2012%2010.59%206.41%205%205%206.41%2010.59%2012%205%2017.59%206.41%2019%2012%2013.41%2017.59%2019%2019%2017.59%2013.41%2012%2019%206.41z%22%2F%3E%3C%2Fsvg%3E") !important;
+        }
+    }
+}
+
+.ui-dialog .ui-dialog-content {
+padding: 40px !important;
+}
+
+.ui-widget-overlay {
+    @extend %overlay;
+}

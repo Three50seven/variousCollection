@@ -1,0 +1,109 @@
+@use '../abstracts' as *;
+
+/* Styling Checkbox Starts */
+.checkbox {
+  &--label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    clear: both;
+    width: fit-content;
+    padding-left: 40px;
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 0 !important;
+    color: var(--solid);
+    min-height: 1.5rem;
+
+    &:hover {
+      .checkbox--custom {
+        border-color: $orange;
+        background: var(--lighter-color);
+      }
+    }
+
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+
+      &:checked ~ .checkbox--custom {
+        background-color: $orange;
+        border-radius: 5px;
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+        border-color: $orange;
+      }
+    }
+  }
+
+  &--custom {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 24px;
+    width: 24px;
+    background-color: var(--lighter-color);
+    border-radius: 5px;
+    @extend %transition;
+    @extend %border;
+
+    &:after {
+      position: absolute;
+      content: "";
+      left: 12px;
+      top: 12px;
+      height: 0px;
+      width: 0px;
+      border-radius: 5px;
+      border: solid $orange;
+      border-width: 0 3px 3px 0;
+      transform: rotate(0deg) scale(0);
+      opacity: 1;
+      @extend %transition;
+    }
+
+    + span {
+      color: var(--solid);
+    }
+  }
+}
+
+
+.checkbox--label input:checked ~ .checkbox--custom::after {
+  transform: rotate(45deg) scale(1);
+  opacity:1;
+  left: 8px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid $white;
+  border-width: 0 2px 2px 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+/* For Ripple Effect */
+.checkbox--label .checkbox--custom::before {
+  position: absolute;
+  content: "";
+  left: 10px;
+  top: 10px;
+  width: 0px;
+  height: 0px;
+  border-radius: 5px;
+  border: 2px solid $orange;
+  transform: scale(0);
+}
+
+.checkbox--label input:checked ~ .checkbox--custom::before {
+  left: -3px;
+  top: -3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  transform: scale(3);
+  opacity:0;
+  z-index: 999;
+  @extend %transition;
+}

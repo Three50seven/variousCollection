@@ -1,0 +1,85 @@
+@use 'mixins' as *;
+
+h1, h2, h3, h4, h5, h6, p {
+  clear: both;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+@mixin h1() {
+    font-size: clamp(3rem, 4vw, 80px);
+    font-weight: 700;
+    color: var(--solid);
+    line-height: 1.25 !important;
+    margin-bottom: 24px;
+    @extend %transition;
+
+    span {
+        line-height: 1.25 !important;
+    }
+}
+
+@mixin h2() {
+    font-size: 2.5rem;
+    color: var(--solid);
+    line-height: 1.25;
+    margin-bottom: 24px;
+    font-weight: 500;
+    @extend %transition;
+}
+
+@mixin h3() {
+    font-size: 2rem;
+    color: var(--solid);
+    font-weight: 500;
+    @extend %transition;
+}
+
+@mixin h4() {
+    font-size: 1.5rem;
+    color: var(--solid);
+    font-weight: 500;
+    @extend %transition;
+
+    span {
+        font-weight: 500;
+    }
+}
+
+@mixin h5() {
+    font-size: 18px;
+    color: var(--solid);
+    font-weight: 500;
+    @extend %transition;
+}
+
+@mixin h6() {
+    color: var(--text);
+    font-weight: 400;
+    font-size: 14px;
+    @extend %transition;
+}
+
+h1 {
+  @include h1();
+}
+
+h2 {
+  @include h2();
+}
+
+h3 {
+  @include h3();
+}
+
+h4 {
+  @include h4();
+}
+
+h5 {
+  @include h5();
+}
+
+h6 {
+  @include h6();
+}

@@ -1,0 +1,409 @@
+@use '../abstracts' as *;
+
+/* Developer styles go here - please notify design team when additions 
+are made so they can be added into the project SASS files */
+
+/*
+    ********************
+    NOTE: You have minify this file to the .min.css version before production release
+          because MS optimizations will utilize the min version when bundling
+    ********************
+*/
+
+/* test style 
+body {background:yellow !important;} */
+
+
+
+/* global styles */
+/* ------------ */
+.forminputwrap-fullwidth {
+  width: 100%;
+}
+
+.form label.label-right {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.action {
+  cursor: pointer;
+
+  &:hover {
+    svg {
+      stroke: var(--solid);
+    }
+  }
+
+  svg {
+    stroke: var(--border);
+  }
+}
+
+.btnrow {
+  background-color: #f1f1f1;
+}
+
+  .btnrow .btn {
+    margin-bottom: 0;
+  }
+
+.btn-prioritize {
+  float: right;
+  position: relative;
+}
+
+.btn-fileinput {
+  position: relative;
+  overflow: hidden;
+}
+
+  .btn-fileinput input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+    font-size: 200px;
+    direction: ltr;
+    cursor: pointer;
+  }
+
+/* on Home and Team Tasks - only want move cursor on table */
+#sortingSection {
+  cursor: default;
+}
+
+  #sortingSection table {
+    cursor: move;
+  }
+
+
+.grouptext {
+  font-weight: bold;
+  font-size: 16px;
+  padding-right: .3em;
+}
+
+span.form-warning-text {
+  font-style: italic;
+  font-size: 13px;
+  display: block;
+  color: #ed4e35;
+}
+
+
+
+/* ------------ */
+
+
+/* User's Task list (home, team tasks, and client details pages) */
+/* ------------ */
+
+/* ------------ */
+
+
+/* Time track popup form */
+/* ------------ */
+.form label.lbl-success {
+  color: #51a351 !important;
+}
+/* ------------ */
+
+
+/* Time track edit popup form */
+/* ------------ */
+#timeTrackEditForm a.btn {
+  color: #e74525;
+}
+/* ------------ */
+
+
+/* JQuery easy tabs styles (used on Bill Create, PTO Manage, and Message Queue) */
+/* ------------ */
+
+.panel-container {
+  margin-bottom: 10px;
+}
+
+.autocomplete-suggestions > ul.listselection {
+  margin-top: .2em;
+  margin-right: .2em;
+  margin-bottom: 0.2em;
+}
+
+.autocomplete-selected {
+  background-color: #ED4E35;
+  color: white;
+}
+
+.unassigned-tasks-container select {
+  border: 1px solid #c2e2f9;
+  padding: 0.8em;
+  background: var(--solid);
+}
+
+/* pto manage single request page */
+/* ------------ */
+.ptosingle-form > div.form > div.formelement > div.forminputwrap {
+  display: inline-block;
+  margin: 0 0 0.5em 0;
+  font-size: 15px;
+}
+
+
+/* ------------ */
+
+
+/* client's list page */
+/* ------------ */
+/*NOTE: this one is rather general, but only currently used on client list page to prevent altrow coloring */
+table.striped td.tbl-separator {
+  border-bottom: none !important;
+  border-top: none !important;
+  background-color: white !important;
+}
+/* ------------ */
+
+
+.barchart-overlay-rightedge {
+  position: absolute;
+  left: 1357px;
+  top: 0px;
+  width: 1px;
+  height: 238px;
+  border-right: 1px solid #d7d7d7;
+  z-index: 2;
+}
+
+/* team tasks */
+/* ------------ */
+.btn-editteam {
+  float: right;
+  position: relative;
+}
+
+.teamtasks-only-my-tasks {
+  float: right;
+  padding: -20px 20px 10px 10px !important;
+}
+
+  /*.teamtasks-only-my-tasks > span {
+    display:inline-block;
+}*/
+
+  .teamtasks-only-my-tasks em {
+    padding-right: 5px;
+  }
+/* ------------ */
+
+
+/* calendar page */
+/* ------------ */
+/* SEE calendar.css*/
+/* ------------ */
+
+
+/* ------------ */
+
+
+
+/* Bill Manage/Index page */
+/* ------------ */
+/*span.billamount-hover-wrap {
+    @extend %border;
+    color: var(--solid);
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+}*/
+
+.billamount-hover-wrap h4 {
+  padding: 6px 12px;
+  margin-left: 0;
+  background: transparent !important;
+  color: var(--solid);
+  font-weight: bold;
+  font-size: 15px;
+  margin-top: 0;
+  font-style: normal;
+}
+
+span.billamount-hover-wrap img {
+  bottom: 0;
+  margin-left: 6px;
+}
+
+/* ------------ */
+
+
+
+/* Bill Create page */
+/* ------------ */
+
+.billtthourentry > input {
+width: 70px !important;
+}
+
+
+
+
+/* NOTE: Styles below are from Fields Charah project for drag and drop features  */
+.draggable {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+#drag--help {
+  border-color: $orange;
+  background: rgba($orange, .1);
+}
+
+.dragged-items, .dragged-items > div:not(.form) {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  flex-direction: row !important;
+  width: 100%;
+
+  .form {
+    width: 100%;
+  }
+}
+
+.receiver {
+    padding: 2rem;
+    border: 1px dashed var(--border);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    border-radius: 1rem;
+    margin: 0;
+    gap: 1rem;
+    position: relative;
+    @extend %transition;
+
+    h5 {
+        white-space: nowrap;
+    }
+
+    > div:not(.receiver--header) {
+        flex-direction: column;
+        display: flex;
+        gap: 1rem;
+    }
+
+    &--header {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .form {
+        display: flex;
+        gap: 1rem;
+        background-color: var(--lighter-color);
+        font-size: 14px;
+
+        > * {
+            width: auto;
+        }
+    }
+}
+
+.taskDraggedItem {
+  list-style-type: none;
+  min-width: 125px;
+  border: 2px solid $orange;
+  background-color: $orange;
+  border-radius: 5px 5px 5px 5px;
+  padding: 1rem;
+  display: inline;
+  color: var(--solid);
+  font-size: 14px;
+}
+
+div.dropped {
+  border-color: $orange;
+  
+}
+
+div.drop-hover {
+  background: rgba($orange, .1);
+  border-color: $orange;
+}
+/* ------------ */
+
+/* Adjust height of leftbar nav elements */
+/* ------------ */
+
+.leftbar ul li a {
+  height: 80px;
+}
+
+  .leftbar ul li a img {
+    padding-top: 14px;
+    width: 30px;
+  }
+
+  .leftbar ul li a.selected {
+    background-position: right 24px;
+    background-size: 10px;
+  }
+
+
+.leftbar ul li a:hover img {
+    @extend %transition;
+}
+
+.leftbar ul li a {
+    @extend %transition;
+    font-size: 11px;
+}
+
+/* 
+    Word break - mainly for time track list description/notes column
+    REF - https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/
+*/
+.word-break {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-word;
+}
+
+.word-break-all {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.ellipses {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#ntResources {
+  overflow-y: scroll;
+}
+
+.no-data {
+  color: #ef7c66;
+  text-align: center;
+  text-transform: uppercase;
+  padding-top: 8%;
+  font-size: 30px;
+  font-family: sans-serif;
+}

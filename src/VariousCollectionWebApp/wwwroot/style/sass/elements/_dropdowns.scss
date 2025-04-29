@@ -1,0 +1,53 @@
+@use '../abstracts' as *;
+
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    background: var(--base-color);
+    border-radius: 1.5rem;
+    position: relative;
+    align-items: flex-start;
+    overflow: hidden;
+    @extend %border;
+
+    + .dropdown {
+        margin-top: 1rem;
+    }
+
+    &--arrow {
+        @extend %transition;
+        min-width: 12px;
+    }
+
+    &--body {
+        padding: 40px;
+        border-top: 1px solid var(--border);
+        width: 100%;
+
+        > *:not(*[style="display: none"]) + *:not([style="display: none"]) {
+            margin-top: 1.5rem;
+        }
+    }
+
+    &--button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        cursor: pointer;
+        background: var(--base-color);
+        border-radius: 1.5rem;
+        padding: 1.5rem 40px;
+
+        svg {
+            transform: rotate(90deg);
+        }
+
+        span {
+            color: $light-text;
+            font-size: 18px;
+        }
+    }
+}

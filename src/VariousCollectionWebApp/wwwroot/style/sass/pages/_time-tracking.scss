@@ -1,0 +1,36 @@
+@use '../abstracts' as *;
+
+#ptobreakdowncharttop, #timetrackingreportchart {
+  svg {
+    width: auto;
+    height: auto;
+  }
+}
+
+#ptobreakdowncharttop {
+    th, td {
+        &:first-child {
+            width: 1%;
+        }
+    }
+
+    td {
+        &:first-child {
+            font-weight: 500;
+            color: var(--solid);
+        }
+    }
+
+    svg {
+        display: none;
+
+        + div {
+            position: relative !important;
+            left: 0 !important;
+            top: auto !important;
+            width: 100% !important;
+            height: auto !important;
+            overflow: visible !important;
+        }
+    }
+}

@@ -1,0 +1,157 @@
+@use '../abstracts' as *;
+
+.modal {
+  position: relative;
+  background: var(--lighter-color);
+  margin: auto;
+  max-width: 800px;
+  width: 100%;
+  max-height: 75%;
+  height: auto;
+  overflow-y: auto;
+  z-index: 999999;
+  border-radius: 8px;
+  @extend %border;
+  transform: scale(.75);
+  @extend %transition;
+  opacity: 0;
+
+  @include breakpoint (800px) {
+    max-height: 100%;
+  }
+
+  &--body {
+    align-items: flex-start;
+  }
+
+  &--container {
+    background: rgba(0,0,0,0.35);
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &--open {
+    visibility: visible;
+    opacity: 1;
+
+    .modal {
+      opacity: 1;
+      transform: scale(1);
+      @extend %transition;
+    }
+  }
+
+  &--title {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  textarea {
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  > a {
+    margin-top: 1rem;
+  }
+}
+
+
+
+div.ui-dialog:nth-child(40) {
+    /*position: relative;*/
+    background: var(--lighter-color);
+    margin: auto;
+    max-width: 800px;
+    width: 100%;
+    max-height: 75%;
+    height: auto;
+    overflow-y: auto;
+    z-index: 999999;
+    border-radius: 8px;
+    @extend %border;
+    /*transform: scale(.75);*/
+    @extend %transition;
+    /*opacity: 0;*/
+
+    @include breakpoint (800px) {
+        max-height: 100%;
+    }
+}
+
+div.ui-dialog:nth-child(41) > div:nth-child(1), div.ui-dialog:nth-child(40) > div:nth-child(1) {
+  background: var(--lighter-color);
+}
+
+
+
+.ui-widget-header, .ui-widget-content {
+  background: var(--base-color) !important;
+  color: var(--text) !important;
+}
+
+#timeTrackForm > fieldset:nth-child(2) {
+  border: none !important;
+}
+
+textarea#timeTrackDescription, textarea#timeTrackEmployeeNotes {
+  width: 100% !important;
+  @extend %border;
+}
+
+div.ui-dialog:nth-child(41) {
+  background: var(--lighter-color);
+  border-radius: 8px !important;
+}
+
+div.ui-dialog:nth-child(41) > div:nth-child(1) > button:nth-child(2), div.ui-dialog:nth-child(40) > div:nth-child(1) > button:nth-child(2) {
+    @extend %border;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    border-radius: 8px;
+    background: var(--lighter-color);
+    float: right;
+    padding: 0;
+    height: 60px;
+    width: 60px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-right: -3% !important;
+
+    &:hover {
+        background: #E74525;
+        border-color: #E74525;
+        @extend %transition;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+}
+
+
+div.ui-dialog:nth-child(41) > div:nth-child(1) > button:nth-child(2) > span:nth-child(2) {
+  &:hover {
+    background: red !important;
+  }
+}
+
+.ui-dialog .ui-dialog-title {
+  @include h4;
+}
+
+div.ui-dialog:nth-child(34) {
+  border: 1px solid #8e939d;
+}

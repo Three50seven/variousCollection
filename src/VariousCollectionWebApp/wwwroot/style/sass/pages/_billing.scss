@@ -1,0 +1,168 @@
+@use '../abstracts' as *;
+
+/* Billing Styles */
+
+#timeTrackEditDate + [data-bind="visible: BillRestricted"] {
+    font-size: 14px;
+    margin-top: .5rem;
+    display: flex;
+}
+
+
+#billFormWizard-step-3 {
+    svg {
+        height: auto;
+        width: auto;
+    }
+}
+
+.billTaskGridHeaderContainer {
+    width: 100%;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+}
+
+.billTaskContainer {
+    width: 100%;
+    padding: 10px 10px 0px 0px;
+    border-bottom: 1px solid #ccc;
+}
+
+.billTaskCol {
+    display: inline-block;
+    width: 20%;
+}
+
+.billTaskReviewGrid {
+    /* structure */
+    width: 550px;
+    padding: 5px;
+}
+
+.billTaskReviewGrid .headColumn {
+    /* structure */
+    padding: 10px;
+    /* skin */
+    color: White;
+    background-color: #888;
+}
+
+.billTaskReviewGrid .row:nth-child(even) {
+    /* skin */
+    background-color: #eee;
+}
+
+.billTaskReviewGrid .rowItem {
+    /* structure */
+    padding: 10px;
+}
+
+.billTaskReviewGrid .rowItem .read {
+    /* structure */
+    display: block;
+    width: 150px;
+}
+
+.billTaskReviewGrid .tools {
+    /* skin */
+    background-color: var(--solid);
+    padding: 5px;
+}
+
+/* Buttons */
+.billTaskReviewGrid .button {
+    /* structure */
+    padding: 8px 12px;
+    /* skin */
+    border: 1px solid gainsboro;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.billTaskReviewGrid .addNewButton {
+    /* skin */
+    background-color: #FB8F3D;
+    background-image: -webkit-linear-gradient(top, #FDA352, #FB8F3D);
+    background-image: -moz-linear-gradient(top, #FDA352, #FB8F3D);
+    background-image: -ms-linear-gradient(top, #FDA352, #FB8F3D);
+    background-image: -o-linear-gradient(top, #FDA352, #FB8F3D);
+    background-image: linear-gradient(top, #FDA352, #FB8F3D);
+    color: White;
+}
+
+.billTaskReviewGrid .toolButton {
+    /* skin */
+    background-color: #F9F9F9;
+    background-image: -webkit-linear-gradient(top, white, #F9F9F9);
+    background-image: -moz-linear-gradient(top, white, #F9F9F9);
+    background-image: -ms-linear-gradient(top, white, #F9F9F9);
+    background-image: -o-linear-gradient(top, white, #F9F9F9);
+    background-image: linear-gradient(top, white, #F9F9F9);
+    color: #444;
+}
+
+.billing--manage {
+    @media only screen and (max-width: 1300px) {
+        > .button--group {
+            flex-wrap: wrap !important;
+        }
+    }
+}
+
+#billFormWizard {
+ legend {
+ display: none;
+ }
+}
+
+.billreviewapproved {
+  a {
+    background-color: $green !important;
+    border-color: $green !important;
+    color: $white !important;
+  }
+}
+
+.stepy-navigator {
+  @include button-group;
+}
+
+.stepy-header {
+  li {
+    padding: 1rem 2rem;
+
+    div {
+      @include h6;
+    }
+
+    span {
+      @include h5;
+    }
+
+    &.stepy-active {
+      span {
+        color: var(--solid);
+      }
+
+      &:after {
+        width: 100%;
+        opacity: 1;
+      }
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 0;
+      height: 2px;
+      @extend %transition;
+      background: $orange;
+      margin: auto;
+      opacity: 0;
+      z-index: 2;
+    }
+  }
+}

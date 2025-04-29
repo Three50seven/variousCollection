@@ -1,0 +1,130 @@
+@use '../abstracts' as *;
+
+section {
+  width: 100%;
+}
+
+.section {
+    &--flex {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+
+        > * {
+            flex: 30%;
+        }
+    }
+
+    &--cards {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        gap: 1.5rem;
+
+        @include breakpoint(1200px) {
+            flex-wrap: wrap;
+        }
+
+        > * {
+            width: 100%;
+
+            @include breakpoint(1200px) {
+                width: calc(50% - 12px);
+
+                &:last-child {
+                    width: 100%;
+                }
+            }
+
+            @include breakpoint(900px) {
+                width: 100%;
+            }
+        }
+
+        &--33 {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+
+            @include breakpoint(1200px) {
+                flex-direction: column;
+            }
+
+            > * {
+                flex: 30%;
+            }
+        }
+
+        &--33-66 {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+            justify-content: space-between;
+            gap: 1.5rem;
+
+            h2 {
+                margin-bottom: 0;
+                align-self: center;
+            }
+
+            > * {
+                &:first-child {
+                    flex: calc(100% / 3 - 1rem);
+                }
+
+                &:nth-child(2n) {
+                    flex: calc(100% / 3 * 2 - 1rem);
+                }
+            }
+        }
+
+        &--66-33 {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            justify-content: space-between;
+            gap: 1.5rem;
+
+            @include breakpoint(1200px) {
+                flex-direction: column;
+            }
+
+            > * {
+                &:last-child {
+                    width: calc(100% / 3);
+
+                    @include breakpoint(1200px) {
+                        width: 100%;
+                    }
+                }
+
+                &:first-child {
+                    width: 66.666%;
+
+                    @include breakpoint(1200px) {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
+    &--cards-v3 {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+
+        > div {
+            width: calc(100% / 2 - 12px);
+        }
+    }
+}
