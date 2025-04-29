@@ -19,7 +19,7 @@
     <div id="jsconfig" style="display:none;visibility:hidden">
         <input type="hidden" value="Production" id="app-environment" />
     </div>
-    <div class="text-start p-3">
+    <div class="container p-3">
         <h1>
             Liturgical Calendar
             <button id="theme-switch-button" class="btn btn-outline-secondary">
@@ -57,7 +57,7 @@
                     </div>
 
                     <!-- Description Text -->
-                    <div class="col-12">
+                    <div class="col-12 fs-5">
                         <p>Enter the year above to calculate the Liturgical Year.</p>
                     </div>
 
@@ -81,8 +81,8 @@
             <!-- /ko -->
             <!-- Liturgical Dates Table -->
             <!-- ko if: liturgicalDates().length > 0 -->
-            <div class="table-responsive mt-4">
-                <table class="table">
+            <div class="table-responsive">
+                <table class="table fs-2">
                     <thead>
                         <tr>
                             <th>Event Name</th>
