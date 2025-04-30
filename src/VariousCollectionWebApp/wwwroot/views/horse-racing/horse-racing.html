@@ -18,10 +18,9 @@
     <!-- prod-->
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.1/lodash.min.js"></script>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/assets/css/horse-racing-styles.min.css" />
 </head>
 <body data-bs-theme="dark">
@@ -35,10 +34,10 @@
                 <button id="theme-switch-button" class="btn btn-sm btn-theme-aware rounded margin-all transform">
                     <img id="switch-theme-icon" src="../../images/icon/moon.svg" />
                 </button>
-            </h1>            
+            </h1>
             <ul class="nav nav-pills">
                 <li class="nav-item"><a href="/" title="Click to go back home" class="nav-link active" aria-current="page">Home</a></li>
-                <li class="nav-item margin-left"><a href="horse-racing-simple.html" title="Horse Racing (Simple)" class="nav-link border border-info rounded">Horse Racing (Simple)</a></li>                
+                <li class="nav-item margin-left"><a href="horse-racing-simple.html" title="Horse Racing (Simple)" class="nav-link border border-info rounded">Horse Racing (Simple)</a></li>
             </ul>
         </header>
     </div>
@@ -48,7 +47,7 @@
         <div id="horse-racing-app-wrapper" v-cloak class="col">
             <div class="row text-center">
                 <div class="col text-info float-left">
-                    <h4>Race: {{ CurrentRaceToRun.RaceNumber }} <span class="text-tiny border border-secondary">{{ RaceTimeToPost }}</span></h4>                    
+                    <h4>Race: {{ CurrentRaceToRun.RaceNumber }} <span class="text-tiny border border-secondary">{{ RaceTimeToPost }}</span></h4>
                 </div>
             </div>
             <div class="card row bg-light-subtle p-3">
@@ -99,7 +98,7 @@
                                        v-bind:value="race"></race-menu>
                         </ul>
                     </div>
-                    <button class="btn-side-right btn btn-theme-aware margin-all" 
+                    <button class="btn-side-right btn btn-theme-aware margin-all"
                             type="button" value="Next Race"
                             v-on:click.prevent="NextRace">
                         >> {{ NextRaceText }}
@@ -350,7 +349,7 @@
                                 <svg id="race-track-svg"
                                      viewBox="0 0 300 120"
                                      xmlns="http://www.w3.org/2000/svg"
-                                     width="100%"                                     
+                                     width="100%"
                                      preserveAspectRatio="xMidYMid meet">
                                     <!-- Define Gradient -->
                                     <defs>
@@ -417,11 +416,11 @@
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
         </div><!--END OF VUE JS APP CONTAINER-->
     </div>
     <div class="container">
-        <footer class="flex-wrap justify-content-center py-3 mb-4 border-bottom">            
+        <footer class="flex-wrap justify-content-center py-3 mb-4 border-bottom">
         </footer>
     </div>
 
@@ -562,5 +561,6 @@
     </script>
 
     <script src="/assets/js/viewmodels/horse-racing-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
 </body>
 </html>
