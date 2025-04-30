@@ -8,11 +8,11 @@
 <!-- MODIFIED DATE: 09.30.2014 						-->
 
 <HEAD>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <TITLE>Risk Yer Ast: A Game with an Asterisk</TITLE>
-
-    <script language="JavaScript" src="/assets/js/viewmodels/risk-yer-ast-bundle.min.js"></script>
+        
     <link rel="stylesheet" type="text/css" href="/assets/css/rick-yer-ast-styles.min.css" media="screen" />
-
 </HEAD>
 
 <BODY onload="load()">
@@ -98,21 +98,25 @@
     </div>
 
     <div ID="pnlGame" STYLE="display:none;">
-        <!--these p text lines display the asterisk and the points-->
-        <P ID="pCharacter" class="pointPosition" STYLE="left: 0;">*</P>
-        <P class="pointPosition" STYLE="left: 0;">0</P>
-        <P class="pointPosition" STYLE="left: 70px;">70</P>
-        <P class="pointPosition" STYLE="left: 140px;">140</P>
-        <P class="pointPosition" STYLE="left: 210px;">210</P>
-        <P class="pointPosition" STYLE="left: 280px;">280</P>
-        <P class="pointPosition" STYLE="left: 350px;">350</P>
-        <P class="pointPosition" STYLE="left: 420px;">420</P>
-        <P class="pointPosition" STYLE="left: 490px;">490</P>
-        <P class="pointPosition" STYLE="left: 560px;">560</P>
-        <P class="pointPosition" STYLE="left: 630px;">630</P>
-        <P class="pointPosition" STYLE="left: 700px;">700 &nbsp&nbsp&nbsp&nbsp&nbsp= POINTS</P>
+        <div class="scroll-div">
+            <div class="position-relative">
+                <p id="pCharacter" class="pointPosition" style="left: 0;">*</p>
+                <p class="pointPosition" style="left: 0;">0</p>
+                <p class="pointPosition" style="left: 70px;">70</p>
+                <p class="pointPosition" style="left: 140px;">140</p>
+                <p class="pointPosition" style="left: 210px;">210</p>
+                <p class="pointPosition" style="left: 280px;">280</p>
+                <p class="pointPosition" style="left: 350px;">350</p>
+                <p class="pointPosition" style="left: 420px;">420</p>
+                <p class="pointPosition" style="left: 490px;">490</p>
+                <p class="pointPosition" style="left: 560px;">560</p>
+                <p class="pointPosition" style="left: 630px;">630</p>
+                <p class="pointPosition" style="left: 700px;">700 = POINTS</p>
+                <br />
+                <hr class="pointBar">
+            </div>
+        </div>
 
-        <BR><BR><HR class="pointBar">
 
         <!-- this displays the points -->
         <P><FONT COLOR="#FFFFFF">Current Player: <A ID="aCurrentPlayer">1</A> </FONT></P>
@@ -185,5 +189,6 @@
             The goal is to get the most points within <A ID="TimeResetval2"></A> seconds and have fun doing so!!!<BR>
         </FONT>
     </P>
+    <script language="JavaScript" src="/assets/js/viewmodels/risk-yer-ast-bundle.min.js"></script>
 </BODY>
 </HTML>

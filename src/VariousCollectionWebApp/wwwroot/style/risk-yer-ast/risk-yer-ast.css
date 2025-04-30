@@ -3,16 +3,40 @@
 	font-family: Arial;
 }
 
+
+.scroll-div {
+    overflow-x: auto; /* Enables horizontal scrolling */
+    white-space: nowrap; /* Prevents wrapping of content */
+    width: 100%;
+    max-width: 100vw;
+    border: 1px solid #ddd; /* Optional: visual separation */
+    box-sizing: border-box;
+}
+
+.position-relative {
+    width: 740px; /* Fixed width for the entire bar */
+    height: 75px; /* Adjust height to fit content */
+    position: relative; /* Ensures child elements are positioned absolutely within this container */
+}
+
+#pCharacter {
+    font-weight: bold;
+}
+
 .pointPosition {
-	position: absolute; 
-	font-family: serif; 
-	color: blue
+    position: absolute;
+    font-family: serif;
+    color: blue;
+    margin: 0;
+    padding: 0;
 }
 
 .pointBar {
-	height: 10px;
-	background-color: navy;
-	border-color: navy;
+    height: 25px;
+    background-color: navy;
+    border-color: navy;
+    margin: 0;
+    padding: 0;
 }
 
 .results {
