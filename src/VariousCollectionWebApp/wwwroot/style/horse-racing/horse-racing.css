@@ -95,6 +95,7 @@ button:focus {
     display: inline-block;
     overflow: auto;
     margin: 0px auto;
+    margin-left: -20px;
 }
 
 .btn-side-left {
@@ -138,7 +139,7 @@ button:focus {
     display: none;
     position: absolute;
     min-width: 160px;
-    margin: 0;
+    margin-left: 80px;
     padding: 0;
     z-index: 1;
     overflow-y: auto;
