@@ -61,6 +61,7 @@
     model.CurrentPlayer = new Object;
     model.StartingAccountBalance = 1000;
     model.PlayerMenuIsShowing = false;
+    model.IsEditingPlayerName = false;
 
     // Custom Vue Components:
     let sortComponent = {
@@ -654,6 +655,11 @@
                 let data = this;
 
                 data.PlayerMenuIsShowing = !data.PlayerMenuIsShowing;
+            },
+            EditPlayerName: function () {
+                let data = this;
+
+                data.IsEditingPlayerName = !data.IsEditingPlayerName;
             },
             SelectPlayer: function (playerId) {
                 let data = this;
