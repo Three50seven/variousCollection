@@ -396,10 +396,6 @@ button:focus {
     font-size: .5em;
 }
 
-.container .row > * {
-    padding-left: 0px;
-}
-
 /*table Sorting styles:*/
 .col span.sortable {
     cursor: pointer;
