@@ -706,7 +706,7 @@
                 //reset BetTypeId and disable Show and WPS betting when there are less than 4 horses:
                 data.BetTypes.forEach((type) => {
                     if (data.CurrentRace.Horses.length < 4 && (type.Name == 'Show' || type.Name == 'WPS')) {
-                        data.SelectedBetTypeId = 0;
+                        data.SelectedBetTypeId = 1;
                         type.disabled = true;
                     }
                     else
