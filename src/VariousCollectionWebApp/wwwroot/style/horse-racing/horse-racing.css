@@ -166,7 +166,7 @@ button:focus {
 /*Horse Position Indicator With Image:*/
 #horse-position-img {
     margin-top: 4px;
-    margin-left: 148px; /*175px is max for right position, 85px is 50 yard line from left-to-right, is 50yd from right-to-left, 0 is max left NOTE: THIS IS SET IN JAVASCRIPT BASED ON BALL POSITION*/
+    margin-left: 148px;
     height: 10px;
     width: 5px;
     position: absolute;
@@ -178,19 +178,14 @@ button:focus {
 #track-container {
     overflow-x: scroll;
     overflow-y: hidden;
+    max-width: 1050px;
 }
 
-#track-container-img {
-    position: absolute;
-    height: 233px;
-    width: 657px;
-    margin: 10px;
-}
-#track-img {
-    position: static;
-    height: 233px;
-    width: 657px;
-    background-image: url('../../images/horse-racing/horsetrack_tranparent-bg.png');
+/*NOTE: The min-width on this media query and track-container max-width are highly dependent on the absolute static widths set in the JavaScript, for example (see TRACK_LENGTH in horse-racing.js)*/
+@media (min-width: 1201px) {
+    #track-container {
+        overflow-x: hidden; /* Hides scrollbar only when screen is wider than max-width of track container (plus borders etc.) */
+    }
 }
 
 #horse-track {
